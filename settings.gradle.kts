@@ -27,5 +27,6 @@ gradleEnterprise {
 
 rootProject.name = "kotlin-gradle-plugin-template"
 
+include(":example2")
 include(":example")
 includeBuild("plugin-build")

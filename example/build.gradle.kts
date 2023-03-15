@@ -1,8 +1,13 @@
 plugins {
     java
-    id("com.ncorti.kotlin.gradle.template.plugin")
+    id("dev.iurysouza.modulegraph.plugin")
 }
 
-templateExampleConfig {
-    message.set("Just trying this gradle plugin...")
+moduleGraphConfig {
+    heading.set("### Dependency Diagram")
+    readmeFile.set(File(projectDir, "README.md"))
+}
+
+dependencies {
+    implementation(project(":example2"))
 }
