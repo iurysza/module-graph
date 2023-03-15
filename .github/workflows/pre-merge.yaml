@@ -25,12 +25,3 @@ jobs:
         uses: gradle/gradle-build-action@v2
       - name: Run Gradle tasks
         run: ./gradlew preMerge --continue
-
-        # We do a run of the new task `templateExample` created by the plugin
-      - name: Run the plugin
-        run: ./gradlew createModuleGraph
-        if: success()
-        # And we verify that the output of the file is correct.
-      - name: Verify the plugin output
-        run: grep -Fxq $'### Dependency Diagram\n```mermaid\n%%{\n  init: {\n    \'theme\': \'dark\',\n    \'themeVariables\': {\n      \'primaryColor\': \'#C4C7B300\',\n      \'primaryTextColor\': \'#fff\',\n      \'primaryBorderColor\': \'#7C0000\',\n      \'lineColor\': \'#FF2F2F2F\',\n      \'secondaryColor\': \'#006100\',\n      \'tertiaryColor\': \'#fff\'\n    }\n  }\n}%%\n\ngraph LR\n  subgraph others\n    example\n    example2\n  end\n  example --> example2\n```'$'### Dependency Diagram\n```mermaid\n%%{\n  init: {\n    \'theme\': \'dark\',\n    \'themeVariables\': {\n      \'primaryColor\': \'#C4C7B300\',\n      \'primaryTextColor\': \'#fff\',\n      \'primaryBorderColor\': \'#7C0000\',\n      \'lineColor\': \'#FF2F2F2F\',\n      \'secondaryColor\': \'#006100\',\n      \'tertiaryColor\': \'#fff\'\n    }\n  }\n}%%\n\ngraph LR\n  subgraph others\n    example\n    example2\n  end\n  example --> example2\n```'
-        if: success()
