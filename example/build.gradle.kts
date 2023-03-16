@@ -5,7 +5,7 @@ plugins {
 
 moduleGraphConfig {
     heading.set("### Dependency Diagram")
-    readmeFile.set(File(projectDir, "README.md"))
+    readmeFile.set(file("$projectDir/README.md"))
 }
 
 dependencies {

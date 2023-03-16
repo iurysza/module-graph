@@ -4,12 +4,12 @@
 
 Introducing the Gradle Module Dependency Graph Plugin! 🌟
 
-The Gradle Module Dependency Graph Plugin is a plugin that generates a [Mermaid](https://github.com/mermaid-js/mermaid) dependency graph for your Gradle project.
+This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) dependency graph for your Gradle project.
 It provides a visual representation of your project's module dependencies, making it easier to understand the structure and relationships between modules.
 
 ## Features
 
-- Generate a Mermaid dependency graph of your the modules in your Gradle project
+- Generate a Mermaid dependency graph of the modules in your Gradle project
 - Automatically append the generated graph to your project's README file
 
 ## Getting Started
@@ -19,23 +19,78 @@ You'll just need to add it to your project's `build.gradle` or `build.gradle.kts
 <details>
   <summary><b>build.gradle (Groovy DSL)</b></summary>
 
+### Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
+
 ```groovy
-  createModuleGraph {
-      readmeFile = file('README.md')
-      heading = '## Custom Heading'
+plugins {
+  id "dev.iurysouza.modulegraph" version "0.1.1"
+}
+```
+
+### Using [legacy plugin application](https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application)
+
+```groovy
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "dev.iurysouza:modulegraph:0.1.1"
+  }
+}
+
+apply plugin: "dev.iurysouza.modulegraph"
+```
+### Configuring the plugin
+```groovy
+  moduleGraphConfig {
+      readmeFile = file('$projectDir/README.md')
+      heading = '### Dependency Diagram'
   }
 ```
 </details>
 
-<p></>
+<p></p>
 
 <details open>
-  <summary><b>build.gradle.kts (Kotlin DSL)</b></summary>
+<summary><b>build.gradle.kts (Kotlin DSL)</b></summary>
+
+<p></p>
+
+#### Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
+
 
 ```kotlin
-createModuleGraph {
-    readmeFile.set(file("README.md"))
-    heading.set("## Custom Heading")
+plugins {
+  id("dev.iurysouza.modulegraph") version "0.1.1"
+}
+```
+
+#### Using [legacy plugin application](https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application)
+
+```kotlin
+buildscript {
+  repositories {
+    maven {
+      url = uri("https://plugins.gradle.org/m2/")
+    }
+  }
+  dependencies {
+    classpath("dev.iurysouza:modulegraph:0.1.1")
+  }
+}
+
+apply(plugin = "dev.iurysouza:modulegraph")
+```
+
+### Configuring the plugin
+
+```kotlin
+moduleGraphConfig {
+    readmeFile.set(file("$projectDir/README.md"))
+    heading.set("### Dependency Diagram")
 }
 ```
 </details>
@@ -55,9 +110,9 @@ To generate the Mermaid dependency graph for your project, run the following com
 ./gradlew createModuleGraph
 ```
 
-## Sample Diagram
+### Example Diagram
 
-When ran you can expect it to generate this kind of diagram:
+You can expect the plugin to generate this kind of diagram after running the plugin:
 
 ```mermaid
 %%{
@@ -115,7 +170,7 @@ graph LR
 
 ## Contributing 🤝
 
-Feel free to open a issue or submit a pull request for any bugs/improvements.
+Feel free to open an issue or submit a pull request for any bugs/improvements.
 
 ## License 📄
 
