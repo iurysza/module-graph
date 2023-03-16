@@ -7,6 +7,8 @@ Introducing the Gradle Module Dependency Graph Plugin! 🌟
 This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) dependency graph for your Gradle project.
 It provides a visual representation of your project's module dependencies, making it easier to understand the structure and relationships between modules.
 
+>A diagram about the current system is only useful if it's generated. If it is produced by hand it documents the author's belief, not the system. Still, important, but not an input for decision making. Development is primarily decision making. Enable it through custom tools. [source](https://twitter.com/girba/status/1628326848256962561)
+
 ## Features
 
 - Generate a Mermaid dependency graph of the modules in your Gradle project
