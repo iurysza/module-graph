@@ -1,6 +1,5 @@
 package dev.iurysouza.modulegraph
 
-import java.io.File
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
@@ -20,7 +19,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @get:Input
     @get:Option(option = "theme", description = "The mermaid theme")
     @get:Optional
-    abstract val theme: Property<String>
+    abstract val theme: Property<Theme>
 
     @get:Input
     @get:Option(option = "heading", description = "The heading where the graph will be appended")
@@ -45,7 +44,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
             val mermaidGraph = buildMermaidGraph(
                 sortedProjects,
                 dependencies,
-                theme = theme.orNull ?: "dark"
+                theme = theme.orNull ?: Theme.NEUTRAL
             )
             appendMermaidGraphToReadme(mermaidGraph, heading.get(), outputFile.get().asFile)
         }

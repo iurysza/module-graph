@@ -48,8 +48,9 @@ apply plugin: "dev.iurysouza.modulegraph"
 ### Configuring the plugin
 ```groovy
   moduleGraphConfig {
-      readmeFile = file('$projectDir/README.md')
+      readmePath = '$projectDir/README.md'
       heading = '### Dependency Diagram'
+      theme = dev.iurysouza.modulegraph.Theme.NEUTRAL
   }
 ```
 </details>
@@ -91,8 +92,9 @@ apply(plugin = "dev.iurysouza:modulegraph")
 
 ```kotlin
 moduleGraphConfig {
-    readmeFile.set(file("$projectDir/README.md"))
+    readmePath.set("$projectDir/README.md")
     heading.set("### Dependency Diagram")
+    theme.set(dev.iurysouza.modulegraph.Theme.NEUTRAL)
 }
 ```
 </details>
@@ -101,8 +103,9 @@ moduleGraphConfig {
 
 To configure the Gradle Module Dependency Graph Plugin, you can set the following options:
 
-- `readmeFile`: The README file where the dependency graph will be appended. Default is the project's README file.
-- `heading`: The heading where the dependency graph will be appended. Default is "## Module Dependency Graph".
+- `readmeFile`: The README file where the dependency graph will be appended.
+- `theme`: The theme to be used for styling the graph. Default is `NEUTRAL`.
+- `heading`: The heading where the dependency graph will be appended.
 
 ## Usage
 
@@ -119,15 +122,7 @@ You can expect the plugin to generate this kind of diagram after running the plu
 ```mermaid
 %%{
   init: {
-    'theme': 'dark',
-    'themeVariables': {
-      'primaryColor': '#C4C7B300',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#FF2F2F2F',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff'
-    }
+    'theme': 'neutral'
   }
 }%%
 

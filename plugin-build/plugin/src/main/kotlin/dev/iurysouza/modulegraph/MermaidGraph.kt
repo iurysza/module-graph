@@ -3,7 +3,6 @@ package dev.iurysouza.modulegraph
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
-import org.gradle.api.file.RegularFile
 
 /**
  * Generates a Mermaid graph for module dependencies.
@@ -17,7 +16,7 @@ import org.gradle.api.file.RegularFile
 fun buildMermaidGraph(
     sortedProjects: List<Project>,
     dependencies: MutableList<Pair<Project, Project>>,
-    theme: String,
+    theme: Theme,
 ): String {
     // Create a list of module paths by splitting project paths by ":" and filtering out blank parts
     val modules = sortedProjects.map { it.path.split(":").filter { it.isNotBlank() } }
@@ -41,15 +40,7 @@ fun buildMermaidGraph(
     val mermaidConfig = """
       %%{
         init: {
-          'theme': '$theme',
-          'themeVariables': {
-            'primaryColor': '#C4C7B300',
-            'primaryTextColor': '#fff',
-            'primaryBorderColor': '#7C0000',
-            'lineColor': '#FF2F2F2F',
-            'secondaryColor': '#006100',
-            'tertiaryColor': '#fff'
-          }
+          'theme': '${theme.value}'
         }
       }%%
     """.trimIndent()
