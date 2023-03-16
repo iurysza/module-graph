@@ -14,6 +14,7 @@ abstract class ModuleGraphPlugin : Plugin<Project> {
             it.heading.set(extension.heading)
             it.outputFile.set(extension.outputFile)
             it.readmePath.set(extension.readmePath)
+            it.theme.set(extension.theme)
         }
     }
 }
