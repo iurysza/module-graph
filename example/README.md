@@ -2,7 +2,7 @@
 ```mermaid
 %%{
   init: {
-    'theme': 'dark',
+    'theme': 'light',
     'themeVariables': {
       'primaryColor': '#C4C7B300',
       'primaryTextColor': '#fff',

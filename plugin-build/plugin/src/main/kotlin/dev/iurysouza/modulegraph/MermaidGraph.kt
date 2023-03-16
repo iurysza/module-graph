@@ -17,6 +17,7 @@ import org.gradle.api.file.RegularFile
 fun buildMermaidGraph(
     sortedProjects: List<Project>,
     dependencies: MutableList<Pair<Project, Project>>,
+    theme: String,
 ): String {
     // Create a list of module paths by splitting project paths by ":" and filtering out blank parts
     val modules = sortedProjects.map { it.path.split(":").filter { it.isNotBlank() } }
@@ -40,7 +41,7 @@ fun buildMermaidGraph(
     val mermaidConfig = """
       %%{
         init: {
-          'theme': 'dark',
+          'theme': '$theme',
           'themeVariables': {
             'primaryColor': '#C4C7B300',
             'primaryTextColor': '#fff',

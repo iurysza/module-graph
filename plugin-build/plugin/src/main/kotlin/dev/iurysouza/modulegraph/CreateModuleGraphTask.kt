@@ -17,6 +17,10 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @get:Option(option = "readmePath", description = "The readme file to be used as input")
     abstract val readmePath: Property<String>
 
+    @get:Input
+    @get:Option(option = "theme", description = "The mermaid theme")
+    @get:Optional
+    abstract val theme: Property<String>
 
     @get:Input
     @get:Option(option = "heading", description = "The heading where the graph will be appended")
@@ -41,6 +45,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
             val mermaidGraph = buildMermaidGraph(
                 sortedProjects,
                 dependencies,
+                theme = theme.orNull ?: "dark"
             )
             appendMermaidGraphToReadme(mermaidGraph, heading.get(), outputFile.get().asFile)
         }
