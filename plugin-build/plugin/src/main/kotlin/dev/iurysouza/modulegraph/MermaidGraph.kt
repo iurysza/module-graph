@@ -3,6 +3,7 @@ package dev.iurysouza.modulegraph
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.file.RegularFile
 
 /**
  * Generates a Mermaid graph for module dependencies.

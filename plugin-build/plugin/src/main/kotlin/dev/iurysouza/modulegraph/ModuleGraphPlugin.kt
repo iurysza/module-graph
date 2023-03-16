@@ -12,7 +12,8 @@ abstract class ModuleGraphPlugin : Plugin<Project> {
 
         project.tasks.register(TASK_NAME, CreateModuleGraphTask::class.java) {
             it.heading.set(extension.heading)
-            it.readmeFile.set(extension.readmeFile)
+            it.outputFile.set(extension.outputFile)
+            it.readmePath.set(extension.readmePath)
         }
     }
 }

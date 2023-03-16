@@ -2,20 +2,28 @@ package dev.iurysouza.modulegraph
 
 import java.io.File
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.options.Option
 
 abstract class CreateModuleGraphTask : DefaultTask() {
 
-    @get:Input
-    @get:Option(option = "readmeFile", description = "The readme file to be used as input")
-    abstract val readmeFile: Property<File>
+    @get:InputFile
+    @get:Option(option = "readmePath", description = "The readme file to be used as input")
+    abstract val readmePath: Property<String>
+
 
     @get:Input
     @get:Option(option = "heading", description = "The heading where the graph will be appended")
     abstract val heading: Property<String>
+
+    @get:OutputFile
+    abstract val outputFile: RegularFileProperty
 
     init {
         group = "Reporting"
@@ -30,8 +38,11 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     private fun execute() {
         doLast {
             val (dependencies, sortedProjects) = project.parseProjectStructure()
-            val mermaidGraph = buildMermaidGraph(sortedProjects, dependencies)
-            appendMermaidGraphToReadme(mermaidGraph, heading.get(), readmeFile.get())
+            val mermaidGraph = buildMermaidGraph(
+                sortedProjects,
+                dependencies,
+            )
+            appendMermaidGraphToReadme(mermaidGraph, heading.get(), outputFile.get().asFile)
         }
     }
 }
