@@ -32,7 +32,7 @@ gradlePlugin {
             version = property("VERSION").toString()
             description = property("DESCRIPTION").toString()
             displayName = property("DISPLAY_NAME").toString()
-            tags.set(listOf("plugin", "gradle", "sample", "template"))
+            tags.set(listOf("plugin", "gradle", "mermaid", "diagram"))
         }
     }
 }

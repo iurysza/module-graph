@@ -1,4 +1,4 @@
-package dev.iurysouza.modulegraph.plugin
+package dev.iurysouza.modulegraph
 
 import java.io.File
 import org.gradle.api.Project
