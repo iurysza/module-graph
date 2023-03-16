@@ -10,11 +10,7 @@ abstract class ModuleGraphExtension @Inject constructor(project: Project) {
 
     private val objects = project.objects
 
-    // Example of a property that is mandatory. The task will
-    // fail if this property is not set as is annotated with @Optional.
-
     val readmeFile: Property<File> = objects.property(File::class.java)
 
     val heading: Property<String> = objects.property(String::class.java)
-    val tag: Property<String> = objects.property(String::class.java)
 }

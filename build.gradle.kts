@@ -53,6 +53,7 @@ tasks.register("clean", Delete::class.java) {
 
 tasks.register("reformatAll") {
     description = "Reformat all the Kotlin Code"
+    group = "Verification"
 
     dependsOn("ktlintFormat")
     dependsOn(gradle.includedBuild("plugin-build").task(":plugin:ktlintFormat"))
@@ -60,6 +61,7 @@ tasks.register("reformatAll") {
 
 tasks.register("preMerge") {
     description = "Runs all the tests/verification tasks on both top level and included build."
+    group = "Verification"
 
     dependsOn(":example:check")
     dependsOn(gradle.includedBuild("plugin-build").task(":plugin:check"))
