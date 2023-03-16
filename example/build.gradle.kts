@@ -1,6 +1,6 @@
 plugins {
     java
-    id("dev.iurysouza.modulegraph.plugin")
+    id("dev.iurysouza.modulegraph")
 }
 
 moduleGraphConfig {

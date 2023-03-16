@@ -1,4 +1,4 @@
-package dev.iurysouza.modulegraph.plugin
+package dev.iurysouza.modulegraph
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -6,7 +6,7 @@ import org.gradle.api.Project
 const val EXTENSION_NAME = "moduleGraphConfig"
 const val TASK_NAME = "createModuleGraph"
 
-abstract class TemplatePlugin : Plugin<Project> {
+abstract class ModuleGraphPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         // Add the 'template' extension object
         val extension = project.extensions.create(EXTENSION_NAME, ModuleGraphExtension::class.java, project)

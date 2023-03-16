@@ -1,7 +1,7 @@
 package com.iurysouza.kotlin.gradle.template.plugin
 
-import dev.iurysouza.modulegraph.plugin.CreateModuleGraphTask
-import dev.iurysouza.modulegraph.plugin.ModuleGraphExtension
+import dev.iurysouza.modulegraph.CreateModuleGraphTask
+import dev.iurysouza.modulegraph.ModuleGraphExtension
 import java.io.File
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert.assertEquals
@@ -10,7 +10,7 @@ import org.junit.Test
 
 class ModuleGraphPluginTest {
 
-    private val pluginId = "dev.iurysouza.modulegraph.plugin"
+    private val pluginId = "dev.iurysouza.modulegraph"
     private val pluginExtension = "moduleGraphConfig"
 
     @Test
