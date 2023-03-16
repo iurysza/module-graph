@@ -2,7 +2,7 @@ package com.iurysouza.kotlin.gradle.template.plugin
 
 import dev.iurysouza.modulegraph.CreateModuleGraphTask
 import dev.iurysouza.modulegraph.ModuleGraphExtension
-import java.io.File
+import dev.iurysouza.modulegraph.Theme
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -31,15 +31,17 @@ class ModuleGraphPluginTest {
     fun `parameters are passed correctly from extension to task`() {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply(pluginId)
-        val aFile = File(project.projectDir, "README.md")
+        val aFilePath = "${project.projectDir}/README.md"
         (project.extensions.getByName(pluginExtension) as ModuleGraphExtension).apply {
             heading.set("### Dependency Diagram")
-            readmeFile.set(aFile)
+            theme.set(Theme.NEUTRAL)
+            readmePath.set(aFilePath)
         }
 
         val task = project.tasks.getByName("createModuleGraph") as CreateModuleGraphTask
 
         assertEquals("### Dependency Diagram", task.heading.get())
-        assertEquals(aFile, task.readmeFile.get())
+        assertEquals(aFilePath, task.readmePath.get())
+        assertEquals(Theme.NEUTRAL, task.theme.get())
     }
 }

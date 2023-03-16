@@ -10,7 +10,7 @@ abstract class ModuleGraphExtension @Inject constructor(project: Project) {
 
     private val objects = project.objects
 
-    val theme: Property<String> = objects.property(String::class.java)
+    val theme: Property<Theme> = objects.property(Theme::class.java)
 
     val readmePath: Property<String> = objects.property(String::class.java)
 

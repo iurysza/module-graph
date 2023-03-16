@@ -6,7 +6,7 @@ plugins {
 moduleGraphConfig {
     heading.set("### Dependency Diagram")
     readmePath.set("$projectDir/README.md")
-    theme.set("light")
+    theme.set(dev.iurysouza.modulegraph.Theme.NEUTRAL)
 }
 
 dependencies {
