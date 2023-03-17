@@ -1,4 +1,4 @@
-package com.iurysouza.modulegraph
+package dev.iurysouza.modulegraph
 
 import dev.iurysouza.modulegraph.CreateModuleGraphTask
 import dev.iurysouza.modulegraph.ModuleGraphExtension
