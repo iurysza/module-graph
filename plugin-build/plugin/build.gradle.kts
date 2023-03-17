@@ -10,9 +10,14 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(gradleApi())
 
-    testImplementation(libs.junit)
+    testImplementation(libs.junit5Api)
+    testRuntimeOnly(libs.junit5Engine)
+    testImplementation(gradleTestKit())
 }
-
+// Configure the test task to use JUnit 5
+tasks.test {
+    useJUnitPlatform()
+}
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

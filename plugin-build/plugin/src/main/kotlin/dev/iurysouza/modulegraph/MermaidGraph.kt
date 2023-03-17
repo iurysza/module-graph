@@ -19,7 +19,11 @@ fun buildMermaidGraph(
     theme: Theme,
 ): String {
     // Create a list of module paths by splitting project paths by ":" and filtering out blank parts
-    val modules = sortedProjects.map { it.path.split(":").filter { it.isNotBlank() } }
+    val modules = sortedProjects.map { project ->
+        project.path
+            .split(":")
+            .filter { it.isNotBlank() }
+    }
 
     // Create a list of distinct group names, including "others" for modules without a parent folder
     val groups = createGroups(modules)
@@ -30,11 +34,11 @@ fun buildMermaidGraph(
     }
 
     // Generate Mermaid arrows for each dependency between projects
-    val arrows = dependencies.map { (key, value) ->
-        val sourceName = key.path.split(":").last { it.isNotBlank() }
-        val targetName = value.path.split(":").last { it.isNotBlank() }
+    val arrows = dependencies.joinToString("\n") { (source, target) ->
+        val sourceName = source.path.split(":").last { it.isNotBlank() }
+        val targetName = target.path.split(":").last { it.isNotBlank() }
         "  $sourceName --> $targetName"
-    }.joinToString("\n")
+    }
 
     // Combine subgraphs and arrows to create the final Mermaid graph
     val mermaidConfig = """
@@ -106,6 +110,6 @@ fun Project.parseProjectStructure(): Pair<MutableList<Pair<Project, Project>>, L
         }
     }
 
-    val sortedProjects = projects.sortedBy { it.path }
+    val sortedProjects = projects.sortedBy { it.path }.distinct()
     return Pair(dependencies, sortedProjects)
 }

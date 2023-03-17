@@ -1,12 +1,12 @@
-package com.iurysouza.kotlin.gradle.template.plugin
+package com.iurysouza.modulegraph
 
 import dev.iurysouza.modulegraph.CreateModuleGraphTask
 import dev.iurysouza.modulegraph.ModuleGraphExtension
 import dev.iurysouza.modulegraph.Theme
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
 
 class ModuleGraphPluginTest {
 
@@ -21,7 +21,7 @@ class ModuleGraphPluginTest {
     }
 
     @Test
-    fun `extension templateExampleConfig is created correctly`() {
+    fun `extension moduleGraphConfig is created correctly`() {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply(pluginId)
         assertNotNull(project.extensions.getByName("moduleGraphConfig"))
