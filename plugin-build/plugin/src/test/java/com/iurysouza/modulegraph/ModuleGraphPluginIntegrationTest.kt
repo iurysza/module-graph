@@ -17,37 +17,38 @@ class ModuleGraphPluginIntegrationTest {
 
     @BeforeEach
     fun setup() {
-        settingsFile = File(testProjectDir, "settings.gradle")
-        readmeFile = File(testProjectDir, "README.md")
-        exampleBuildFile = File(testProjectDir, "example/build.gradle")
-        example2BuildFile = File(testProjectDir, "example2/build.gradle")
+        settingsFile = File(testProjectDir, "settings.gradle.kts")
+        exampleBuildFile = File(testProjectDir, "example/build.gradle.kts")
+        example2BuildFile = File(testProjectDir, "example2/build.gradle.kts")
         exampleBuildFile.parentFile.mkdirs()
         example2BuildFile.parentFile.mkdirs()
+        readmeFile = File(testProjectDir, "README.md")
     }
 
     @Test
     fun `when plugin is ran it produces the expected output`() {
         settingsFile.writeText(
             """
-                rootProject.name = 'test'
-                include 'example', 'example2'
+                rootProject.name = "test"
+                include(":example")
+                include(":example2")
             """.trimIndent()
         )
 
         exampleBuildFile.writeText(
             """
                 plugins {
-                    id 'java'
-                    id 'dev.iurysouza.modulegraph' version '0.1.1'
+                    java
+                    id("dev.iurysouza.modulegraph") version "0.1.1"
                 }
 
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
                     theme.set(dev.iurysouza.modulegraph.Theme.NEUTRAL)
-                    readmePath.set("${readmeFile.absolutePath}")
+                    readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
                 }
                 dependencies {
-                    implementation project(':example2')
+                    implementation(project(":example2"))
                 }
             """.trimIndent()
         )
