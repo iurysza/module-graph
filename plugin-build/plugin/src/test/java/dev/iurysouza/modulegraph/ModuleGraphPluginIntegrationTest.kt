@@ -1,4 +1,4 @@
-package com.iurysouza.modulegraph
+package dev.iurysouza.modulegraph
 
 import java.io.File
 import org.gradle.testkit.runner.GradleRunner
