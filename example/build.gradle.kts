@@ -10,5 +10,5 @@ moduleGraphConfig {
 }
 
 dependencies {
-    implementation(project(":example2"))
+    implementation(project(":groupFolder:example2"))
 }

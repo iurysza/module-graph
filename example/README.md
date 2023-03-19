@@ -7,8 +7,7 @@
 }%%
 
 graph LR
-  subgraph others
-    example
+  subgraph groupFolder
     example2
   end
   example --> example2
