@@ -1,8 +1,5 @@
 package dev.iurysouza.modulegraph
 
-import dev.iurysouza.modulegraph.CreateModuleGraphTask
-import dev.iurysouza.modulegraph.ModuleGraphExtension
-import dev.iurysouza.modulegraph.Theme
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull

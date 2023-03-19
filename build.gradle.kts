@@ -56,7 +56,7 @@ tasks.register("reformatAll") {
     group = "Verification"
 
     dependsOn("ktlintFormat")
-    dependsOn(gradle.includedBuild("plugin-build").task(":plugin:ktlintFormat"))
+    dependsOn(gradle.includedBuild("plugin-build").task(":modulegraph:ktlintFormat"))
 }
 
 tasks.register("preMerge") {
@@ -64,8 +64,8 @@ tasks.register("preMerge") {
     group = "Verification"
 
     dependsOn(":example:check")
-    dependsOn(gradle.includedBuild("plugin-build").task(":plugin:check"))
-    dependsOn(gradle.includedBuild("plugin-build").task(":plugin:validatePlugins"))
+    dependsOn(gradle.includedBuild("plugin-build").task(":modulegraph:check"))
+    dependsOn(gradle.includedBuild("plugin-build").task(":modulegraph:validatePlugins"))
 }
 
 tasks.wrapper {
