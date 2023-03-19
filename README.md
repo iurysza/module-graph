@@ -1,13 +1,12 @@
-# Gradle Module Dependency Graph Plugin
-
 [![Pre Merge Checks](https://github.com/iurysza/module-graph/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/iurysza/module-graph/actions?query=workflow%3A%22Pre+Merge+Checks%22) [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE) ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
 
-Introducing the Gradle Module Dependency Graph Plugin! 🌟
+## Introducing the Gradle Module Graph Plugin! 🌟
 
-This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) dependency graph for your Gradle project.
-It provides a visual representation of your project's module dependencies, making it easier to understand the structure and relationships between modules.
+This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph for your Gradle project, providing a visual representation of your project's module relationships. By illustrating the connections between modules, it makes it easier to grasp your project's structure and interdependencies.
 
 >A diagram about the current system is only useful if it's generated. If it is produced by hand it documents the author's belief, not the system. Still, important, but not an input for decision making. Development is primarily decision making. Enable it through custom tools. [source](https://twitter.com/girba/status/1628326848256962561)
+
+You can read more about the background story of this plugin [here](https://iurysouza.dev/automating-project-architecture-graphs/).
 
 ## Features
 
@@ -25,7 +24,7 @@ You'll just need to add it to your project's `build.gradle` or `build.gradle.kts
 
 ```groovy
 plugins {
-  id "dev.iurysouza.modulegraph" version "0.1.1"
+  id "dev.iurysouza.modulegraph" version "0.2.0"
 }
 ```
 
@@ -39,7 +38,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "dev.iurysouza:modulegraph:0.1.1"
+    classpath "dev.iurysouza:modulegraph:0.2.0"
   }
 }
 
@@ -67,7 +66,7 @@ apply plugin: "dev.iurysouza.modulegraph"
 
 ```kotlin
 plugins {
-  id("dev.iurysouza.modulegraph") version "0.1.1"
+  id("dev.iurysouza.modulegraph") version "0.2.0"
 }
 ```
 
@@ -81,7 +80,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath("dev.iurysouza:modulegraph:0.1.1")
+    classpath("dev.iurysouza:modulegraph:0.2.0")
   }
 }
 
