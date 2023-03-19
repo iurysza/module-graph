@@ -44,7 +44,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
             val mermaidGraph = buildMermaidGraph(
                 sortedProjects = sortedProjects,
                 dependencies = dependencies,
-                theme = theme.getOrElse(Theme.NEUTRAL),
+                theme = theme.getOrElse(Theme.NEUTRAL)
             )
             appendMermaidGraphToReadme(mermaidGraph, heading.get(), outputFile.get().asFile)
         }
