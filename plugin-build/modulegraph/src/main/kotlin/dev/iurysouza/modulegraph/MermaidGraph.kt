@@ -25,7 +25,7 @@ fun buildMermaidGraph(
             .filter { it.isNotBlank() }
     }
 
-    // Create a list of distinct group names, including "others" for modules without a parent folder
+    // Create a list of distinct group names
     val groups = createGroups(modules)
 
     // Generate the Mermaid subgraph for each group
@@ -53,14 +53,14 @@ fun buildMermaidGraph(
 
 // Create a list of distinct group names based on the module paths
 fun createGroups(modules: List<List<String>>): List<String> {
-    return modules.map { if (it.size > 1) it[0] else "others" }.distinct()
+    return modules.filter { it.size > 1 }.map { it[0] }.distinct()
 }
 
 // Generate a Mermaid subgraph for the specified group and list of modules
 fun createSubgraph(group: String, modules: List<List<String>>): String {
-    // Extract module names for the current group, handling "others" modules separately
+    // Extract module names for the current group
     val moduleNames = modules
-        .filter { it.getOrNull(0) == group || (group == "others" && it.size == 1) }
+        .filter { it.getOrNull(0) == group }
         .map { if (it.size > 1) it[1] else it[0] }
         .joinToString("\n    ") { moduleName -> moduleName }
 

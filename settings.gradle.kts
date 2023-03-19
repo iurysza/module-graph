@@ -28,6 +28,6 @@ gradleEnterprise {
 
 rootProject.name = "module-graph-plugin-project"
 
-include(":example2")
+include(":groupFolder:example2")
 include(":example")
 includeBuild("plugin-build")

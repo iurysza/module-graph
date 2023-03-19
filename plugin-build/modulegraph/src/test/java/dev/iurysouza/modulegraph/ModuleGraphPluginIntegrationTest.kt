@@ -19,7 +19,7 @@ class ModuleGraphPluginIntegrationTest {
     fun setup() {
         settingsFile = File(testProjectDir, "settings.gradle.kts")
         exampleBuildFile = File(testProjectDir, "example/build.gradle.kts")
-        example2BuildFile = File(testProjectDir, "example2/build.gradle.kts")
+        example2BuildFile = File(testProjectDir, "groupFolder/example2/build.gradle.kts")
         exampleBuildFile.parentFile.mkdirs()
         example2BuildFile.parentFile.mkdirs()
         readmeFile = File(testProjectDir, "README.md")
@@ -31,7 +31,7 @@ class ModuleGraphPluginIntegrationTest {
             """
                 rootProject.name = "test"
                 include(":example")
-                include(":example2")
+                include(":groupFolder:example2")
             """.trimIndent()
         )
 
@@ -48,7 +48,7 @@ class ModuleGraphPluginIntegrationTest {
                     readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
                 }
                 dependencies {
-                    implementation(project(":example2"))
+                    implementation(project(":groupFolder:example2"))
                 }
             """.trimIndent()
         )
@@ -73,8 +73,7 @@ class ModuleGraphPluginIntegrationTest {
                 }%%
 
                 graph LR
-                  subgraph others
-                    example
+                  subgraph groupFolder
                     example2
                   end
                   example --> example2
