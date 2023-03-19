@@ -33,4 +33,4 @@ gradleEnterprise {
 
 rootProject.name = ("dev.iurysouza.modulegraph.plugin")
 
-include(":plugin")
+include(":modulegraph")
