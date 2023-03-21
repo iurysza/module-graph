@@ -15,7 +15,7 @@ You can read more about the background story of this plugin [here](https://iurys
 
 ## Getting Started
 
-You'll just need to add it to your project's `build.gradle` or `build.gradle.kts` file.
+You'll just need to add it to your project's **root** `build.gradle` or `build.gradle.kts` file.
 
 <details>
   <summary><b>build.gradle (Groovy DSL)</b></summary>
