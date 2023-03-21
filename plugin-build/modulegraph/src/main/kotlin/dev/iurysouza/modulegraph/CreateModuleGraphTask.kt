@@ -7,6 +7,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 
 abstract class CreateModuleGraphTask : DefaultTask() {
@@ -30,15 +31,11 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     init {
         group = "Reporting"
         description = "Creates a mermaid dependency graph for the project"
-        try {
-            execute()
-        } catch (e: Exception) {
-            logger.log(LogLevel.ERROR, e.message, e)
-        }
     }
 
-    private fun execute() {
-        doLast {
+    @TaskAction
+    fun execute() {
+        try {
             val (dependencies, sortedProjects) = project.parseProjectStructure()
             val mermaidGraph = buildMermaidGraph(
                 sortedProjects = sortedProjects,
@@ -46,6 +43,8 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 theme = theme.getOrElse(Theme.NEUTRAL)
             )
             appendMermaidGraphToReadme(mermaidGraph, heading.get(), outputFile.get().asFile, logger)
+        } catch (e: Exception) {
+            logger.log(LogLevel.ERROR, e.message, e)
         }
     }
 }
