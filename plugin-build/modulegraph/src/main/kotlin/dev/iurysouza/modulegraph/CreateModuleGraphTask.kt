@@ -5,15 +5,14 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.options.Option
 
 abstract class CreateModuleGraphTask : DefaultTask() {
 
-    @get:InputFile
-    @get:Option(option = "readmePath", description = "The readme file to be used as input")
+    @get:Input
+    @get:Option(option = "readmePath", description = "The readme file path")
     abstract val readmePath: Property<String>
 
     @get:Input
@@ -46,7 +45,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 dependencies = dependencies,
                 theme = theme.getOrElse(Theme.NEUTRAL)
             )
-            appendMermaidGraphToReadme(mermaidGraph, heading.get(), outputFile.get().asFile)
+            appendMermaidGraphToReadme(mermaidGraph, heading.get(), outputFile.get().asFile, logger)
         }
     }
 }

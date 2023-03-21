@@ -3,6 +3,7 @@ package dev.iurysouza.modulegraph
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.logging.Logger
 
 /**
  * Generates a Mermaid graph for module dependencies.
@@ -72,6 +73,7 @@ fun appendMermaidGraphToReadme(
     mermaidGraph: String,
     readMeSection: String,
     readmeFile: File,
+    logger: Logger,
 ) {
     val readmeLines: MutableList<String> = readmeFile.readLines().toMutableList()
 
@@ -86,9 +88,9 @@ fun appendMermaidGraphToReadme(
         readmeLines.add(modulesIndex + 1, "```mermaid\n$mermaidGraph\n```")
 
         readmeFile.writeText(readmeLines.joinToString("\n"))
-        println("Project module dependency graph replaced the content in README.md under the $readMeSection section ")
+        logger.debug("Module graph added to ${readmeFile.path} under the $readMeSection section")
     } else {
-        println("The $readMeSection section was not found in the README.md file")
+        logger.debug("The $readMeSection section was not found in ${readmeFile.path}")
     }
 }
 
