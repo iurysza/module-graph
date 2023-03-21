@@ -17,6 +17,6 @@ abstract class ModuleGraphExtension @Inject constructor(project: Project) {
     val heading: Property<String> = objects.property(String::class.java)
 
     val outputFile: RegularFileProperty = objects.fileProperty().convention(
-        project.layout.buildDirectory.file(readmePath)
+        project.layout.projectDirectory.file(readmePath)
     )
 }
