@@ -49,7 +49,7 @@ apply plugin: "dev.iurysouza.modulegraph"
   moduleGraphConfig {
       readmePath = '$projectDir/README.md'
       heading = '### Dependency Diagram'
-      theme = dev.iurysouza.modulegraph.Theme.NEUTRAL
+      theme = Theme.NEUTRAL
   }
 ```
 </details>
@@ -93,7 +93,7 @@ apply(plugin = "dev.iurysouza:modulegraph")
 moduleGraphConfig {
     readmePath.set("$projectDir/README.md")
     heading.set("### Dependency Diagram")
-    theme.set(dev.iurysouza.modulegraph.Theme.NEUTRAL)
+    theme.set(Theme.NEUTRAL)
 }
 ```
 </details>
@@ -102,9 +102,9 @@ moduleGraphConfig {
 
 To configure the Gradle Module Dependency Graph Plugin, you can set the following options:
 
-- `readmeFile`: The README file where the dependency graph will be appended.
-- `theme`: The theme to be used for styling the graph. Default is `NEUTRAL`.
-- `heading`: The heading where the dependency graph will be appended.
+- **readmePath**: The path of the file where the dependency graph will be appended.
+- **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling the graph. Default is `NEUTRAL`.
+- **heading**: The heading where the dependency graph will be appended.
 
 ## Usage
 
