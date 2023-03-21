@@ -39,7 +39,7 @@ class ModuleGraphPluginIntegrationTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph") version "0.1.1"
+                    id("dev.iurysouza.modulegraph")
                 }
 
                 moduleGraphConfig {
