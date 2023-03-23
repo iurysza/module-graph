@@ -21,11 +21,7 @@ abstract class ModuleGraphPlugin : Plugin<Project> {
             task.heading.set(extension.heading)
             task.readmePath.set(extension.readmePath)
             task.theme.set(extension.theme)
-            task.outputFile.set(
-                project.objects.fileProperty().convention(
-                    project.layout.projectDirectory.file(task.readmePath)
-                )
-            )
+            task.outputFile.set(project.file(extension.readmePath))
             task.doLast { task.execute() }
         }
     }
