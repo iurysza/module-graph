@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 
-class ModuleGraphPluginIntegrationTest {
+class ModuleGraphPluginFunctionalTest {
     @TempDir
     lateinit var testProjectDir: File
     private lateinit var settingsFile: File
