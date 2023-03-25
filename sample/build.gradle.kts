@@ -1,5 +1,4 @@
 plugins {
-    java
     id("dev.iurysouza.modulegraph")
 }
 
@@ -9,6 +8,7 @@ moduleGraphConfig {
     theme.set(dev.iurysouza.modulegraph.Theme.NEUTRAL)
 }
 
-dependencies {
-    implementation(project(":groupFolder:example2"))
+task("check") {
+    dependsOn(tasks.detekt)
+    dependsOn(tasks.ktlintCheck)
 }

@@ -15,33 +15,43 @@ import org.gradle.api.logging.Logger
  */
 
 fun buildMermaidGraph(
-    sortedProjects: List<Project>,
-    dependencies: MutableList<Pair<Project, Project>>,
     theme: Theme,
+    dependencies: MutableMap<String, List<String>>,
 ): String {
-    // Create a list of module paths by splitting project paths by ":" and filtering out blank parts
-    val modules = sortedProjects.map { project ->
-        project.path
-            .split(":")
-            .filter { it.isNotBlank() }
+    val projectPaths = dependencies
+        .entries
+        .asSequence()
+        .flatMap { (source, target) -> target.plus(source) }
+        .sorted()
+
+    val mostMeaningfulGroups: List<String> = projectPaths
+        .map { it.split(":").takeLast(2).take(1) }
+        .distinct()
+        .flatten()
+        .toList()
+
+    val projectNames = projectPaths
+        .map { listOf(it.split(":").takeLast(2)) }
+        .distinct()
+        .flatten()
+        .toList()
+
+    val subgraphs = mostMeaningfulGroups.joinToString("\n") { group ->
+        createSubgraph(group, projectNames)
     }
 
-    // Create a list of distinct group names
-    val groups = createGroups(modules)
+    var arrows = ""
 
-    // Generate the Mermaid subgraph for each group
-    val subgraphs = groups.joinToString("\n") { group ->
-        createSubgraph(group, modules)
+    dependencies.forEach { (source, targets) ->
+        targets.forEach { target ->
+            val sourceName = source.split(":").last { it.isNotBlank() }
+            val targetName = target.split(":").last { it.isNotBlank() }
+            if (sourceName != targetName) {
+                arrows += "  $sourceName --> $targetName\n"
+            }
+        }
     }
 
-    // Generate Mermaid arrows for each dependency between projects
-    val arrows = dependencies.joinToString("\n") { (source, target) ->
-        val sourceName = source.path.split(":").last { it.isNotBlank() }
-        val targetName = target.path.split(":").last { it.isNotBlank() }
-        "  $sourceName --> $targetName"
-    }
-
-    // Combine subgraphs and arrows to create the final Mermaid graph
     val mermaidConfig = """
       %%{
         init: {
@@ -52,20 +62,19 @@ fun buildMermaidGraph(
     return "${mermaidConfig}\n\ngraph LR\n$subgraphs\n$arrows"
 }
 
-// Create a list of distinct group names based on the module paths
-fun createGroups(modules: List<List<String>>): List<String> {
-    return modules.filter { it.size > 1 }.map { it[0] }.distinct()
-}
-
 // Generate a Mermaid subgraph for the specified group and list of modules
 fun createSubgraph(group: String, modules: List<List<String>>): String {
     // Extract module names for the current group
-    val moduleNames = modules
-        .filter { it.getOrNull(0) == group }
-        .map { if (it.size > 1) it[1] else it[0] }
+    val moduleNames = modules.asSequence()
+        .map { it.takeLast(2) } // group by the most relevant part of the path
+        .filter { it.all { it.length > 2 } }
+        .filter { it.contains(group) }
+        .map { it.last() } // take the actual module name
         .joinToString("\n    ") { moduleName -> moduleName }
 
-    // Create the subgraph string for the current group with its module names
+    if (moduleNames.isBlank()) {
+        return ""
+    }
     return "  subgraph $group\n    $moduleNames\n  end"
 }
 
@@ -94,24 +103,18 @@ fun appendMermaidGraphToReadme(
     }
 }
 
-fun Project.parseProjectStructure(): Pair<MutableList<Pair<Project, Project>>, List<Project>> {
-    val projects = mutableSetOf<Project>()
-    val dependencies = mutableListOf<Pair<Project, Project>>()
-
-    project.allprojects.forEach { project ->
-        project.configurations.forEach { config ->
+fun Project.parseProjectStructure(): HashMap<String, List<String>> {
+    val dependencies = hashMapOf<String, List<String>>()
+    project.allprojects.forEach { sourceProject ->
+        sourceProject.configurations.forEach { config ->
             config.dependencies.withType(ProjectDependency::class.java)
                 .map { it.dependencyProject }
-                .forEach { dependency ->
-                    if (dependency != project) {
-                        projects.add(project)
-                        projects.add(dependency)
-                        dependencies.add(project to dependency)
-                    }
+                .forEach { targetProject ->
+                    dependencies[sourceProject.path] =
+                        dependencies.getOrDefault(sourceProject.path, emptyList())
+                            .plus(targetProject.path)
                 }
         }
     }
-
-    val sortedProjects = projects.sortedBy { it.path }.distinct()
-    return Pair(dependencies, sortedProjects)
+    return dependencies
 }
