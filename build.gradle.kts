@@ -63,7 +63,7 @@ tasks.register("preMerge") {
     description = "Runs all the tests/verification tasks on both top level and included build."
     group = "Verification"
 
-    dependsOn(":example:check")
+    dependsOn(":sample:check")
     dependsOn(gradle.includedBuild("plugin-build").task(":modulegraph:check"))
     dependsOn(gradle.includedBuild("plugin-build").task(":modulegraph:validatePlugins"))
 }

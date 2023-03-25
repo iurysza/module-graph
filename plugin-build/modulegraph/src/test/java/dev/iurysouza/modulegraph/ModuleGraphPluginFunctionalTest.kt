@@ -73,10 +73,12 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph LR
+
                   subgraph groupFolder
                     example2
                   end
                   example --> example2
+
                 ```
             """.trimIndent()
         assertEquals(expectedOutput, readmeFile.readText())
