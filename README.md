@@ -24,7 +24,7 @@ You'll just need to add it to your project's **root** `build.gradle` or `build.g
 
 ```groovy
 plugins {
-  id "dev.iurysouza.modulegraph" version "0.2.0"
+  id "dev.iurysouza.modulegraph" version "0.2.2"
 }
 ```
 
@@ -38,7 +38,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "dev.iurysouza:modulegraph:0.2.0"
+    classpath "dev.iurysouza:modulegraph:0.2.2"
   }
 }
 
@@ -66,7 +66,7 @@ apply plugin: "dev.iurysouza.modulegraph"
 
 ```kotlin
 plugins {
-  id("dev.iurysouza.modulegraph") version "0.2.0"
+  id("dev.iurysouza.modulegraph") version "0.2.2"
 }
 ```
 
@@ -80,7 +80,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath("dev.iurysouza:modulegraph:0.2.0")
+    classpath("dev.iurysouza:modulegraph:0.2.2")
   }
 }
 
