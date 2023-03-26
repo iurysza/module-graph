@@ -23,7 +23,6 @@ abstract class ModuleGraphPlugin : Plugin<Project> {
             task.theme.set(extension.theme)
             task.dependencies.set(project.parseProjectStructure())
             task.outputFile.set(project.layout.projectDirectory.file(extension.readmePath))
-            task.doLast { task.execute() }
         }
     }
 }
