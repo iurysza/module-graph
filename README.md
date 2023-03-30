@@ -94,6 +94,7 @@ moduleGraphConfig {
     readmePath.set("$projectDir/README.md")
     heading.set("### Dependency Diagram")
     theme.set(Theme.NEUTRAL)
+    orientation.set(Orientation.LEFT_TO_RIGHT)
 }
 ```
 </details>
@@ -104,6 +105,7 @@ To configure the Gradle Module Dependency Graph Plugin, you can set the followin
 
 - **readmePath**: The path of the file where the dependency graph will be appended.
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling the graph. Default is `NEUTRAL`.
+- **orientation**: The [orientation](https://mermaid.js.org/syntax/flowchart.html#flowchart-orientation) that the flowchart will have. Default is `LEFT_TO_RIGHT`.
 - **heading**: The heading where the dependency graph will be appended.
 
 ## Usage
