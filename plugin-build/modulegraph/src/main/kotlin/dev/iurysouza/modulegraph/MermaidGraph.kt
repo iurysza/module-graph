@@ -16,6 +16,7 @@ import org.gradle.api.logging.Logger
 
 fun buildMermaidGraph(
     theme: Theme,
+    orientation: Orientation,
     dependencies: MutableMap<String, List<String>>,
 ): String {
     val projectPaths = dependencies
@@ -59,7 +60,8 @@ fun buildMermaidGraph(
         }
       }%%
     """.trimIndent()
-    return "${mermaidConfig}\n\ngraph LR\n$subgraphs\n$arrows"
+    val graphOrientation = orientation.value
+    return "${mermaidConfig}\n\ngraph $graphOrientation\n$subgraphs\n$arrows"
 }
 
 // Generate a Mermaid subgraph for the specified group and list of modules
