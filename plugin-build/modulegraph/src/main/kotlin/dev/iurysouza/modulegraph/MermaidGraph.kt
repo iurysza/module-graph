@@ -105,9 +105,10 @@ fun appendMermaidGraphToReadme(
             In order to decide where in the README file the flowchart should be generated, there must be a section
             inside the README file which matches the text provided in `heading` property inside your
             `moduleGraphConfig {}` block.
-            Suggested change: add the following text at the end of your README file ${readmeFile.path}
-
-            $readMeSection
+            Suggested change:
+            Add the section "$readMeSection" inside of your README file.
+            or
+            Change `heading.set("$readMeSection")` to a string which already exists inside your README file.
             """.trimIndent()
         )
     }
