@@ -99,7 +99,18 @@ fun appendMermaidGraphToReadme(
         readmeFile.writeText(readmeLines.joinToString("\n"))
         logger.debug("Module graph added to ${readmeFile.path} under the $readMeSection section")
     } else {
-        logger.debug("The $readMeSection section was not found in ${readmeFile.path}")
+        logger.error(
+            """
+            The "$readMeSection" section was not found in ${readmeFile.path}
+            In order to decide where in the README file the flowchart should be generated, there must be a section
+            inside the README file which matches the text provided in `heading` property inside your
+            `moduleGraphConfig {}` block.
+            Suggested change:
+            Add the section "$readMeSection" inside of your README file.
+            or
+            Change `heading.set("$readMeSection")` to a string which already exists inside your README file.
+            """.trimIndent()
+        )
     }
 }
 
