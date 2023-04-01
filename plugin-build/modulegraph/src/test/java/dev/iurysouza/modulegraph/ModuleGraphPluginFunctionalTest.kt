@@ -45,6 +45,7 @@ class ModuleGraphPluginFunctionalTest {
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
                     theme.set(dev.iurysouza.modulegraph.Theme.NEUTRAL)
+                    orientation.set(dev.iurysouza.modulegraph.Orientation.RIGHT_TO_LEFT)
                     readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
                 }
                 dependencies {
@@ -72,7 +73,7 @@ class ModuleGraphPluginFunctionalTest {
                   }
                 }%%
 
-                graph LR
+                graph RL
 
                   subgraph groupFolder
                     example2
