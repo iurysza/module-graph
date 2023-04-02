@@ -44,7 +44,7 @@ class ModuleGraphPluginFunctionalTest {
 
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
-                    theme.set(dev.iurysouza.modulegraph.Theme.NEUTRAL)
+                    theme.set(dev.iurysouza.modulegraph.Theme.FOREST)
                     orientation.set(dev.iurysouza.modulegraph.Orientation.RIGHT_TO_LEFT)
                     readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
                 }
@@ -69,7 +69,7 @@ class ModuleGraphPluginFunctionalTest {
                 ```mermaid
                 %%{
                   init: {
-                    'theme': 'neutral'
+                    'theme': 'forest'
                   }
                 }%%
 
