@@ -49,7 +49,8 @@ apply plugin: "dev.iurysouza.modulegraph"
   moduleGraphConfig {
       readmePath = '$projectDir/README.md'
       heading = '### Dependency Diagram'
-      theme = Theme.NEUTRAL
+      theme = Theme.NEUTRAL // optional
+      orientation = Orientation.LEFT_TO_RIGHT // optional
   }
 ```
 </details>
@@ -93,8 +94,8 @@ apply(plugin = "dev.iurysouza:modulegraph")
 moduleGraphConfig {
     readmePath.set("$projectDir/README.md")
     heading.set("### Dependency Diagram")
-    theme.set(Theme.NEUTRAL)
-    orientation.set(Orientation.LEFT_TO_RIGHT)
+    theme.set(Theme.NEUTRAL) // optional
+    orientation.set(Orientation.LEFT_TO_RIGHT) //optional
 }
 ```
 </details>
@@ -104,9 +105,11 @@ moduleGraphConfig {
 To configure the Gradle Module Dependency Graph Plugin, you can set the following options:
 
 - **readmePath**: The path of the file where the dependency graph will be appended.
+- **heading**: The heading where the dependency graph will be appended.
+
+Optional settings:
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling the graph. Default is `NEUTRAL`.
 - **orientation**: The [orientation](https://mermaid.js.org/syntax/flowchart.html#flowchart-orientation) that the flowchart will have. Default is `LEFT_TO_RIGHT`.
-- **heading**: The heading where the dependency graph will be appended.
 
 ## Usage
 
@@ -115,6 +118,7 @@ To generate the Mermaid dependency graph for your project, run the following com
 ```sh
 ./gradlew createModuleGraph
 ```
+Now, just look for the generated graph in your project's README file.
 
 ### Example Diagram
 
