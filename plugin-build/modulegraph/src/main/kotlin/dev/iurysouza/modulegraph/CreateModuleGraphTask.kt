@@ -23,6 +23,11 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val theme: Property<Theme>
 
     @get:Input
+    @get:Option(option = "orientation", description = "The flowchart orientation")
+    @get:Optional
+    abstract val orientation: Property<Orientation>
+
+    @get:Input
     @get:Option(option = "heading", description = "The heading where the graph will be appended")
     abstract val heading: Property<String>
 
@@ -43,6 +48,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
         try {
             val mermaidGraph = buildMermaidGraph(
                 theme = theme.getOrElse(Theme.NEUTRAL),
+                orientation = orientation.getOrElse(Orientation.LEFT_TO_RIGHT),
                 dependencies = dependencies.get()
             )
             appendMermaidGraphToReadme(mermaidGraph, heading.get(), outputFile.get().asFile, logger)

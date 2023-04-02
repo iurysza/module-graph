@@ -32,6 +32,7 @@ class ModuleGraphPluginTest {
         (project.extensions.getByName(pluginExtension) as ModuleGraphExtension).apply {
             heading.set("### Dependency Diagram")
             theme.set(Theme.NEUTRAL)
+            orientation.set(Orientation.TOP_TO_BOTTOM)
             readmePath.set(aFilePath)
         }
 
@@ -40,5 +41,6 @@ class ModuleGraphPluginTest {
         assertEquals("### Dependency Diagram", task.heading.get())
         assertEquals(aFilePath, task.readmePath.get())
         assertEquals(Theme.NEUTRAL, task.theme.get())
+        assertEquals(Orientation.TOP_TO_BOTTOM, task.orientation.get())
     }
 }
