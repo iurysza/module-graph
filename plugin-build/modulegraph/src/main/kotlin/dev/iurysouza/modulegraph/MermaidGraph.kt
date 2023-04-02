@@ -44,6 +44,7 @@ fun buildMermaidGraph(
     var arrows = ""
 
     dependencies.forEach { (source, targets) ->
+        if (source == ":") return@forEach
         targets.forEach { target ->
             val sourceName = source.split(":").last { it.isNotBlank() }
             val targetName = target.split(":").last { it.isNotBlank() }
