@@ -3,8 +3,8 @@ plugins {
 }
 
 moduleGraphConfig {
-    heading.set("### Dependency Diagram")
-    readmePath.set("$projectDir/README.md")
+    heading.set("# Dependency Diagram")
+    readmePath.set("./README.md")
     theme.set(dev.iurysouza.modulegraph.Theme.NEUTRAL)
 }
 

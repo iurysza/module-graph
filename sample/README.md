@@ -1,4 +1,6 @@
-### Dependency Diagram
+
+# Dependency Diagram
+
 ```mermaid
 %%{
   init: {
