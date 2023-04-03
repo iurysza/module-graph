@@ -2,11 +2,18 @@
 
 ## Introducing the Gradle Module Graph Plugin! 🌟
 
-This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph for your Gradle project, providing a visual representation of your project's module relationships. By illustrating the connections between modules, it makes it easier to grasp your project's structure and interdependencies.
+This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph for your Gradle
+project, providing a visual representation of your project's module relationships. By illustrating
+the connections between modules, it makes it easier to grasp your project's structure and
+interdependencies.
 
->A diagram about the current system is only useful if it's generated. If it is produced by hand it documents the author's belief, not the system. Still, important, but not an input for decision making. Development is primarily decision making. Enable it through custom tools. [source](https://twitter.com/girba/status/1628326848256962561)
+> A diagram about the current system is only useful if it's generated. If it is produced by hand it
+> documents the author's belief, not the system. Still, important, but not an input for decision
+> making. Development is primarily decision making. Enable it through custom
+> tools. [source](https://twitter.com/girba/status/1628326848256962561)
 
-You can read more about the background story of this plugin [here](https://iurysouza.dev/automating-project-architecture-graphs/).
+You can read more about the background story of this
+plugin [here](https://iurysouza.dev/automating-project-architecture-graphs/).
 
 ## Features
 
@@ -24,7 +31,7 @@ You'll just need to add it to your project's **root** `build.gradle` or `build.g
 
 ```groovy
 plugins {
-  id "dev.iurysouza.modulegraph" version "0.2.2"
+    id "dev.iurysouza.modulegraph" version "0.2.2"
 }
 ```
 
@@ -32,27 +39,30 @@ plugins {
 
 ```groovy
 buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
-  }
-  dependencies {
-    classpath "dev.iurysouza:modulegraph:0.2.2"
-  }
+    dependencies {
+        classpath "dev.iurysouza:modulegraph:0.2.2"
+    }
 }
 
 apply plugin: "dev.iurysouza.modulegraph"
 ```
+
 ### Configuring the plugin
+
 ```groovy
   moduleGraphConfig {
-      readmePath = '$projectDir/README.md'
-      heading = '### Dependency Diagram'
-      theme = Theme.NEUTRAL // optional
-      orientation = Orientation.LEFT_TO_RIGHT // optional
-  }
+    readmePath = "README.md"
+    heading = '### Dependency Diagram'
+    theme = Theme.NEUTRAL // optional
+    orientation = Orientation.LEFT_TO_RIGHT // optional
+}
 ```
+
 </details>
 
 <p></p>
@@ -64,10 +74,9 @@ apply plugin: "dev.iurysouza.modulegraph"
 
 #### Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
 
-
 ```kotlin
 plugins {
-  id("dev.iurysouza.modulegraph") version "0.2.2"
+    id("dev.iurysouza.modulegraph") version "0.2.2"
 }
 ```
 
@@ -75,14 +84,14 @@ plugins {
 
 ```kotlin
 buildscript {
-  repositories {
-    maven {
-      url = uri("https://plugins.gradle.org/m2/")
+    repositories {
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
+        }
     }
-  }
-  dependencies {
-    classpath("dev.iurysouza:modulegraph:0.2.2")
-  }
+    dependencies {
+        classpath("dev.iurysouza:modulegraph:0.2.2")
+    }
 }
 
 apply(plugin = "dev.iurysouza:modulegraph")
@@ -98,6 +107,7 @@ moduleGraphConfig {
     orientation.set(Orientation.LEFT_TO_RIGHT) //optional
 }
 ```
+
 </details>
 
 ## Configuration
@@ -108,16 +118,24 @@ To configure the Gradle Module Dependency Graph Plugin, you can set the followin
 - **heading**: The heading where the dependency graph will be appended.
 
 Optional settings:
-- **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling the graph. Default is `NEUTRAL`.
-- **orientation**: The [orientation](https://mermaid.js.org/syntax/flowchart.html#flowchart-orientation) that the flowchart will have. Default is `LEFT_TO_RIGHT`.
+
+- **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling
+  the graph. Default is `NEUTRAL`.
+- **orientation**:
+  The [orientation](https://mermaid.js.org/syntax/flowchart.html#flowchart-orientation) that the
+  flowchart will have. Default is `LEFT_TO_RIGHT`.
 
 ## Usage
 
-To generate the Mermaid dependency graph for your project, run the following command:
+Make sure you have a heading in your `README` with the same format as the one you set in the configuration, if
+not, the plugin will append it with the graph to the end of the file.
+
+After that, just run the following command:
 
 ```sh
 ./gradlew createModuleGraph
 ```
+
 Now, just look for the generated graph in your project's README file.
 
 ### Example Diagram
