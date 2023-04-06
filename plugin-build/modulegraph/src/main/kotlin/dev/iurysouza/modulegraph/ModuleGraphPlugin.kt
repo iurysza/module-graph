@@ -6,7 +6,7 @@ import org.gradle.api.Project
 const val EXTENSION_NAME = "moduleGraphConfig"
 const val TASK_NAME = "createModuleGraph"
 
-abstract class ModuleGraphPlugin : Plugin<Project> {
+open class ModuleGraphPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val extension = project.extensions.create(
             EXTENSION_NAME,
