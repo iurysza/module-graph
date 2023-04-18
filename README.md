@@ -60,6 +60,7 @@ apply plugin: "dev.iurysouza.modulegraph"
     heading = '### Dependency Diagram'
     theme = Theme.NEUTRAL // optional
     orientation = Orientation.LEFT_TO_RIGHT // optional
+    linkText = LinkText.CONFIGURATION // optional
 }
 ```
 
@@ -105,6 +106,7 @@ moduleGraphConfig {
     heading.set("### Dependency Diagram")
     theme.set(Theme.NEUTRAL) // optional
     orientation.set(Orientation.LEFT_TO_RIGHT) //optional
+    linkText.set(LinkText.CONFIGURATION) // optional
 }
 ```
 
@@ -124,6 +126,10 @@ Optional settings:
 - **orientation**:
   The [orientation](https://mermaid.js.org/syntax/flowchart.html#flowchart-orientation) that the
   flowchart will have. Default is `LEFT_TO_RIGHT`.
+- **linkText**:
+  Whether to add information as text on links in graph. Available values:
+  - `NONE`: No text added. (Default.)
+  - `CONFIGURATION`: The name of the configuration which the dependency belongs to (e.g. "implementation", "compileOnly", "jsMain").
 
 ## Usage
 

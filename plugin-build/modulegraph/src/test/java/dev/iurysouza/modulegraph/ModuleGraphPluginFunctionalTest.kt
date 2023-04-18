@@ -13,6 +13,7 @@ class ModuleGraphPluginFunctionalTest {
     private lateinit var settingsFile: File
     private lateinit var exampleBuildFile: File
     private lateinit var example2BuildFile: File
+    private lateinit var example3BuildFile: File
     private lateinit var readmeFile: File
 
     @BeforeEach
@@ -20,8 +21,10 @@ class ModuleGraphPluginFunctionalTest {
         settingsFile = File(testProjectDir, "settings.gradle.kts")
         exampleBuildFile = File(testProjectDir, "example/build.gradle.kts")
         example2BuildFile = File(testProjectDir, "groupFolder/example2/build.gradle.kts")
+        example3BuildFile = File(testProjectDir, "groupFolder/example3/build.gradle.kts")
         exampleBuildFile.parentFile.mkdirs()
         example2BuildFile.parentFile.mkdirs()
+        example3BuildFile.parentFile.mkdirs()
         readmeFile = File(testProjectDir, "README.md")
     }
 
@@ -79,6 +82,71 @@ class ModuleGraphPluginFunctionalTest {
                     example2
                   end
                   example --> example2
+
+                ```
+            """.trimIndent()
+        assertEquals(expectedOutput, readmeFile.readText())
+    }
+
+    @Test
+    fun `plugin add configuration name to links if configured to`() {
+        settingsFile.writeText(
+            """
+                rootProject.name = "test"
+                include(":example")
+                include(":groupFolder:example2")
+                include(":groupFolder:example3")
+            """.trimIndent()
+        )
+
+        exampleBuildFile.writeText(
+            """
+                plugins {
+                    java
+                    id("dev.iurysouza.modulegraph")
+                }
+
+                moduleGraphConfig {
+                    heading.set("### Dependency Diagram")
+                    theme.set(dev.iurysouza.modulegraph.Theme.FOREST)
+                    orientation.set(dev.iurysouza.modulegraph.Orientation.RIGHT_TO_LEFT)
+                    linkText.set(dev.iurysouza.modulegraph.LinkText.CONFIGURATION)
+                    readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
+                }
+                dependencies {
+                    implementation(project(":groupFolder:example2"))
+                    runtimeOnly(project(":groupFolder:example3"))
+                }
+            """.trimIndent()
+        )
+        readmeFile.writeText("### Dependency Diagram")
+
+        // Run the plugin task
+        GradleRunner.create()
+            .withProjectDir(testProjectDir)
+            .withArguments("createModuleGraph")
+            .withPluginClasspath()
+            .build()
+
+        // Check if the output matches the expected result
+        val expectedOutput =
+            """
+                ### Dependency Diagram
+                ```mermaid
+                %%{
+                  init: {
+                    'theme': 'forest'
+                  }
+                }%%
+
+                graph RL
+
+                  subgraph groupFolder
+                    example2
+                    example3
+                  end
+                  example -- implementation --> example2
+                  example -- runtimeOnly --> example3
 
                 ```
             """.trimIndent()
