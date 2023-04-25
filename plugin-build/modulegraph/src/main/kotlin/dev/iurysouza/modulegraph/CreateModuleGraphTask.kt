@@ -15,7 +15,11 @@ import org.gradle.api.tasks.options.Option
 /**
  * Represents a dependency on a project. Contains the name of the configuration to which the dependency belongs.
  */
-data class Dependency(val targetProjectPath: String, val configName: String) : Serializable
+data class Dependency(val targetProjectPath: String, val configName: String) : Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 46465844
+    }
+}
 
 abstract class CreateModuleGraphTask : DefaultTask() {
 
