@@ -17,12 +17,13 @@ import org.gradle.api.logging.Logger
 fun buildMermaidGraph(
     theme: Theme,
     orientation: Orientation,
-    dependencies: MutableMap<String, List<String>>,
+    linkText: LinkText,
+    dependencies: MutableMap<String, List<Dependency>>,
 ): String {
     val projectPaths = dependencies
         .entries
         .asSequence()
-        .flatMap { (source, target) -> target.plus(source) }
+        .flatMap { (source, target) -> target.map { it.targetProjectPath }.plus(source) }
         .sorted()
 
     val mostMeaningfulGroups: List<String> = projectPaths
@@ -47,9 +48,13 @@ fun buildMermaidGraph(
         if (source == ":") return@forEach
         targets.forEach { target ->
             val sourceName = source.split(":").last { it.isNotBlank() }
-            val targetName = target.split(":").last { it.isNotBlank() }
+            val targetName = target.targetProjectPath.split(":").last { it.isNotBlank() }
             if (sourceName != targetName) {
-                arrows += "  $sourceName --> $targetName\n"
+                val link = when (linkText) {
+                    LinkText.CONFIGURATION -> "-- ${target.configName} -->"
+                    LinkText.NONE -> "-->"
+                }
+                arrows += "  $sourceName $link $targetName\n"
             }
         }
     }
@@ -112,8 +117,8 @@ fun appendMermaidGraphToReadme(
     }
 }
 
-fun Project.parseProjectStructure(): HashMap<String, List<String>> {
-    val dependencies = hashMapOf<String, List<String>>()
+fun Project.parseProjectStructure(): HashMap<String, List<Dependency>> {
+    val dependencies = hashMapOf<String, List<Dependency>>()
     project.allprojects.forEach { sourceProject ->
         sourceProject.configurations.forEach { config ->
             config.dependencies.withType(ProjectDependency::class.java)
@@ -121,7 +126,7 @@ fun Project.parseProjectStructure(): HashMap<String, List<String>> {
                 .forEach { targetProject ->
                     dependencies[sourceProject.path] =
                         dependencies.getOrDefault(sourceProject.path, emptyList())
-                            .plus(targetProject.path)
+                            .plus(Dependency(targetProject.path, config.name))
                 }
         }
     }

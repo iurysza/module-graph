@@ -22,6 +22,7 @@ abstract class ModuleGraphPlugin : Plugin<Project> {
             task.readmePath.set(extension.readmePath)
             task.theme.set(extension.theme)
             task.orientation.set(extension.orientation)
+            task.linkText.set(extension.linkText)
             task.dependencies.set(project.parseProjectStructure())
             task.outputFile.set(project.layout.projectDirectory.file(extension.readmePath))
         }
