@@ -61,6 +61,7 @@ apply plugin: "dev.iurysouza.modulegraph"
     theme = Theme.NEUTRAL // optional
     orientation = Orientation.LEFT_TO_RIGHT // optional
     linkText = LinkText.CONFIGURATION // optional
+    createReadmeIfMissing = true // optional
 }
 ```
 
@@ -107,6 +108,7 @@ moduleGraphConfig {
     theme.set(Theme.NEUTRAL) // optional
     orientation.set(Orientation.LEFT_TO_RIGHT) //optional
     linkText.set(LinkText.CONFIGURATION) // optional
+    createReadmeIfMissing.set(true) // optional
 }
 ```
 
@@ -130,6 +132,8 @@ Optional settings:
   Whether to add information as text on links in graph. Available values:
   - `NONE`: No text added. (Default.)
   - `CONFIGURATION`: The name of the configuration which the dependency belongs to (e.g. "implementation", "compileOnly", "jsMain").
+- **createReadmeIfMissing**:
+  Create the specified `readmePath` if it does not exist. Default is `false`.
 
 ## Usage
 

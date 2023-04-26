@@ -90,10 +90,19 @@ fun appendMermaidGraphToReadme(
     mermaidGraph: String,
     readMeSection: String,
     readmeFile: File,
+    createReadmeIfMissing: Boolean,
     logger: Logger,
 ) {
+    if (createReadmeIfMissing && !readmeFile.exists()) {
+        readmeFile.createNewFile()
+        logger.warn(
+            """
+            The specified readme file does not exist: ${readmeFile.path}.
+            The file has been created.
+            """.trimIndent()
+        )
+    }
     val readmeLines: MutableList<String> = readmeFile.readLines().toMutableList()
-
     val modulesIndex = readmeLines.indexOfFirst { it.startsWith(readMeSection) }
 
     if (modulesIndex != -1) {
