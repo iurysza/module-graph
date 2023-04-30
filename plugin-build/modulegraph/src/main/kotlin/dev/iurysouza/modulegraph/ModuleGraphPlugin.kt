@@ -20,6 +20,7 @@ abstract class ModuleGraphPlugin : Plugin<Project> {
         ) { task ->
             task.heading.set(extension.heading)
             task.readmePath.set(extension.readmePath)
+            task.createReadmeIfMissing.set(extension.createReadmeIfMissing)
             task.theme.set(extension.theme)
             task.orientation.set(extension.orientation)
             task.linkText.set(extension.linkText)

@@ -34,12 +34,14 @@ class ModuleGraphPluginTest {
             theme.set(Theme.NEUTRAL)
             orientation.set(Orientation.TOP_TO_BOTTOM)
             readmePath.set(aFilePath)
+            createReadmeIfMissing.set(true)
         }
 
         val task = project.tasks.getByName("createModuleGraph") as CreateModuleGraphTask
 
         assertEquals("### Dependency Diagram", task.heading.get())
         assertEquals(aFilePath, task.readmePath.get())
+        assertEquals(true, task.createReadmeIfMissing.get())
         assertEquals(Theme.NEUTRAL, task.theme.get())
         assertEquals(Orientation.TOP_TO_BOTTOM, task.orientation.get())
     }

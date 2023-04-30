@@ -1,8 +1,11 @@
 package dev.iurysouza.modulegraph
 
 import java.io.File
+import kotlin.random.Random
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -151,5 +154,76 @@ class ModuleGraphPluginFunctionalTest {
                 ```
             """.trimIndent()
         assertEquals(expectedOutput, readmeFile.readText())
+    }
+
+    @Test
+    fun `by default the plugin fails if the readme file is missing`() {
+        val missingFile = testProjectDir.resolve("missing-file-${Random.nextLong()}.md")
+        settingsFile.writeText(
+            """
+                rootProject.name = "test"
+                include(":example")
+            """.trimIndent()
+        )
+        exampleBuildFile.writeText(
+            """
+                plugins {
+                    java
+                    id("dev.iurysouza.modulegraph")
+                }
+
+                moduleGraphConfig {
+                    heading.set("### Dependency Diagram")
+                    readmePath.set("${missingFile.absolutePath.replace("\\", "\\\\")}")
+                    // we do NOT set 'createReadmeIfMissing'
+                }
+            """.trimIndent()
+        )
+
+        // Run the plugin task
+        val buildResult = GradleRunner.create()
+            .withProjectDir(testProjectDir)
+            .withArguments("createModuleGraph")
+            .withPluginClasspath()
+            .build()
+
+        assertTrue(buildResult.output.contains("FileNotFoundException"), buildResult.output)
+        assertFalse(missingFile.exists(), "File was created even though it was not supposed to.")
+    }
+
+    @Test
+    fun `plugin creates readme file if configured to`() {
+        val missingFile = testProjectDir.resolve("missing-file-${Random.nextLong()}.md")
+        settingsFile.writeText(
+            """
+                rootProject.name = "test"
+                include(":example")
+            """.trimIndent()
+        )
+        exampleBuildFile.writeText(
+            """
+                plugins {
+                    java
+                    id("dev.iurysouza.modulegraph")
+                }
+
+                moduleGraphConfig {
+                    heading.set("### Dependency Diagram")
+                    readmePath.set("${missingFile.absolutePath.replace("\\", "\\\\")}")
+                    createReadmeIfMissing.set(true)
+                }
+            """.trimIndent()
+        )
+
+        // Run the plugin task
+        GradleRunner.create()
+            .withProjectDir(testProjectDir)
+            .withArguments("createModuleGraph")
+            .withPluginClasspath()
+            .build()
+
+        // Check that the file was created and output written
+        assertTrue(missingFile.exists(), "File was supposed to be created but was not.")
+        assertFalse(missingFile.readText().isBlank(), "File was created but has no content.")
     }
 }
