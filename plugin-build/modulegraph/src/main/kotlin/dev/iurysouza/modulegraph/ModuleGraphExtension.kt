@@ -14,8 +14,6 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
 
     val readmePath: Property<String> = objects.property(String::class.java)
 
-    val createReadmeIfMissing: Property<Boolean> = objects.property(Boolean::class.java)
-
     val heading: Property<String> = objects.property(String::class.java)
 
     val linkText: Property<LinkText> = objects.property(LinkText::class.java)

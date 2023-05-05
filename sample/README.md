@@ -1,14 +1,13 @@
-
-# Dependency Diagram
+# Module Graph
 
 ```mermaid
 %%{
   init: {
-    'theme': 'neutral'
+    'theme': 'dark'
   }
 }%%
 
-graph LR
+graph TB
   subgraph sample
     alpha
     beta

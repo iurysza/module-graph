@@ -28,14 +28,6 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val readmePath: Property<String>
 
     @get:Input
-    @get:Option(
-        option = "createReadmeIfMissing",
-        description = "Create readme file instead of failing the task if the file is missing."
-    )
-    @get:Optional
-    abstract val createReadmeIfMissing: Property<Boolean>
-
-    @get:Input
     @get:Option(option = "theme", description = "The mermaid theme")
     @get:Optional
     abstract val theme: Property<Theme>
@@ -79,7 +71,6 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 mermaidGraph = mermaidGraph,
                 readMeSection = heading.get(),
                 readmeFile = outputFile.get().asFile,
-                createReadmeIfMissing = createReadmeIfMissing.getOrElse(false),
                 logger = logger
             )
         } catch (e: Exception) {
