@@ -72,6 +72,7 @@ class ModuleGraphPluginFunctionalTest {
         val expectedOutput =
             """
                 ### Dependency Diagram
+
                 ```mermaid
                 %%{
                   init: {
@@ -135,6 +136,7 @@ class ModuleGraphPluginFunctionalTest {
         val expectedOutput =
             """
                 ### Dependency Diagram
+
                 ```mermaid
                 %%{
                   init: {
@@ -157,7 +159,7 @@ class ModuleGraphPluginFunctionalTest {
     }
 
     @Test
-    fun `by default the plugin fails if the readme file is missing`() {
+    fun `plugin creates readme file when one is not found`() {
         val missingFile = testProjectDir.resolve("missing-file-${Random.nextLong()}.md")
         settingsFile.writeText(
             """
@@ -175,42 +177,6 @@ class ModuleGraphPluginFunctionalTest {
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
                     readmePath.set("${missingFile.absolutePath.replace("\\", "\\\\")}")
-                    // we do NOT set 'createReadmeIfMissing'
-                }
-            """.trimIndent()
-        )
-
-        // Run the plugin task
-        val buildResult = GradleRunner.create()
-            .withProjectDir(testProjectDir)
-            .withArguments("createModuleGraph")
-            .withPluginClasspath()
-            .build()
-
-        assertTrue(buildResult.output.contains("FileNotFoundException"), buildResult.output)
-        assertFalse(missingFile.exists(), "File was created even though it was not supposed to.")
-    }
-
-    @Test
-    fun `plugin creates readme file if configured to`() {
-        val missingFile = testProjectDir.resolve("missing-file-${Random.nextLong()}.md")
-        settingsFile.writeText(
-            """
-                rootProject.name = "test"
-                include(":example")
-            """.trimIndent()
-        )
-        exampleBuildFile.writeText(
-            """
-                plugins {
-                    java
-                    id("dev.iurysouza.modulegraph")
-                }
-
-                moduleGraphConfig {
-                    heading.set("### Dependency Diagram")
-                    readmePath.set("${missingFile.absolutePath.replace("\\", "\\\\")}")
-                    createReadmeIfMissing.set(true)
                 }
             """.trimIndent()
         )
