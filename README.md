@@ -4,8 +4,8 @@
 
 This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph for your Gradle
 project, providing a visual representation of your project's module relationships. By illustrating
-the connections between modules, it makes it easier to grasp your project's structure and
-interdependencies.
+how the parts of the project are connected, it makes it easier to understand the design and how they
+depend on each other.
 
 > A diagram about the current system is only useful if it's generated. If it is produced by hand it
 > documents the author's belief, not the system. Still, important, but not an input for decision
@@ -17,8 +17,11 @@ plugin [here](https://iurysouza.dev/automating-project-architecture-graphs/).
 
 ## Features
 
-- Generate a Mermaid dependency graph of the modules in your Gradle project
-- Automatically append the generated graph to your project's README file
+- Generates a Mermaid dependency graph of the modules in your Gradle project.
+- Automatically append the generated graph to your project's README file.
+- The raw code block automatically renders as a graph on
+  both [Github](https://github.blog/2022-02-14-include-diagrams-markdown-files-mermaid/)
+  and [Gitlab](https://about.gitlab.com/handbook/tools-and-tips/mermaid/#mermaid-diagrams).
 
 ## Getting Started
 
@@ -31,7 +34,7 @@ You'll just need to add it to your project's **root** `build.gradle` or `build.g
 
 ```groovy
 plugins {
-    id "dev.iurysouza.modulegraph" version "0.3.0"
+    id "dev.iurysouza.modulegraph" version "0.4.0"
 }
 ```
 
@@ -45,7 +48,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "dev.iurysouza:modulegraph:0.3.0"
+        classpath "dev.iurysouza:modulegraph:0.4.0"
     }
 }
 
@@ -56,11 +59,11 @@ apply plugin: "dev.iurysouza.modulegraph"
 
 ```groovy
   moduleGraphConfig {
-    readmePath = "README.md"
+    readmePath = "./README.md"
     heading = '### Dependency Diagram'
     theme = Theme.NEUTRAL // optional
     orientation = Orientation.LEFT_TO_RIGHT // optional
-    linkText = LinkText.CONFIGURATION // optional
+    linkText = LinkText.NONE // optional
 }
 ```
 
@@ -77,7 +80,7 @@ apply plugin: "dev.iurysouza.modulegraph"
 
 ```kotlin
 plugins {
-    id("dev.iurysouza.modulegraph") version "0.3.0"
+    id("dev.iurysouza.modulegraph") version "0.4.0"
 }
 ```
 
@@ -91,7 +94,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath("dev.iurysouza:modulegraph:0.3.0")
+        classpath("dev.iurysouza:modulegraph:0.4.0")
     }
 }
 
@@ -102,11 +105,11 @@ apply(plugin = "dev.iurysouza:modulegraph")
 
 ```kotlin
 moduleGraphConfig {
-    readmePath.set("$projectDir/README.md")
+    readmePath.set("./README.md")
     heading.set("### Dependency Diagram")
     theme.set(Theme.NEUTRAL) // optional
     orientation.set(Orientation.LEFT_TO_RIGHT) //optional
-    linkText.set(LinkText.CONFIGURATION) // optional
+    linkText.set(LinkText.NONE) // optional
 }
 ```
 
@@ -128,12 +131,14 @@ Optional settings:
   flowchart will have. Default is `LEFT_TO_RIGHT`.
 - **linkText**:
   Whether to add information as text on links in graph. Available values:
-  - `NONE`: No text added. (Default.)
-  - `CONFIGURATION`: The name of the configuration which the dependency belongs to (e.g. "implementation", "compileOnly", "jsMain").
+    - `NONE`: No text added. (Default.)
+    - `CONFIGURATION`: The name of the configuration which the dependency belongs to (e.g. "
+      implementation", "compileOnly", "jsMain").
 
 ## Usage
 
-Make sure you have a heading in your `README` with the same format as the one you set in the configuration, if
+Make sure you have a heading in your `README` with the same format as the one you set in the
+configuration, if
 not, the plugin will append it with the graph to the end of the file.
 
 After that, just run the following command:
