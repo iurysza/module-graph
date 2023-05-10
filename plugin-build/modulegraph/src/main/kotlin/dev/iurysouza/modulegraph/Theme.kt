@@ -23,4 +23,9 @@ enum class Theme(val value: String) {
      * This theme is great for black and white documents that will be printed.
      */
     NEUTRAL("neutral"),
+    
+    /**
+    * This is a base theme which can be configured
+    */
+    BASE("base")
 }
