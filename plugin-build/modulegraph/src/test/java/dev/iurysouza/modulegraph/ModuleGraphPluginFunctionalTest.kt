@@ -86,7 +86,6 @@ class ModuleGraphPluginFunctionalTest {
                     example2
                   end
                   example --> example2
-
                 ```
             """.trimIndent()
         assertEquals(expectedOutput, readmeFile.readText())
@@ -152,7 +151,6 @@ class ModuleGraphPluginFunctionalTest {
                   end
                   example -- implementation --> example2
                   example -- runtimeOnly --> example3
-
                 ```
             """.trimIndent()
         assertEquals(expectedOutput, readmeFile.readText())
