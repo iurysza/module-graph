@@ -107,9 +107,21 @@ apply(plugin = "dev.iurysouza:modulegraph")
 moduleGraphConfig {
     readmePath.set("./README.md")
     heading.set("### Dependency Diagram")
-    theme.set(Theme.NEUTRAL) // optional
     orientation.set(Orientation.LEFT_TO_RIGHT) //optional
     linkText.set(LinkText.NONE) // optional
+    theme.set(Theme.NEUTRAL) // optional
+    // or you can fully customize it by using the BASE theme:
+    // theme.set(Theme.BASE(
+    //      mapOf(
+    //          "primaryTextColor" to "#fff",
+    //          "primaryColor" to "#5a4f7c",
+    //          "primaryBorderColor" to "#5a4f7c",
+    //          "lineColor" to "#f5a623",
+    //          "tertiaryColor" to "#40375c",
+    //          "fontSize" to "11px"
+    //      )
+    //   )
+    // )
 }
 ```
 
@@ -126,6 +138,8 @@ Optional settings:
 
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling
   the graph. Default is `NEUTRAL`.
+  - Further customization is possible by setting the `themeVariables` property on the BASE theme. Check the
+    [mermaid docs](https://mermaid-js.github.io/mermaid/#/theming) for more info.
 - **orientation**:
   The [orientation](https://mermaid.js.org/syntax/flowchart.html#flowchart-orientation) that the
   flowchart will have. Default is `LEFT_TO_RIGHT`.
