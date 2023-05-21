@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 
+@Suppress("LongMethod")
 class ModuleGraphPluginFunctionalTest {
     @TempDir
     lateinit var testProjectDir: File
@@ -81,6 +82,75 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph RL
+
+                  subgraph groupFolder
+                    example2
+                  end
+                  example --> example2
+                ```
+            """.trimIndent()
+        assertEquals(expectedOutput, readmeFile.readText())
+    }
+
+    @Test
+    fun `when custom theme is applied it produces the expected output`() {
+        settingsFile.writeText(
+            """
+                rootProject.name = "test"
+                include(":example")
+                include(":groupFolder:example2")
+            """.trimIndent()
+        )
+
+        exampleBuildFile.writeText(
+            """
+                plugins {
+                    java
+                    id("dev.iurysouza.modulegraph")
+                }
+                moduleGraphConfig {
+                    heading.set("### Dependency Diagram")
+                    theme.set(dev.iurysouza.modulegraph.Theme.BASE(
+                        mapOf(
+                            "primaryTextColor" to "#fff",
+                            "primaryColor" to "#5a4f7c",
+                            "primaryBorderColor" to "#5a4f7c",
+                            "lineColor" to "#f5a623",
+                            "tertiaryColor" to "#40375c",
+                            "fontSize" to "11px"
+                            )
+                        )
+                    )
+                    readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
+                }
+                dependencies {
+                    implementation(project(":groupFolder:example2"))
+                }
+            """.trimIndent()
+        )
+        readmeFile.writeText("### Dependency Diagram")
+
+        // Run the plugin task
+        GradleRunner.create()
+            .withProjectDir(testProjectDir)
+            .withArguments("createModuleGraph")
+            .withPluginClasspath()
+            .build()
+
+        // Check if the output matches the expected result
+        val expectedOutput =
+            """
+                ### Dependency Diagram
+
+                ```mermaid
+                %%{
+                  init: {
+                    'theme': 'base',
+                	'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"11px"}
+                  }
+                }%%
+
+                graph LR
 
                   subgraph groupFolder
                     example2
