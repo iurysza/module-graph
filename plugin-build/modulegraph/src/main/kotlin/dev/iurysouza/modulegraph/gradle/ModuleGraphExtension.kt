@@ -1,5 +1,8 @@
-package dev.iurysouza.modulegraph
+package dev.iurysouza.modulegraph.gradle
 
+import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.Orientation
+import dev.iurysouza.modulegraph.Theme
 import javax.inject.Inject
 import org.gradle.api.Project
 import org.gradle.api.provider.Property

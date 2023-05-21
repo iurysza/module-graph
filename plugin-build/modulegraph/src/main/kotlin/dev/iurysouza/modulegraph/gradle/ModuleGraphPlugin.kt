@@ -1,10 +1,11 @@
-package dev.iurysouza.modulegraph
+package dev.iurysouza.modulegraph.gradle
 
+import dev.iurysouza.modulegraph.parseProjectStructure
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-const val EXTENSION_NAME = "moduleGraphConfig"
-const val TASK_NAME = "createModuleGraph"
+private const val EXTENSION_NAME = "moduleGraphConfig"
+private const val TASK_NAME = "createModuleGraph"
 
 open class ModuleGraphPlugin : Plugin<Project> {
     override fun apply(project: Project) {

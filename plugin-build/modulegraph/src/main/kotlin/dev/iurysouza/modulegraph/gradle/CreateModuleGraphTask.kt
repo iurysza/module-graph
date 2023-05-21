@@ -1,6 +1,11 @@
-package dev.iurysouza.modulegraph
+package dev.iurysouza.modulegraph.gradle
 
-import java.io.Serializable
+import dev.iurysouza.modulegraph.Dependency
+import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.Orientation
+import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.appendMermaidGraphToReadme
+import dev.iurysouza.modulegraph.buildMermaidGraph
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
@@ -11,15 +16,6 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
-
-/**
- * Represents a dependency on a project. Contains the name of the configuration to which the dependency belongs.
- */
-data class Dependency(val targetProjectPath: String, val configName: String) : Serializable {
-    companion object {
-        private const val serialVersionUID: Long = 46465844
-    }
-}
 
 abstract class CreateModuleGraphTask : DefaultTask() {
 
@@ -48,7 +44,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
 
     @get:Input
     @get:Option(option = "dependencies", description = "The project dependencies")
-    abstract val dependencies: MapProperty<String, List<Dependency>>
+    internal abstract val dependencies: MapProperty<String, List<Dependency>>
 
     @get:OutputFile
     abstract val outputFile: RegularFileProperty

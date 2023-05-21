@@ -1,6 +1,7 @@
 package dev.iurysouza.modulegraph
 
 import java.io.File
+import java.io.Serializable
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.logging.Logger
@@ -11,10 +12,9 @@ import org.gradle.api.logging.Logger
  * - Subgraphs: Grouped modules in the graph
  * - Source: Module with dependencies
  * - Target: Dependent module
- * - Arrows: Represent dependencies between modules
+ * - Digraph: Represents the dependencies between two modules: source -> target
  */
-
-fun buildMermaidGraph(
+internal fun buildMermaidGraph(
     theme: Theme,
     orientation: Orientation,
     linkText: LinkText,
@@ -42,22 +42,21 @@ fun buildMermaidGraph(
         createSubgraph(group, projectNames)
     }
 
-    var arrows = ""
-
-    dependencies.forEach { (source, targets) ->
-        if (source == ":") return@forEach
-        targets.forEach { target ->
-            val sourceName = source.split(":").last { it.isNotBlank() }
+    val digraph = dependencies.filterKeys { it != ":" }.flatMap { entry ->
+        val sourceName = entry.key.split(":").last { it.isNotBlank() }
+        entry.value.mapNotNull { target ->
             val targetName = target.targetProjectPath.split(":").last { it.isNotBlank() }
             if (sourceName != targetName) {
                 val link = when (linkText) {
                     LinkText.CONFIGURATION -> "-- ${target.configName} -->"
                     LinkText.NONE -> "-->"
                 }
-                arrows += "  $sourceName $link $targetName\n"
+                "  $sourceName $link $targetName"
+            } else {
+                null
             }
         }
-    }
+    }.joinToString(separator = "\n")
 
     val mermaidConfig = """
       %%{
@@ -66,8 +65,7 @@ fun buildMermaidGraph(
         }
       }%%
     """.trimIndent()
-    val graphOrientation = orientation.value
-    return "${mermaidConfig}\n\ngraph $graphOrientation\n$subgraphs\n$arrows"
+    return "${mermaidConfig}\n\ngraph ${orientation.value}\n$subgraphs\n$digraph"
 }
 
 // Generate a Mermaid subgraph for the specified group and list of modules
@@ -86,7 +84,7 @@ fun createSubgraph(group: String, modules: List<List<String>>): String {
     return "  subgraph $group\n    $moduleNames\n  end"
 }
 
-fun appendMermaidGraphToReadme(
+internal fun appendMermaidGraphToReadme(
     mermaidGraph: String,
     readMeSection: String,
     readmeFile: File,
@@ -125,7 +123,21 @@ private fun findNextSectionStart(readmeLines: List<String>, startIndex: Int): In
     }
 }
 
-fun Project.parseProjectStructure(): HashMap<String, List<Dependency>> {
+/**
+ * Represents a dependency on a project.
+ * Contains the name of the configuration to which the dependency belongs.
+ */
+internal data class Dependency(
+    val targetProjectPath: String,
+    val configName: String,
+) : Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 46465844
+    }
+}
+
+internal fun Project.parseProjectStructure(): HashMap<String, List<Dependency>> {
+    println("Parsing project structure...")
     val dependencies = hashMapOf<String, List<Dependency>>()
     project.allprojects.forEach { sourceProject ->
         sourceProject.configurations.forEach { config ->

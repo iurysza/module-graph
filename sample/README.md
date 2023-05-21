@@ -22,5 +22,4 @@ graph TB
   alpha --> gama
   alpha --> delta
   gama --> zeta
-
 ```
