@@ -5,12 +5,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm")
     `java-gradle-plugin`
+    alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.pluginPublish)
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(gradleApi())
+    implementation(libs.kotlinxSerializationJson)
 
     testImplementation(libs.junit5Api)
     testRuntimeOnly(libs.junit5Engine)
