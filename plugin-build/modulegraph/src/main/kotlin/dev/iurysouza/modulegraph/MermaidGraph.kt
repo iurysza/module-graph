@@ -2,6 +2,8 @@ package dev.iurysouza.modulegraph
 
 import java.io.File
 import java.io.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.logging.Logger
@@ -58,15 +60,16 @@ internal fun buildMermaidGraph(
         }
     }.joinToString(separator = "\n")
 
-    val mermaidConfig = """
-      %%{
-        init: {
-          'theme': '${theme.value}'
-        }
-      }%%
-    """.trimIndent()
-    return "${mermaidConfig}\n\ngraph ${orientation.value}\n$subgraphs\n$digraph"
+    return "${createConfig(theme)}\n\ngraph ${orientation.value}\n$subgraphs\n$digraph"
 }
+
+private fun createConfig(theme: Theme): String = """
+%%{
+  init: {
+    'theme': '${theme.name}'${if (theme is Theme.BASE) ",\n\t'themeVariables': ${Json.encodeToString(theme.themeVariables).trimIndent()}" else ""}
+  }
+}%%
+""".trimIndent()
 
 // Generate a Mermaid subgraph for the specified group and list of modules
 fun createSubgraph(group: String, modules: List<List<String>>): String {

@@ -30,30 +30,31 @@ You'll just need to add it to your project's **root** `build.gradle` or `build.g
 <details>
   <summary><b>build.gradle (Groovy DSL)</b></summary>
 
-### Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
+#### Using the plugins DSL
 
 ```groovy
 plugins {
     id "dev.iurysouza.modulegraph" version "0.4.0"
 }
 ```
-
-### Using [legacy plugin application](https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application)
+<details>
+  <summary><b>Using Legacy Plugin application</b></summary>
 
 ```groovy
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
+    buildscript {
+        repositories {
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+        }
+        dependencies {
+            classpath "dev.iurysouza:modulegraph:0.4.0"
         }
     }
-    dependencies {
-        classpath "dev.iurysouza:modulegraph:0.4.0"
-    }
-}
 
-apply plugin: "dev.iurysouza.modulegraph"
+    apply plugin: "dev.iurysouza.modulegraph"
 ```
+</details>
 
 ### Configuring the plugin
 
@@ -64,6 +65,17 @@ apply plugin: "dev.iurysouza.modulegraph"
     theme = Theme.NEUTRAL // optional
     orientation = Orientation.LEFT_TO_RIGHT // optional
     linkText = LinkText.NONE // optional
+    // or you can fully customize it by using the BASE theme:
+    // theme = Theme.BASE(
+    //      [
+    //          "primaryTextColor": "#fff",
+    //          "primaryColor": "#5a4f7c",
+    //          "primaryBorderColor": "#5a4f7c",
+    //          "lineColor": "#f5a623",
+    //          "tertiaryColor": "#40375c",
+    //          "fontSize": "11px"
+    //      ]
+    //  )
 }
 ```
 
@@ -76,7 +88,7 @@ apply plugin: "dev.iurysouza.modulegraph"
 
 <p></p>
 
-#### Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
+#### Using the plugins DSL
 
 ```kotlin
 plugins {
@@ -84,22 +96,24 @@ plugins {
 }
 ```
 
-#### Using [legacy plugin application](https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application)
+<details>
+  <summary><b>Using Legacy Plugin application</b></summary>
 
 ```kotlin
-buildscript {
-    repositories {
-        maven {
-            url = uri("https://plugins.gradle.org/m2/")
+    buildscript {
+        repositories {
+            maven {
+                url = uri("https://plugins.gradle.org/m2/")
+            }
+        }
+        dependencies {
+            classpath("dev.iurysouza:modulegraph:0.4.0")
         }
     }
-    dependencies {
-        classpath("dev.iurysouza:modulegraph:0.4.0")
-    }
-}
 
 apply(plugin = "dev.iurysouza:modulegraph")
 ```
+</details>
 
 ### Configuring the plugin
 
@@ -107,9 +121,21 @@ apply(plugin = "dev.iurysouza:modulegraph")
 moduleGraphConfig {
     readmePath.set("./README.md")
     heading.set("### Dependency Diagram")
-    theme.set(Theme.NEUTRAL) // optional
     orientation.set(Orientation.LEFT_TO_RIGHT) //optional
     linkText.set(LinkText.NONE) // optional
+    theme.set(Theme.NEUTRAL) // optional
+    // or you can fully customize it by using the BASE theme:
+    // theme.set(Theme.BASE(
+    //      mapOf(
+    //          "primaryTextColor" to "#fff",
+    //          "primaryColor" to "#5a4f7c",
+    //          "primaryBorderColor" to "#5a4f7c",
+    //          "lineColor" to "#f5a623",
+    //          "tertiaryColor" to "#40375c",
+    //          "fontSize" to "11px"
+    //      )
+    //   )
+    // )
 }
 ```
 
@@ -126,6 +152,8 @@ Optional settings:
 
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling
   the graph. Default is `NEUTRAL`.
+  - Further customization is possible by setting the `themeVariables` property on the `BASE` theme. Check the
+    [mermaid docs](https://mermaid-js.github.io/mermaid/#/theming) for more info.
 - **orientation**:
   The [orientation](https://mermaid.js.org/syntax/flowchart.html#flowchart-orientation) that the
   flowchart will have. Default is `LEFT_TO_RIGHT`.
