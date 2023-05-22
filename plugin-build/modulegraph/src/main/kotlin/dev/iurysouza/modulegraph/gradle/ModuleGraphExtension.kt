@@ -15,6 +15,8 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
 
     val orientation: Property<Orientation> = objects.property(Orientation::class.java)
 
+    val pattern: Property<String> = objects.property(String::class.java)
+
     val readmePath: Property<String> = objects.property(String::class.java)
 
     val heading: Property<String> = objects.property(String::class.java)

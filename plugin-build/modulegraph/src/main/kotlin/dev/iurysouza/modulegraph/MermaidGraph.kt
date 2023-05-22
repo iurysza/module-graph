@@ -17,6 +17,7 @@ internal fun buildMermaidGraph(
     theme: Theme,
     orientation: Orientation,
     linkText: LinkText,
+    pattern: Regex,
     dependencies: MutableMap<String, List<Dependency>>,
 ): String {
     val projectPaths = dependencies
@@ -24,6 +25,7 @@ internal fun buildMermaidGraph(
         .asSequence()
         .flatMap { (source, target) -> target.map { it.targetProjectPath }.plus(source) }
         .sorted()
+        .filter { it.matches(pattern) }
 
     val mostMeaningfulGroups: List<String> = projectPaths
         .map { it.split(":").takeLast(2).take(1) }
@@ -45,7 +47,7 @@ internal fun buildMermaidGraph(
         val sourceName = entry.key.split(":").last { it.isNotBlank() }
         entry.value.mapNotNull { target ->
             val targetName = target.targetProjectPath.split(":").last { it.isNotBlank() }
-            if (sourceName != targetName) {
+            if (shouldAddToGraph(pattern, entry.key, target.targetProjectPath)) {
                 val link = when (linkText) {
                     LinkText.CONFIGURATION -> "-- ${target.configName} -->"
                     LinkText.NONE -> "-->"
@@ -60,10 +62,20 @@ internal fun buildMermaidGraph(
     return "${createConfig(theme)}\n\ngraph ${orientation.value}\n$subgraphs\n$digraph"
 }
 
+private fun shouldAddToGraph(
+    pattern: Regex,
+    source: String,
+    target: String,
+): Boolean = source != target && (source.matches(pattern) || target.matches(pattern))
+
 private fun createConfig(theme: Theme): String = """
 %%{
   init: {
-    'theme': '${theme.name}'${if (theme is Theme.BASE) ",\n\t'themeVariables': ${Json.encodeToString(theme.themeVariables).trimIndent()}" else ""}
+    'theme': '${theme.name}'${
+    if (theme is Theme.BASE) ",\n\t'themeVariables': ${
+        Json.encodeToString(theme.themeVariables).trimIndent()
+    }" else ""
+}
   }
 }%%
 """.trimIndent()
