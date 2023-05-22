@@ -1,11 +1,8 @@
 package dev.iurysouza.modulegraph
 
 import java.io.File
-import java.io.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.gradle.api.Project
-import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.logging.Logger
 
 /**
@@ -124,34 +121,4 @@ private fun findNextSectionStart(readmeLines: List<String>, startIndex: Int): In
     return readmeLines.drop(startIndex + 1).indexOfFirst { it.startsWith("#") }.let {
         if (it != -1) it + startIndex + 1 else readmeLines.size
     }
-}
-
-/**
- * Represents a dependency on a project.
- * Contains the name of the configuration to which the dependency belongs.
- */
-internal data class Dependency(
-    val targetProjectPath: String,
-    val configName: String,
-) : Serializable {
-    companion object {
-        private const val serialVersionUID: Long = 46465844
-    }
-}
-
-internal fun Project.parseProjectStructure(): HashMap<String, List<Dependency>> {
-    println("Parsing project structure...")
-    val dependencies = hashMapOf<String, List<Dependency>>()
-    project.allprojects.forEach { sourceProject ->
-        sourceProject.configurations.forEach { config ->
-            config.dependencies.withType(ProjectDependency::class.java)
-                .map { it.dependencyProject }
-                .forEach { targetProject ->
-                    dependencies[sourceProject.path] =
-                        dependencies.getOrDefault(sourceProject.path, emptyList())
-                            .plus(Dependency(targetProject.path, config.name))
-                }
-        }
-    }
-    return dependencies
 }

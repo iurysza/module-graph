@@ -1,6 +1,5 @@
 package dev.iurysouza.modulegraph.gradle
 
-import dev.iurysouza.modulegraph.parseProjectStructure
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
