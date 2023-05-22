@@ -26,6 +26,8 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
      */
     val orientation: Property<Orientation> = objects.property(Orientation::class.java)
 
+    val pattern: Property<String> = objects.property(String::class.java)
+
     /**
      * The path of the readme file where the graph will be appended.
      * This is a required input.

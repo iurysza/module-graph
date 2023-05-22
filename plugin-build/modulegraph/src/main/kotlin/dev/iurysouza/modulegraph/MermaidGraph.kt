@@ -17,6 +17,7 @@ internal fun buildMermaidGraph(
     theme: Theme,
     orientation: Orientation,
     linkText: LinkText,
+    pattern: Regex,
     dependencies: MutableMap<String, List<Dependency>>,
     showFullPath: Boolean,
 ): String {
@@ -25,6 +26,7 @@ internal fun buildMermaidGraph(
         .asSequence()
         .flatMap { (source, target) -> target.map { it.targetProjectPath }.plus(source) }
         .sorted()
+        .filter { it.matches(pattern) }
 
     val mostMeaningfulGroups: List<String> = projectPaths
         .map { it.split(":").takeLast(2).take(1) }
@@ -39,7 +41,7 @@ internal fun buildMermaidGraph(
         .toList()
 
     val subgraphs = buildSubgraph(showFullPath, mostMeaningfulGroups, projectNames)
-    val digraph = buildDigraph(dependencies, showFullPath, linkText)
+    val digraph = buildDigraph(pattern, dependencies, showFullPath, linkText)
 
     return "${createConfig(theme)}\n\ngraph ${orientation.value}\n$subgraphs$digraph"
 }
@@ -70,6 +72,7 @@ private fun String.getProjectName(showFullPath: Boolean): String {
 }
 
 private fun buildDigraph(
+    pattern: Regex,
     dependencies: Map<String, List<Dependency>>,
     showFullPath: Boolean,
     linkText: LinkText,
@@ -77,7 +80,7 @@ private fun buildDigraph(
     val sourceName = entry.key.getProjectName(showFullPath)
     entry.value.mapNotNull { target ->
         val targetName = target.targetProjectPath.getProjectName(showFullPath)
-        if (sourceName != targetName) {
+        if (shouldAddToGraph(pattern, entry.key, target.targetProjectPath)) {
             "  $sourceName ${linkText.toLinkString(target.configName)} $targetName"
         } else {
             null
@@ -87,10 +90,20 @@ private fun buildDigraph(
     .distinct()
     .joinToString(separator = "\n")
 
+private fun shouldAddToGraph(
+    pattern: Regex,
+    source: String,
+    target: String,
+): Boolean = source != target && (source.matches(pattern) || target.matches(pattern))
+
 private fun createConfig(theme: Theme): String = """
 %%{
   init: {
-    'theme': '${theme.name}'${if (theme is Theme.BASE) ",\n\t'themeVariables': ${Json.encodeToString(theme.themeVariables).trimIndent()}" else ""}
+    'theme': '${theme.name}'${
+    if (theme is Theme.BASE) ",\n\t'themeVariables': ${
+        Json.encodeToString(theme.themeVariables).trimIndent()
+    }" else ""
+}
   }
 }%%
 """.trimIndent()
