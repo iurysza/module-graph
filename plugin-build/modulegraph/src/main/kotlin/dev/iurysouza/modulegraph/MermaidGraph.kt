@@ -17,6 +17,7 @@ internal fun buildMermaidGraph(
     theme: Theme,
     orientation: Orientation,
     linkText: LinkText,
+    pattern: Regex,
     dependencies: MutableMap<String, List<Dependency>>,
     showFullPath: Boolean,
 ): String {
@@ -38,20 +39,23 @@ internal fun buildMermaidGraph(
         .flatten()
         .toList()
 
-    val subgraphs = buildSubgraph(showFullPath, mostMeaningfulGroups, projectNames)
-    val digraph = buildDigraph(dependencies, showFullPath, linkText)
+    val subgraphs = buildSubgraph(pattern, showFullPath, mostMeaningfulGroups, projectNames)
+    val digraph = buildDigraph(pattern, dependencies, showFullPath, linkText)
 
     return "${createConfig(theme)}\n\ngraph ${orientation.value}\n$subgraphs$digraph"
 }
 
 private fun buildSubgraph(
+    pattern: Regex,
     showFullPath: Boolean,
     mostMeaningfulGroups: List<String>,
     projectNames: List<List<String>>,
 ) = if (showFullPath) {
     ""
 } else {
-    mostMeaningfulGroups.joinToString("\n") { group ->
+    println("subgraph:\n $pattern\n")
+    println(mostMeaningfulGroups.filter { it.matches(pattern) })
+    mostMeaningfulGroups.filter { it.matches(pattern) }.joinToString("\n") { group ->
         createSubgraph(group, projectNames)
     }.plus("\n")
 }
@@ -70,6 +74,7 @@ private fun String.getProjectName(showFullPath: Boolean): String {
 }
 
 private fun buildDigraph(
+    pattern: Regex,
     dependencies: Map<String, List<Dependency>>,
     showFullPath: Boolean,
     linkText: LinkText,
@@ -77,7 +82,7 @@ private fun buildDigraph(
     val sourceName = entry.key.getProjectName(showFullPath)
     entry.value.mapNotNull { target ->
         val targetName = target.targetProjectPath.getProjectName(showFullPath)
-        if (sourceName != targetName) {
+        if (shouldAddToGraph(pattern, entry.key, target.targetProjectPath)) {
             "  $sourceName ${linkText.toLinkString(target.configName)} $targetName"
         } else {
             null
@@ -87,10 +92,30 @@ private fun buildDigraph(
     .distinct()
     .joinToString(separator = "\n")
 
+private fun shouldAddToGraph(
+    pattern: Regex,
+    source: String,
+    target: String,
+): Boolean {
+    println(target)
+    println(target.split(":"))
+    val sourceMatches = source.split(":").any { it.matches(pattern) }
+    val targetMatches = target.split(":").any { it.matches(pattern) }
+    println(targetMatches)
+//    println("Regex matches digraph: sourceMatches: $sourceMatches\t targetMatches: $targetMatches")
+//    println("source: $source, \ttarget: $target")
+    println("=================")
+    return source != target && (sourceMatches || targetMatches)
+}
+
 private fun createConfig(theme: Theme): String = """
 %%{
   init: {
-    'theme': '${theme.name}'${if (theme is Theme.BASE) ",\n\t'themeVariables': ${Json.encodeToString(theme.themeVariables).trimIndent()}" else ""}
+    'theme': '${theme.name}'${
+    if (theme is Theme.BASE) ",\n\t'themeVariables': ${
+        Json.encodeToString(theme.themeVariables).trimIndent()
+    }" else ""
+}
   }
 }%%
 """.trimIndent()

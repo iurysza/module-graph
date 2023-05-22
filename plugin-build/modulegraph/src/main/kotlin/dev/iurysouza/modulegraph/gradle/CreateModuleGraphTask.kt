@@ -30,6 +30,10 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val theme: Property<Theme>
 
     @get:Input
+    @get:Option(option = "pattern", description = "The regex pattern to filter projects")
+    @get:Optional
+    abstract val pattern: Property<String>
+    @get:Input
     @get:Option(option = "orientation", description = "The flowchart orientation")
     @get:Optional
     abstract val orientation: Property<Orientation>
@@ -73,7 +77,9 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 orientation = orientation.getOrElse(Orientation.LEFT_TO_RIGHT),
                 linkText = linkText.getOrElse(LinkText.NONE),
                 dependencies = dependencies.get(),
-                showFullPath = showFullPath.getOrElse(false)
+                showFullPath = showFullPath.getOrElse(false),
+                // a regex pattern that filters all projects that start with "container"
+                pattern = Regex(pattern.getOrElse(".*")),
             )
             appendMermaidGraphToReadme(
                 mermaidGraph = mermaidGraph,
