@@ -34,6 +34,11 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val orientation: Property<Orientation>
 
     @get:Input
+    @get:Option(option = "isFullPathEnabled", description = "Show full path of the module")
+    @get:Optional
+    abstract val showFullPath: Property<Boolean>
+
+    @get:Input
     @get:Option(option = "heading", description = "The heading where the graph will be appended")
     abstract val heading: Property<String>
 
@@ -61,7 +66,8 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 theme = theme.getOrElse(Theme.NEUTRAL),
                 orientation = orientation.getOrElse(Orientation.LEFT_TO_RIGHT),
                 linkText = linkText.getOrElse(LinkText.NONE),
-                dependencies = dependencies.get()
+                dependencies = dependencies.get(),
+                showFullPath = showFullPath.getOrElse(false)
             )
             appendMermaidGraphToReadme(
                 mermaidGraph = mermaidGraph,
