@@ -1,7 +1,6 @@
 package dev.iurysouza.modulegraph
 
 import java.io.File
-import kotlin.random.Random
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import kotlin.random.Random
 
 @Suppress("LongMethod")
 class ModuleGraphPluginFunctionalTest {
@@ -156,6 +156,60 @@ class ModuleGraphPluginFunctionalTest {
                     example2
                   end
                   example --> example2
+                ```
+            """.trimIndent()
+        assertEquals(expectedOutput, readmeFile.readText())
+    }
+
+    @Test
+    fun `when showFullPath option is set to true, the generated graph should show full the path`() {
+        settingsFile.writeText(
+            """
+                rootProject.name = "test"
+                include(":example")
+                include(":groupFolder:example2")
+            """.trimIndent()
+        )
+
+        exampleBuildFile.writeText(
+            """
+                plugins {
+                    java
+                    id("dev.iurysouza.modulegraph")
+                }
+                moduleGraphConfig {
+                    heading.set("### Dependency Diagram")
+                    showFullPath.set(true)
+                    readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
+                }
+                dependencies {
+                    implementation(project(":groupFolder:example2"))
+                }
+            """.trimIndent()
+        )
+        readmeFile.writeText("### Dependency Diagram")
+
+        // Run the plugin task
+        GradleRunner.create()
+            .withProjectDir(testProjectDir)
+            .withArguments("createModuleGraph")
+            .withPluginClasspath()
+            .build()
+
+        // Check if the output matches the expected result
+        val expectedOutput =
+            """
+                ### Dependency Diagram
+
+                ```mermaid
+                %%{
+                  init: {
+                    'theme': 'neutral'
+                  }
+                }%%
+
+                graph LR
+                  :example --> :groupFolder:example2
                 ```
             """.trimIndent()
         assertEquals(expectedOutput, readmeFile.readText())
