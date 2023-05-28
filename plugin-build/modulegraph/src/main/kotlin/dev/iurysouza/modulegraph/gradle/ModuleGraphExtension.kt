@@ -44,4 +44,11 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
      */
     val linkText: Property<LinkText> = objects.property(LinkText::class.java)
 
+    /**
+     * Whether to show the full path of the module in the graph.
+     * Use this if you have modules with the same name in different folders.
+     * Note: when using this option, the graph generated won't use the subgraph feature mermaid provides.
+     */
+    val showFullPath: Property<Boolean> = objects.property(Boolean::class.java)
+
 }
