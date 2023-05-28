@@ -34,7 +34,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val orientation: Property<Orientation>
 
     @get:Input
-    @get:Option(option = "isFullPathEnabled", description = "Show full path of the module")
+    @get:Option(option = "showFullPath", description = "Whether to show the modules full path")
     @get:Optional
     abstract val showFullPath: Property<Boolean>
 
