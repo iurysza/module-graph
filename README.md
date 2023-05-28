@@ -62,6 +62,7 @@ plugins {
   moduleGraphConfig {
     readmePath = "./README.md"
     heading = '### Dependency Diagram'
+    showFullPath = false // optional
     theme = Theme.NEUTRAL // optional
     orientation = Orientation.LEFT_TO_RIGHT // optional
     linkText = LinkText.NONE // optional
@@ -121,6 +122,7 @@ apply(plugin = "dev.iurysouza:modulegraph")
 moduleGraphConfig {
     readmePath.set("./README.md")
     heading.set("### Dependency Diagram")
+    showFullPath.set(false) // optional
     orientation.set(Orientation.LEFT_TO_RIGHT) //optional
     linkText.set(LinkText.NONE) // optional
     theme.set(Theme.NEUTRAL) // optional
@@ -150,6 +152,8 @@ To configure the Gradle Module Dependency Graph Plugin, you can set the followin
 
 Optional settings:
 
+- **showFullPath**: Whether to show the full path of the modules in the graph. Default is `false`. Use this if you have
+  modules with the same name in different paths. This will remove the subgraphs from the graph.
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling
   the graph. Default is `NEUTRAL`.
   - Further customization is possible by setting the `themeVariables` property on the `BASE` theme. Check the
