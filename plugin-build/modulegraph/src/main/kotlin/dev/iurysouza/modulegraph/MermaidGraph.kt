@@ -38,38 +38,57 @@ internal fun buildMermaidGraph(
         .flatten()
         .toList()
 
-    val subgraphs = if (showFullPath) "" else mostMeaningfulGroups.joinToString("\n") { group ->
-        createSubgraph(group, projectNames)
-    }
+    val subgraphs = buildSubgraph(showFullPath, mostMeaningfulGroups, projectNames)
+    val digraph = buildDigraph(dependencies, showFullPath, linkText)
 
-    val digraph = dependencies.filterKeys { it != ":" }.flatMap { entry ->
-        val sourceName = if (showFullPath) entry.key else entry.key.split(":").last { it.isNotBlank() }
-        entry.value.mapNotNull { target ->
-            val targetName = if (showFullPath) target.targetProjectPath else target.targetProjectPath.split(":")
-                .last { it.isNotBlank() }
-            if (sourceName != targetName) {
-                val link = when (linkText) {
-                    LinkText.CONFIGURATION -> "-- ${target.configName} -->"
-                    LinkText.NONE -> "-->"
-                }
-                "  $sourceName $link $targetName"
-            } else {
-                null
-            }
-        }
-    }.joinToString(separator = "\n")
-
-    return "${createConfig(theme)}\n\ngraph ${orientation.value}\n$subgraphs\n$digraph"
+    return "${createConfig(theme)}\n\ngraph ${orientation.value}\n$subgraphs$digraph"
 }
+
+private fun buildSubgraph(
+    showFullPath: Boolean,
+    mostMeaningfulGroups: List<String>,
+    projectNames: List<List<String>>,
+) = if (showFullPath) {
+    ""
+} else {
+    mostMeaningfulGroups.joinToString("\n") { group ->
+        createSubgraph(group, projectNames)
+    }.plus("\n")
+}
+
+private fun LinkText.toLinkString(configName: String?): String = when (this) {
+    LinkText.CONFIGURATION -> "-- $configName -->"
+    LinkText.NONE -> "-->"
+}
+
+private fun String.getProjectName(showFullPath: Boolean): String {
+    return if (showFullPath) {
+        this
+    } else {
+        this.split(":").last { it.isNotBlank() }
+    }
+}
+
+private fun buildDigraph(
+    dependencies: Map<String, List<Dependency>>,
+    showFullPath: Boolean,
+    linkText: LinkText,
+): String = dependencies.filterKeys { it != ":" }.flatMap { entry ->
+    val sourceName = entry.key.getProjectName(showFullPath)
+    entry.value.mapNotNull { target ->
+        val targetName = target.targetProjectPath.getProjectName(showFullPath)
+        if (sourceName != targetName) {
+            "  $sourceName ${linkText.toLinkString(target.configName)} $targetName"
+        } else {
+            null
+        }
+    }
+}.joinToString(separator = "\n")
 
 private fun createConfig(theme: Theme): String = """
 %%{
   init: {
-    'theme': '${theme.name}'${
-    if (theme is Theme.BASE) ",\n\t'themeVariables': ${
-        Json.encodeToString(theme.themeVariables).trimIndent()
-    }" else ""
-}
+    'theme': '${theme.name}'${if (theme is Theme.BASE) ",\n\t'themeVariables': ${Json.encodeToString(theme.themeVariables).trimIndent()}" else ""}
   }
 }%%
 """.trimIndent()
