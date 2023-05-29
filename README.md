@@ -37,23 +37,25 @@ plugins {
     id "dev.iurysouza.modulegraph" version "0.4.0"
 }
 ```
+
 <details>
   <summary><b>Using Legacy Plugin application</b></summary>
 
 ```groovy
     buildscript {
-        repositories {
-            maven {
-                url "https://plugins.gradle.org/m2/"
-            }
-        }
-        dependencies {
-            classpath "dev.iurysouza:modulegraph:0.4.0"
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
         }
     }
+    dependencies {
+        classpath "dev.iurysouza:modulegraph:0.4.0"
+    }
+}
 
-    apply plugin: "dev.iurysouza.modulegraph"
+apply plugin: "dev.iurysouza.modulegraph"
 ```
+
 </details>
 
 ### Configuring the plugin
@@ -102,18 +104,19 @@ plugins {
 
 ```kotlin
     buildscript {
-        repositories {
-            maven {
-                url = uri("https://plugins.gradle.org/m2/")
-            }
-        }
-        dependencies {
-            classpath("dev.iurysouza:modulegraph:0.4.0")
+    repositories {
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
         }
     }
+    dependencies {
+        classpath("dev.iurysouza:modulegraph:0.4.0")
+    }
+}
 
 apply(plugin = "dev.iurysouza:modulegraph")
 ```
+
 </details>
 
 ### Configuring the plugin
@@ -156,8 +159,8 @@ Optional settings:
   modules with the same name in different paths. This will remove the subgraphs from the graph.
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling
   the graph. Default is `NEUTRAL`.
-  - Further customization is possible by setting the `themeVariables` property on the `BASE` theme. Check the
-    [mermaid docs](https://mermaid-js.github.io/mermaid/#/theming) for more info.
+    - Further customization is possible by setting the `themeVariables` property on the `BASE` theme. Check the
+      [mermaid docs](https://mermaid-js.github.io/mermaid/#/theming) for more info.
 - **orientation**:
   The [orientation](https://mermaid.js.org/syntax/flowchart.html#flowchart-orientation) that the
   flowchart will have. Default is `LEFT_TO_RIGHT`.
@@ -238,3 +241,12 @@ Feel free to open an issue or submit a pull request for any bugs/improvements.
 ## License 📄
 
 This template is licensed under the MIT License - see the [License](License) file for details.
+
+## Buy Me a Coffee
+
+If you found this project useful or want to support the development, consider buying me a coffee! Any donations are
+greatly appreciated and help to support the development. [Relevant xkcd](https://xkcd.com/2347/).
+
+<a href="https://www.buymeacoffee.com/iurysza" target="_blank">
+<img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Pingado" style="height: 51px !important;width: 217px !important;" >
+</a>
