@@ -237,4 +237,13 @@ Feel free to open an issue or submit a pull request for any bugs/improvements.
 
 ## License 📄
 
-This template is licensed under the MIT License - see the [License](License) file for details.
+This project is licensed under the MIT License - see the [License](License) file for details.
+
+## Buy Me a Coffee
+
+If you found this project useful or want to support the development, consider buying me a coffee! Any donations are
+greatly appreciated and help to support the development. [Relevant xkcd](https://xkcd.com/2347/).
+
+<a href="https://www.buymeacoffee.com/iurysza" target="_blank">
+<img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Pingado" style="height: 51px !important;width: 217px !important;" >
+</a>
