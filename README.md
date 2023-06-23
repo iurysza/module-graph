@@ -207,20 +207,7 @@ graph LR
     match-day
     match-thread
   end
-  main --> match-thread
-  main --> match-day
-  main --> footballdata
-  main --> reddit
-  main --> design-system
-  main --> common
-  playground --> match-thread
-  playground --> match-day
-  playground --> footballdata
-  playground --> reddit
-  playground --> design-system
-  playground --> common
   footballdata --> common
-  reddit --> common
   match-day --> common
   match-day --> footballdata
   match-day --> design-system
@@ -229,6 +216,14 @@ graph LR
   match-thread --> footballdata
   match-thread --> design-system
   match-thread --> reddit
+  playground --> match-thread
+  playground --> match-day
+  playground --> design-system
+  reddit --> common
+  main --> match-thread
+  main --> match-day
+  main --> design-system
+  main --> common
 ```
 
 ## Contributing 🤝
