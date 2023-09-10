@@ -83,7 +83,9 @@ private fun buildDigraph(
             null
         }
     }
-}.joinToString(separator = "\n")
+}
+    .distinct()
+    .joinToString(separator = "\n")
 
 private fun createConfig(theme: Theme): String = """
 %%{
