@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.versionCheck)
 }
 
+apply(from = "version-bumper.gradle.kts")
+
 subprojects {
     apply {
         plugin(rootProject.libs.plugins.detekt.get().pluginId)
