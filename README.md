@@ -63,20 +63,20 @@ plugins {
     readmePath = "./README.md"
     heading = '### Dependency Diagram'
     showFullPath = false // optional
-    theme = Theme.NEUTRAL // optional
-    orientation = Orientation.LEFT_TO_RIGHT // optional
-    linkText = LinkText.NONE // optional
+    orientation = dev.iurysouza.modulegraph.Orientation.LEFT_TO_RIGHT // optional
+    linkText = dev.iurysouza.modulegraph.LinkText.NONE // optional
+    theme = new dev.iurysouza.modulegraph.Theme.NEUTRAL() // optional
     // or you can fully customize it by using the BASE theme:
-    // theme = Theme.BASE(
-    //      [
-    //          "primaryTextColor": "#fff",
-    //          "primaryColor": "#5a4f7c",
-    //          "primaryBorderColor": "#5a4f7c",
-    //          "lineColor": "#f5a623",
-    //          "tertiaryColor": "#40375c",
-    //          "fontSize": "11px"
-    //      ]
-    //  )
+//   theme = new dev.iurysouza.modulegraph.Theme.BASE(
+//        [
+//            "primaryTextColor": "#fff",
+//            "primaryColor": "#5a4f7c",
+//            "primaryBorderColor": "#5a4f7c",
+//            "lineColor": "#f5a623",
+//            "tertiaryColor": "#40375c",
+//            "fontSize": "11px"
+//        ]
+//    )
 }
 ```
 
