@@ -9,8 +9,6 @@
 }%%
 
 graph TB
-  :sample:alpha --> :sample:zeta
-  :sample:alpha --> :sample:beta
   :sample:alpha --> :sample:container:gama
   :sample:alpha --> :sample:container:delta
   :sample:container:gama --> :sample:zeta

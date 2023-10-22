@@ -26,7 +26,6 @@ internal fun buildMermaidGraph(
         .asSequence()
         .flatMap { (source, target) -> target.map { it.targetProjectPath }.plus(source) }
         .sorted()
-        .filter { it.matches(pattern) }
 
     val mostMeaningfulGroups: List<String> = projectPaths
         .map { it.split(":").takeLast(2).take(1) }
@@ -40,20 +39,23 @@ internal fun buildMermaidGraph(
         .flatten()
         .toList()
 
-    val subgraphs = buildSubgraph(showFullPath, mostMeaningfulGroups, projectNames)
+    val subgraphs = buildSubgraph(pattern, showFullPath, mostMeaningfulGroups, projectNames)
     val digraph = buildDigraph(pattern, dependencies, showFullPath, linkText)
 
     return "${createConfig(theme)}\n\ngraph ${orientation.value}\n$subgraphs$digraph"
 }
 
 private fun buildSubgraph(
+    pattern: Regex,
     showFullPath: Boolean,
     mostMeaningfulGroups: List<String>,
     projectNames: List<List<String>>,
 ) = if (showFullPath) {
     ""
 } else {
-    mostMeaningfulGroups.joinToString("\n") { group ->
+    println("subgraph:\n $pattern\n")
+    println(mostMeaningfulGroups.filter { it.matches(pattern) })
+    mostMeaningfulGroups.filter { it.matches(pattern) }.joinToString("\n") { group ->
         createSubgraph(group, projectNames)
     }.plus("\n")
 }
@@ -94,7 +96,17 @@ private fun shouldAddToGraph(
     pattern: Regex,
     source: String,
     target: String,
-): Boolean = source != target && (source.matches(pattern) || target.matches(pattern))
+): Boolean {
+    println(target)
+    println(target.split(":"))
+    val sourceMatches = source.split(":").any { it.matches(pattern) }
+    val targetMatches = target.split(":").any { it.matches(pattern) }
+    println(targetMatches)
+//    println("Regex matches digraph: sourceMatches: $sourceMatches\t targetMatches: $targetMatches")
+//    println("source: $source, \ttarget: $target")
+    println("=================")
+    return source != target && (sourceMatches || targetMatches)
+}
 
 private fun createConfig(theme: Theme): String = """
 %%{

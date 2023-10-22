@@ -11,6 +11,7 @@ moduleGraphConfig {
     readmePath.set("./README.md")
 
     // optional configs
+    pattern.set(""".*container.*""")
     showFullPath.set(true)
     orientation.set(Orientation.TOP_TO_BOTTOM)
     linkText.set(LinkText.NONE)
