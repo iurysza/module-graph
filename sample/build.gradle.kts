@@ -26,6 +26,7 @@ moduleGraphConfig {
             )
         )
     )
+    excludeConfigurationNames.set(listOf("testImplementation"))
 }
 
 task("check") {

@@ -314,4 +314,67 @@ class ModuleGraphPluginFunctionalTest {
         assertTrue(missingFile.exists(), "File was supposed to be created but was not.")
         assertFalse(missingFile.readText().isBlank(), "File was created but has no content.")
     }
+
+    @Test
+    fun `plugin excludes module when excludeConfigurationNames is set`() {
+        settingsFile.writeText(
+            """
+                rootProject.name = "test"
+                include(":example")
+                include(":groupFolder:example2")
+                include(":ignoredExample")
+            """.trimIndent()
+        )
+
+        exampleBuildFile.writeText(
+            """
+                plugins {
+                    java
+                    id("dev.iurysouza.modulegraph")
+                }
+
+                moduleGraphConfig {
+                    heading.set("### Dependency Diagram")
+                    theme.set(dev.iurysouza.modulegraph.Theme.FOREST)
+                    orientation.set(dev.iurysouza.modulegraph.Orientation.RIGHT_TO_LEFT)
+                    readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
+                    excludeConfigurationNames.set(listOf("testImplementation"))
+                }
+                dependencies {
+                    implementation(project(":groupFolder:example2"))
+                    testImplementation(project(":ignoredExample"))
+                }
+            """.trimIndent()
+        )
+        readmeFile.writeText("### Dependency Diagram")
+
+        // Run the plugin task
+        GradleRunner.create()
+            .withProjectDir(testProjectDir)
+            .withArguments("createModuleGraph")
+            .withPluginClasspath()
+            .build()
+
+        // Check if the output matches the expected result
+        val expectedOutput =
+            """
+                ### Dependency Diagram
+
+                ```mermaid
+                %%{
+                  init: {
+                    'theme': 'forest'
+                  }
+                }%%
+
+                graph RL
+
+                  subgraph groupFolder
+                    example2
+                  end
+                  example --> example2
+                ```
+            """.trimIndent()
+        assertEquals(expectedOutput, readmeFile.readText())
+    }
 }
