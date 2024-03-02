@@ -1,11 +1,13 @@
 [![Pre Merge Checks](https://github.com/iurysza/module-graph/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/iurysza/module-graph/actions?query=workflow%3A%22Pre+Merge+Checks%22) [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE) ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
 
-## Introducing the Gradle Module Graph Plugin! 🌟
+<p align="center">
+  <img src="assets/module-graph-icon.png" alt="module graph icon"/>
+</p>
 
-This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph for your Gradle
-project, providing a visual representation of your project's module relationships. By illustrating
-how the parts of the project are connected, it makes it easier to understand the design and how they
-depend on each other.
+## Module Graph Plugin
+
+This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph of your project's module relationships. See how your modules interact at a glance.
+
 
 > A diagram about the current system is only useful if it's generated. If it is produced by hand it
 > documents the author's belief, not the system. Still, important, but not an input for decision
