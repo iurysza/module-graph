@@ -6,7 +6,7 @@
 
 ## Module Graph Plugin
 
-This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph of your project's module relationships. See how your modules interact at a glance.
+This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph of your project's module relationships, so you can see how your modules interact at a glance.
 
 
 > A diagram about the current system is only useful if it's generated. If it is produced by hand it
