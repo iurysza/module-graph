@@ -140,6 +140,9 @@ moduleGraphConfig {
     //      )
     //   )
     // )
+    excludeConfigurationNames.set( // optional
+        listOf("testImplementation")
+    )
 }
 ```
 
@@ -168,6 +171,8 @@ Optional settings:
     - `NONE`: No text added. (Default.)
     - `CONFIGURATION`: The name of the configuration which the dependency belongs to (e.g. "
       implementation", "compileOnly", "jsMain").
+- **excludeConfigurationNames**:
+  - List of configuration names which should be ignored. e.g. "implementation", "testImplementation". Default is emptyList().
 
 ## Usage
 
