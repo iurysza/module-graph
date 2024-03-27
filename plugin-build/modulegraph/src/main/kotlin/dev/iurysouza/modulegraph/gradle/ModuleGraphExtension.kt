@@ -46,7 +46,7 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
     val linkText: Property<LinkText> = objects.property(LinkText::class.java)
 
     /**
-     * List of configuration name which should be ignored.
+     * List of configuration names to be ignored.
      * e.g. "implementation", "testImplementation" will be set.
      * This is an optional input. Defaults to [emptyList].
      */

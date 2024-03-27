@@ -49,7 +49,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val linkText: Property<LinkText>
 
     @get:Input
-    @get:Option(option = "excludeConfigurationNames", description = "List of configuration name which should be ignored")
+    @get:Option(option = "excludeConfigurationNames", description = "List of configuration names to be ignored")
     @get:Optional
     abstract val excludeConfigurationNames: ListProperty<String>
 

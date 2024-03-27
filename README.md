@@ -167,7 +167,7 @@ Optional settings:
     - `CONFIGURATION`: The name of the configuration which the dependency belongs to (e.g. "
       implementation", "compileOnly", "jsMain").
 - **excludeConfigurationNames**:
-  - List of configuration name which should be ignored. e.g. "implementation", "testImplementation". Default is emptyList().
+  - List of configuration names which should be ignored. e.g. "implementation", "testImplementation". Default is emptyList().
 
 ## Usage
 
