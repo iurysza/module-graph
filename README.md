@@ -138,6 +138,9 @@ moduleGraphConfig {
     //      )
     //   )
     // )
+    excludeConfigurationNames.set( // optional
+        listOf("testImplementation")
+    )
 }
 ```
 
