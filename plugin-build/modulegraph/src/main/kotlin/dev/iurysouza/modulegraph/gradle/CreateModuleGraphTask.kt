@@ -9,6 +9,7 @@ import dev.iurysouza.modulegraph.buildMermaidGraph
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
@@ -46,6 +47,11 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @get:Option(option = "linkText", description = "Whether to add information as text on links in graph")
     @get:Optional
     abstract val linkText: Property<LinkText>
+
+    @get:Input
+    @get:Option(option = "excludeConfigurationNames", description = "List of configuration names to be ignored")
+    @get:Optional
+    abstract val excludeConfigurationNames: ListProperty<String>
 
     @get:Input
     @get:Option(option = "dependencies", description = "The project dependencies")

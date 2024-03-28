@@ -31,6 +31,7 @@ class ModuleGraphPluginTest {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply(pluginId)
         val aFilePath = "${project.projectDir}/README.md"
+        val aExcludeConfigurationNames = listOf("implementation")
         (project.extensions.getByName(pluginExtension) as ModuleGraphExtension).apply {
             heading.set("### Dependency Diagram")
             theme.set(Theme.NEUTRAL)
@@ -38,6 +39,7 @@ class ModuleGraphPluginTest {
             linkText.set(LinkText.CONFIGURATION)
             orientation.set(Orientation.TOP_TO_BOTTOM)
             readmePath.set(aFilePath)
+            excludeConfigurationNames.set(aExcludeConfigurationNames)
         }
 
         val task = project.tasks.getByName("createModuleGraph") as CreateModuleGraphTask
@@ -48,5 +50,6 @@ class ModuleGraphPluginTest {
         assertEquals(true, task.showFullPath.get())
         assertEquals(Theme.NEUTRAL, task.theme.get())
         assertEquals(Orientation.TOP_TO_BOTTOM, task.orientation.get())
+        assertEquals(aExcludeConfigurationNames, task.excludeConfigurationNames.get())
     }
 }
