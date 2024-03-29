@@ -24,9 +24,9 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.orientation.set(extension.orientation)
             task.linkText.set(extension.linkText)
             task.showFullPath.set(extension.showFullPath)
-
-            task.dependencies.set(project.parseProjectStructure(
-                extension.excludeConfigurationNames.getOrElse(emptyList()))
+            task.excludeConfigurationNames.set(extension.excludeConfigurationNames)
+            task.dependencies.set(
+                project.parseProjectStructure(extension.excludeConfigurationNames.getOrElse(emptyList()))
             )
             task.outputFile.set(project.layout.projectDirectory.file(extension.readmePath))
         }

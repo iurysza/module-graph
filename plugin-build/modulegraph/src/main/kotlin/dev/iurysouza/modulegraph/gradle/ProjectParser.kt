@@ -11,7 +11,7 @@ internal fun Project.parseProjectStructure(excludeConfigurationNames: List<Strin
             config.dependencies.withType(ProjectDependency::class.java)
                 .map { it.dependencyProject }
                 .forEach { targetProject ->
-                    if(!excludeConfigurationNames.contains(config.name)) {
+                    if (!excludeConfigurationNames.contains(config.name)) {
                         dependencies[sourceProject.path] =
                             dependencies.getOrDefault(sourceProject.path, emptyList())
                                 .plus(Dependency(targetProject.path, config.name))
