@@ -3,9 +3,7 @@ package dev.iurysouza.modulegraph
 import java.io.File
 import kotlin.random.Random
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -46,13 +44,13 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
 
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
-                    theme.set(dev.iurysouza.modulegraph.Theme.FOREST)
-                    orientation.set(dev.iurysouza.modulegraph.Orientation.RIGHT_TO_LEFT)
+                    theme.set(${MODULEGRAPH_PACKAGE}.Theme.FOREST)
+                    orientation.set(${MODULEGRAPH_PACKAGE}.Orientation.RIGHT_TO_LEFT)
                     readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
                 }
                 dependencies {
@@ -106,11 +104,11 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
-                    theme.set(dev.iurysouza.modulegraph.Theme.BASE(
+                    theme.set(${MODULEGRAPH_PACKAGE}.Theme.BASE(
                         mapOf(
                             "primaryTextColor" to "#fff",
                             "primaryColor" to "#5a4f7c",
@@ -175,7 +173,7 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
@@ -230,14 +228,14 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
 
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
-                    theme.set(dev.iurysouza.modulegraph.Theme.FOREST)
-                    orientation.set(dev.iurysouza.modulegraph.Orientation.RIGHT_TO_LEFT)
-                    linkText.set(dev.iurysouza.modulegraph.LinkText.CONFIGURATION)
+                    theme.set(${MODULEGRAPH_PACKAGE}.Theme.FOREST)
+                    orientation.set(${MODULEGRAPH_PACKAGE}.Orientation.RIGHT_TO_LEFT)
+                    linkText.set(${MODULEGRAPH_PACKAGE}.LinkText.CONFIGURATION)
                     readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
                 }
                 dependencies {
@@ -293,7 +291,7 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
 
                 moduleGraphConfig {
@@ -330,13 +328,13 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
 
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
-                    theme.set(dev.iurysouza.modulegraph.Theme.FOREST)
-                    orientation.set(dev.iurysouza.modulegraph.Orientation.RIGHT_TO_LEFT)
+                    theme.set(${MODULEGRAPH_PACKAGE}.Theme.FOREST)
+                    orientation.set(${MODULEGRAPH_PACKAGE}.Orientation.RIGHT_TO_LEFT)
                     readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
                     excludeConfigurationNames.set(listOf("testImplementation"))
                 }
@@ -378,3 +376,5 @@ class ModuleGraphPluginFunctionalTest {
         assertEquals(expectedOutput, readmeFile.readText())
     }
 }
+
+const val MODULEGRAPH_PACKAGE = "dev.iurysouza.modulegraph"
