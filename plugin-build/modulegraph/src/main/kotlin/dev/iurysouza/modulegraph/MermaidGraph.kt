@@ -71,7 +71,7 @@ private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme)
             ""
         }
     }
-"""
+""".trimIndent()
 }
 
 private fun buildSubgraph(
