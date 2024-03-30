@@ -35,11 +35,10 @@ sealed class Theme(val name: String) : JavaSerializable {
      */
     data class BASE(
         val themeVariables: Map<String, String> = emptyMap(),
-        val focusColor: FocusColor = DefaultFocusColor,
+        val focusColor: FocusColor = DEFAULT_FOCUS_COLOR,
     ) : Theme("base")
 }
 
-
 typealias FocusColor = String
 
-internal const val DefaultFocusColor = "#769566"
+internal const val DEFAULT_FOCUS_COLOR = "#769566"

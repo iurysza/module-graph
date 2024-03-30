@@ -41,6 +41,10 @@ internal fun buildMermaidGraph(
 
     val subgraphs = buildSubgraph(pattern, showFullPath, mostMeaningfulGroups, projectNames)
     val (digraph, focusList) = buildDigraph(pattern, dependencies, showFullPath, linkText)
+
+    require(digraph.isNotEmpty() || focusList.isNotEmpty()) {
+        "No modules match the specified pattern: $pattern"
+    }
     val highlightedNodes = highlightNodes(focusList, pattern, theme)
 
     return """
@@ -48,13 +52,14 @@ ${createConfig(theme)}
 
 graph ${orientation.value}
 $subgraphs$digraph
-$highlightedNodes""".trimIndent()
+$highlightedNodes
+    """.trimIndent()
 }
 
 private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme): String {
     val focusColor = when (theme) {
         is Theme.BASE -> theme.focusColor
-        else -> DefaultFocusColor
+        else -> DEFAULT_FOCUS_COLOR
     }
     val focusClassName = "focus"
     return """${
@@ -71,7 +76,7 @@ private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme)
             ""
         }
     }
-""".trimIndent()
+    """.trimIndent()
 }
 
 private fun buildSubgraph(
@@ -154,9 +159,13 @@ private fun createConfig(theme: Theme): String = """
 %%{
   init: {
     'theme': '${theme.name}'${
-    if (theme is Theme.BASE && theme.themeVariables.isNotEmpty()) ",\n\t'themeVariables': ${
-        Json.encodeToString(theme.themeVariables).trimIndent()
-    }" else ""
+    if (theme is Theme.BASE && theme.themeVariables.isNotEmpty()) {
+        ",\n\t'themeVariables': ${
+            Json.encodeToString(theme.themeVariables).trimIndent()
+        }"
+    } else {
+        ""
+    }
 }
   }
 }%%
