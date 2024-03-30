@@ -154,7 +154,7 @@ private fun createConfig(theme: Theme): String = """
 %%{
   init: {
     'theme': '${theme.name}'${
-    if (theme is Theme.BASE) ",\n\t'themeVariables': ${
+    if (theme is Theme.BASE && theme.themeVariables.isNotEmpty()) ",\n\t'themeVariables': ${
         Json.encodeToString(theme.themeVariables).trimIndent()
     }" else ""
 }
