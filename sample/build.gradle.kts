@@ -12,19 +12,20 @@ moduleGraphConfig {
 
     // optional configs
     pattern.set(""".*zeta.*""")
-    showFullPath.set(true)
+    showFullPath.set(false)
     orientation.set(Orientation.TOP_TO_BOTTOM)
     linkText.set(LinkText.NONE)
     theme.set(
         Theme.BASE(
             themeVariables = mapOf(
                 "primaryTextColor" to "#F6F8FAff", // All text colors
-                "primaryColor" to "#5a4f7c", // Box colors
-                "primaryBorderColor" to "#5a4f7c", // Box border color
-                "lineColor" to "#f5a623", // Line color
+                "primaryColor" to "#5a4f7c", // Node color
+                "primaryBorderColor" to "#5a4f7c", // Node border color
                 "tertiaryColor" to "#40375c", // Container box background
-                "fontSize" to "11px"
-            )
+                "lineColor" to "#f5a623",
+                "fontSize" to "12px",
+            ),
+            focusColor = "#F5A622"
         )
     )
     excludeConfigurationNames.set(listOf("testImplementation"))

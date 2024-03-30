@@ -40,9 +40,38 @@ internal fun buildMermaidGraph(
         .toList()
 
     val subgraphs = buildSubgraph(pattern, showFullPath, mostMeaningfulGroups, projectNames)
-    val digraph = buildDigraph(pattern, dependencies, showFullPath, linkText)
+    val (digraph, focusList) = buildDigraph(pattern, dependencies, showFullPath, linkText)
+    val highlightedNodes = highlightNodes(focusList, pattern, theme)
 
-    return "${createConfig(theme)}\n\ngraph ${orientation.value}\n$subgraphs$digraph"
+    return """
+${createConfig(theme)}
+
+graph ${orientation.value}
+$subgraphs$digraph
+$highlightedNodes""".trimIndent()
+}
+
+private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme): String {
+    val focusColor = when (theme) {
+        is Theme.BASE -> theme.focusColor
+        else -> DefaultFocusColor
+    }
+    val focusClassName = "focus"
+    return """${
+        if (focusList.isNotEmpty() && pattern.toString() != ".*") {
+            buildString {
+                append("\n")
+                append("classDef $focusClassName fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;")
+                append("\n")
+                focusList.forEach { projectName ->
+                    append("class $projectName $focusClassName\n")
+                }
+            }
+        } else {
+            ""
+        }
+    }
+"""
 }
 
 private fun buildSubgraph(
@@ -53,8 +82,6 @@ private fun buildSubgraph(
 ) = if (showFullPath) {
     ""
 } else {
-    println("subgraph:\n $pattern\n")
-    println(mostMeaningfulGroups.filter { it.matches(pattern) })
     mostMeaningfulGroups.filter { it.matches(pattern) }.joinToString("\n") { group ->
         createSubgraph(group, projectNames)
     }.plus("\n")
@@ -78,34 +105,49 @@ private fun buildDigraph(
     dependencies: Map<String, List<Dependency>>,
     showFullPath: Boolean,
     linkText: LinkText,
-): String = dependencies.filterKeys { it != ":" }.flatMap { entry ->
-    val sourceName = entry.key.getProjectName(showFullPath)
-    entry.value.mapNotNull { target ->
-        val targetName = target.targetProjectPath.getProjectName(showFullPath)
-        if (shouldAddToGraph(pattern, entry.key, target.targetProjectPath)) {
-            "  $sourceName ${linkText.toLinkString(target.configName)} $targetName"
-        } else {
-            null
+): Pair<String, Set<String>> {
+    val focusedProjects = mutableSetOf<String>()
+    return dependencies.filterKeys { it != ":" }.flatMap { entry ->
+        val sourceName = entry.key.getProjectName(showFullPath)
+        entry.value.mapNotNull { target ->
+            val targetName = target.targetProjectPath.getProjectName(showFullPath)
+            val (shouldAddToGraph, matching) = shouldAddToGraph(
+                pattern = pattern,
+                source = entry.key,
+                target = target.targetProjectPath,
+                showFullPath = showFullPath
+            )
+            if (shouldAddToGraph) {
+                focusedProjects.addAll(matching)
+                "  $sourceName ${linkText.toLinkString(target.configName)} $targetName"
+            } else {
+                null
+            }
         }
     }
+        .distinct()
+        .joinToString(separator = "\n") to focusedProjects
 }
-    .distinct()
-    .joinToString(separator = "\n")
 
 private fun shouldAddToGraph(
     pattern: Regex,
     source: String,
     target: String,
-): Boolean {
-    println(target)
-    println(target.split(":"))
-    val sourceMatches = source.split(":").any { it.matches(pattern) }
-    val targetMatches = target.split(":").any { it.matches(pattern) }
-    println(targetMatches)
-//    println("Regex matches digraph: sourceMatches: $sourceMatches\t targetMatches: $targetMatches")
-//    println("source: $source, \ttarget: $target")
-    println("=================")
-    return source != target && (sourceMatches || targetMatches)
+    showFullPath: Boolean,
+): Pair<Boolean, List<String>> {
+    val sourceMatchesPattern = source.split(":").any { it.matches(pattern) }
+    val targetMatchesPattern = target.split(":").any { it.matches(pattern) }
+    val sourceName = source.getProjectName(showFullPath)
+    val targetName = target.getProjectName(showFullPath)
+    return Pair(
+        source != target && (sourceMatchesPattern || targetMatchesPattern),
+        when {
+            sourceMatchesPattern && targetMatchesPattern -> listOf(sourceName, targetName)
+            sourceMatchesPattern -> listOf(sourceName)
+            targetMatchesPattern -> listOf(targetName)
+            else -> listOf()
+        }
+    )
 }
 
 private fun createConfig(theme: Theme): String = """

@@ -33,5 +33,13 @@ sealed class Theme(val name: String) : JavaSerializable {
      * The BASE theme can be used for customization. You just need to provide the themeVariables according to the specs.
      * You can read more about it [here](https://mermaid.js.org/config/theming.html#theme-variables).
      */
-    data class BASE(val themeVariables: Map<String, String> = emptyMap()) : Theme("base")
+    data class BASE(
+        val themeVariables: Map<String, String> = emptyMap(),
+        val focusColor: FocusColor = DefaultFocusColor,
+    ) : Theme("base")
 }
+
+
+typealias FocusColor = String
+
+internal const val DefaultFocusColor = "#769566"
