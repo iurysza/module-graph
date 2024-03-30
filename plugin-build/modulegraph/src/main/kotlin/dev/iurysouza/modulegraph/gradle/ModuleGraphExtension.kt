@@ -27,7 +27,13 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
      */
     val orientation: Property<Orientation> = objects.property(Orientation::class.java)
 
-    val pattern: Property<String> = objects.property(String::class.java)
+    /**
+     * The Pattern (Regex) to match nodes in the graph (project names) that should be highlighted and focused.
+     * The graph will only show nodes that either point to the matched nodes or originate from them.
+     *
+     * The Value needs to be a string in regex format.
+     */
+    val focusedNodesPattern: Property<String> = objects.property(String::class.java)
 
     /**
      * The path of the readme file where the graph will be appended.

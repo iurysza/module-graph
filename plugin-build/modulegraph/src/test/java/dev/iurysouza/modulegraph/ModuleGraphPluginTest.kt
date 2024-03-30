@@ -38,7 +38,7 @@ class ModuleGraphPluginTest {
             theme.set(Theme.NEUTRAL)
             showFullPath.set(true)
             linkText.set(LinkText.CONFIGURATION)
-            pattern.set(aRegexPattern)
+            focusedNodesPattern.set(aRegexPattern)
             orientation.set(Orientation.TOP_TO_BOTTOM)
             readmePath.set(aFilePath)
             excludeConfigurationNames.set(aExcludeConfigurationNames)
@@ -52,7 +52,7 @@ class ModuleGraphPluginTest {
         assertEquals(true, task.showFullPath.get())
         assertEquals(Theme.NEUTRAL, task.theme.get())
         assertEquals(Orientation.TOP_TO_BOTTOM, task.orientation.get())
-        assertEquals(aRegexPattern, task.pattern.get())
+        assertEquals(aRegexPattern, task.focusedNodesPattern.get())
         assertEquals(aExcludeConfigurationNames, task.excludeConfigurationNames.get())
     }
 }

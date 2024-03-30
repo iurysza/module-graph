@@ -30,9 +30,9 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val theme: Property<Theme>
 
     @get:Input
-    @get:Option(option = "pattern", description = "The regex pattern to filter projects")
+    @get:Option(option = "focusedNodesPattern", description = "A Regex to match nodes that should be focused.")
     @get:Optional
-    abstract val pattern: Property<String>
+    abstract val focusedNodesPattern: Property<String>
 
     @get:Input
     @get:Option(option = "orientation", description = "The flowchart orientation")
@@ -79,7 +79,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 linkText = linkText.getOrElse(LinkText.NONE),
                 dependencies = dependencies.get(),
                 showFullPath = showFullPath.getOrElse(false),
-                pattern = Regex(pattern.getOrElse(".*"))
+                pattern = Regex(focusedNodesPattern.getOrElse(".*"))
             )
             appendMermaidGraphToReadme(
                 mermaidGraph = mermaidGraph,
