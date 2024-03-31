@@ -168,10 +168,10 @@ To configure the Gradle Module Dependency Graph Plugin, you can set the followin
 
 Optional settings:
 
+- **focusedNodesPattern**: The Pattern (Regex) to match nodes in the graph (project names) that should be focused. By default, no nodes are focused.
+If set, the matching nodes will be highlighted. The color can be customized via the `focusColor` property from `Theme.BASE`. [Read more](#focusing-on-specific-nodes).
 - **showFullPath**: Whether to show the full path of the modules in the graph. Default is `false`. **Use this if you have
   **modules with the same name in different paths**. This will remove the subgraphs from the graph.
-- **focusedNodesPattern**: The Pattern (Regex) to match nodes in the graph (project names) that should be highlighted and focused. By default, no nodes are focused.
-  - If set, the nodes that match the pattern will be highlighted. The color can be customized via the `focusColor` property from `Theme.BASE`.
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling
   the graph. Default is `NEUTRAL`.
   - Further customization is possible by setting the `themeVariables` property on the `BASE` theme. Check the
@@ -285,7 +285,7 @@ moduleGraphConfig {
 }
 ```
 
-By doing this, the plugin will highlight the nodes that match the pattern. and will only show the other nodes that are connected to them.
+By doing this, the plugin will highlight the nodes that match the pattern, and will only show the other nodes that are connected to them.
 It will generate the following graph:
 
 ```mermaid
