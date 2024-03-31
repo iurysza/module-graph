@@ -285,7 +285,8 @@ moduleGraphConfig {
 }
 ```
 
-And that will generate this graph:
+By doing this, the plugin will highlight the nodes that match the pattern. and will only show the other nodes that are connected to them.
+It will generate the following graph:
 
 ```mermaid
 %%{
@@ -318,7 +319,7 @@ or you can come up with whatever cryptic regex patterns you want if you're into 
 When was the last time Regex made you happy? =)
 
 ```kotlin
-focusedNodesPattern.set(".*(reddit|match-day).*")
+focusedNodesPattern.set(".*(reddit|match-day).*") // This matches module names that contain "reddit" or "match-day"
 ```
 
 ```mermaid
