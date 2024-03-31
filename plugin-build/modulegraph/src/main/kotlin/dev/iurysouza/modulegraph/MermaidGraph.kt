@@ -17,7 +17,7 @@ internal fun buildMermaidGraph(
     theme: Theme,
     orientation: Orientation,
     linkText: LinkText,
-    pattern: Regex,
+    focusedNodesPattern: Regex,
     dependencies: MutableMap<String, List<Dependency>>,
     showFullPath: Boolean,
 ): String {
@@ -39,21 +39,24 @@ internal fun buildMermaidGraph(
         .flatten()
         .toList()
 
-    val subgraphs = buildSubgraph(pattern, showFullPath, mostMeaningfulGroups, projectNames)
-    val (digraph, focusList) = buildDigraph(pattern, dependencies, showFullPath, linkText)
+    val (mermaidDigraph, focusList, digraph) = buildDigraph(focusedNodesPattern, dependencies, showFullPath, linkText)
+    val subgraphs = buildSubgraph(digraph, showFullPath, mostMeaningfulGroups, projectNames)
 
     require(digraph.isNotEmpty() || focusList.isNotEmpty()) {
-        "No modules match the specified pattern: $pattern"
+        """
+            No modules match the specified pattern: $focusedNodesPattern
+            This was set via the `focusedNodesPattern` property.
+        """.trimIndent()
     }
-    val highlightedNodes = highlightNodes(focusList, pattern, theme)
+    val highlightedNodes = highlightNodes(focusList, focusedNodesPattern, theme)
 
     return """
 ${createConfig(theme)}
 
 graph ${orientation.value}
-$subgraphs$digraph
-$highlightedNodes
-    """.trimIndent()
+$subgraphs$mermaidDigraph
+
+$highlightedNodes""".trimIndent()
 }
 
 private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme): String {
@@ -80,15 +83,15 @@ private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme)
 }
 
 private fun buildSubgraph(
-    pattern: Regex,
+    digraph: Map<String, Set<String>>,
     showFullPath: Boolean,
     mostMeaningfulGroups: List<String>,
     projectNames: List<List<String>>,
 ) = if (showFullPath) {
     ""
 } else {
-    mostMeaningfulGroups.filter { it.matches(pattern) }.joinToString("\n") { group ->
-        createSubgraph(group, projectNames)
+    mostMeaningfulGroups.joinToString("\n") { group ->
+        createSubgraph(group, projectNames, digraph)
     }.plus("\n")
 }
 
@@ -110,9 +113,10 @@ private fun buildDigraph(
     dependencies: Map<String, List<Dependency>>,
     showFullPath: Boolean,
     linkText: LinkText,
-): Pair<String, Set<String>> {
+): Digraph {
     val focusedProjects = mutableSetOf<String>()
-    return dependencies.filterKeys { it != ":" }.flatMap { entry ->
+    val digraph = mutableMapOf<String, Set<String>>()
+    val mermaidStringSyntax = dependencies.filterKeys { it != ":" }.flatMap { entry ->
         val sourceName = entry.key.getProjectName(showFullPath)
         entry.value.mapNotNull { target ->
             val targetName = target.targetProjectPath.getProjectName(showFullPath)
@@ -124,15 +128,22 @@ private fun buildDigraph(
             )
             if (shouldAddToGraph) {
                 focusedProjects.addAll(matching)
+                digraph[sourceName] = digraph[sourceName].orEmpty() + targetName
                 "  $sourceName ${linkText.toLinkString(target.configName)} $targetName"
             } else {
                 null
             }
         }
-    }
-        .distinct()
-        .joinToString(separator = "\n") to focusedProjects
+    }.distinct()
+        .joinToString(separator = "\n")
+    return Digraph(mermaidStringSyntax, focusedProjects, digraph)
 }
+
+data class Digraph(
+    val mermaidStringSyntax: String,
+    val focusedProjects: Set<String>,
+    val digraph: Map<String, Set<String>>,
+)
 
 private fun shouldAddToGraph(
     pattern: Regex,
@@ -140,8 +151,8 @@ private fun shouldAddToGraph(
     target: String,
     showFullPath: Boolean,
 ): Pair<Boolean, List<String>> {
-    val sourceMatchesPattern = source.split(":").any { it.matches(pattern) }
-    val targetMatchesPattern = target.split(":").any { it.matches(pattern) }
+    val sourceMatchesPattern = source.matches(pattern)
+    val targetMatchesPattern = target.matches(pattern)
     val sourceName = source.getProjectName(showFullPath)
     val targetName = target.getProjectName(showFullPath)
     return Pair(
@@ -172,13 +183,17 @@ private fun createConfig(theme: Theme): String = """
 """.trimIndent()
 
 // Generate a Mermaid subgraph for the specified group and list of modules
-fun createSubgraph(group: String, modules: List<List<String>>): String {
+fun createSubgraph(group: String, projectNames: List<List<String>>, digraph: Map<String, Set<String>>): String {
     // Extract module names for the current group
-    val moduleNames = modules.asSequence()
+    val digraphTargets = digraph.values.flatten()
+    val moduleNames = projectNames.asSequence()
         .map { it.takeLast(2) } // group by the most relevant part of the path
         .filter { it.all { it.length > 2 } }
         .filter { it.contains(group) }
         .map { it.last() } // take the actual module name
+        .filter { moduleName ->
+            digraph.containsKey(moduleName) || digraphTargets.contains(moduleName)
+        }
         .joinToString("\n    ") { moduleName -> moduleName }
 
     if (moduleNames.isBlank()) {

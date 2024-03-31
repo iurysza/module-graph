@@ -79,7 +79,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 linkText = linkText.getOrElse(LinkText.NONE),
                 dependencies = dependencies.get(),
                 showFullPath = showFullPath.getOrElse(false),
-                pattern = Regex(focusedNodesPattern.getOrElse(".*"))
+                focusedNodesPattern = Regex(focusedNodesPattern.getOrElse(".*"))
             )
             appendMermaidGraphToReadme(
                 mermaidGraph = mermaidGraph,
