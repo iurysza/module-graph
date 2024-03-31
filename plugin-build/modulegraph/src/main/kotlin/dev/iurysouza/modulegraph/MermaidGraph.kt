@@ -42,11 +42,13 @@ internal fun buildMermaidGraph(
     val (mermaidDigraph, focusList, digraph) = buildDigraph(focusedNodesPattern, dependencies, showFullPath, linkText)
     val subgraphs = buildSubgraph(digraph, showFullPath, mostMeaningfulGroups, projectNames)
 
-    require(digraph.isNotEmpty() || focusList.isNotEmpty()) {
-        """
+    if(focusedNodesPattern.isRegexFilterSet()) {
+        require(digraph.isNotEmpty() || focusList.isNotEmpty()) {
+            """
             No modules match the specified pattern: $focusedNodesPattern
             This was set via the `focusedNodesPattern` property.
         """.trimIndent()
+        }
     }
     val highlightedNodes = highlightNodes(focusList, focusedNodesPattern, theme)
 
@@ -54,10 +56,10 @@ internal fun buildMermaidGraph(
 ${createConfig(theme)}
 
 graph ${orientation.value}
-$subgraphs$mermaidDigraph
-
-$highlightedNodes""".trimIndent()
+$subgraphs$mermaidDigraph${if(highlightedNodes.isNotBlank()) "\n$highlightedNodes" else ""}
+""".trimIndent()
 }
+
 
 private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme): String {
     val focusColor = when (theme) {
@@ -66,13 +68,13 @@ private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme)
     }
     val focusClassName = "focus"
     return """${
-        if (focusList.isNotEmpty() && pattern.toString() != ".*") {
+        if (focusList.isNotEmpty() && pattern.isRegexFilterSet()) {
             buildString {
                 append("\n")
-                append("classDef $focusClassName fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;")
                 append("\n")
+                append("classDef $focusClassName fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;")
                 focusList.forEach { projectName ->
-                    append("class $projectName $focusClassName\n")
+                    append("\nclass $projectName $focusClassName")
                 }
             }
         } else {
@@ -81,6 +83,8 @@ private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme)
     }
     """.trimIndent()
 }
+
+private fun Regex.isRegexFilterSet() = toString() != ".*"
 
 private fun buildSubgraph(
     digraph: Map<String, Set<String>>,
@@ -116,7 +120,7 @@ private fun buildDigraph(
 ): Digraph {
     val focusedProjects = mutableSetOf<String>()
     val digraph = mutableMapOf<String, Set<String>>()
-    val mermaidStringSyntax = dependencies.filterKeys { it != ":" }.flatMap { entry ->
+    val mermaidRawString = dependencies.filterKeys { it != ":" }.flatMap { entry ->
         val sourceName = entry.key.getProjectName(showFullPath)
         entry.value.mapNotNull { target ->
             val targetName = target.targetProjectPath.getProjectName(showFullPath)
@@ -134,12 +138,11 @@ private fun buildDigraph(
                 null
             }
         }
-    }.distinct()
-        .joinToString(separator = "\n")
-    return Digraph(mermaidStringSyntax, focusedProjects, digraph)
+    }.distinct().joinToString(separator = "\n")
+    return Digraph(mermaidRawString, focusedProjects, digraph)
 }
 
-data class Digraph(
+private data class Digraph(
     val mermaidStringSyntax: String,
     val focusedProjects: Set<String>,
     val digraph: Map<String, Set<String>>,

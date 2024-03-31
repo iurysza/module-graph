@@ -401,7 +401,7 @@ class ModuleGraphPluginFunctionalTest {
 
                 moduleGraphConfig {
                     showFullPath.set(true)
-                    pattern.set("$pattern")
+                    focusedNodesPattern.set("$pattern")
                     heading.set("### Dependency Diagram")
                     readmePath.set("${readmeFilePath()}")
                     theme.set($MODULEGRAPH_PACKAGE.Theme.BASE(focusColor = "$focusColor"))
@@ -456,6 +456,7 @@ class ModuleGraphPluginFunctionalTest {
 
                 graph LR
                   :example --> :groupFolder:example2
+
                 classDef focus fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;
                 class :groupFolder:example2 focus
                 ```
@@ -484,7 +485,7 @@ class ModuleGraphPluginFunctionalTest {
 
             moduleGraphConfig {
                 showFullPath.set(true)
-                pattern.set("$invalidPattern")
+                focusedNodesPattern.set("$invalidPattern")
                 heading.set("### Dependency Diagram")
                 readmePath.set("${readmeFilePath()}")
                 theme.set($MODULEGRAPH_PACKAGE.Theme.BASE(focusColor = "#F5A622"))
