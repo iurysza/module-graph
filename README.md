@@ -1,7 +1,7 @@
 [![Pre Merge Checks](https://github.com/iurysza/module-graph/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/iurysza/module-graph/actions?query=workflow%3A%22Pre+Merge+Checks%22) [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE) ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
 
-<p align="center">
-  <img src="assets/module-graph-icon.png" alt="module graph icon" width="100"/>
+<p style="text-align:center;">
+  <img src="assets/module-graph-icon.png" alt="module graph icon" style="width:100px; margin:auto;">
 </p>
 
 ## Module Graph Plugin
@@ -11,19 +11,20 @@ This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph o
 
 > A diagram about the current system is only useful if it's generated. If it is produced by hand it
 > documents the author's belief, not the system. Still, important, but not an input for decision
-> making. Development is primarily decision making. Enable it through custom
+> making. Development is primarily decision-making. Enable it through custom
 > tools. [source](https://twitter.com/girba/status/1628326848256962561)
 
 You can read more about the background story of this
 plugin [here](https://iurysouza.dev/automating-project-architecture-graphs/).
 
-## Features
+## Main Features ⭐
 
-- Generates a Mermaid dependency graph of the modules in your Gradle project.
-- Automatically append the generated graph to your project's README file.
-- The raw code block automatically renders as a graph on
-  both [Github](https://github.blog/2022-02-14-include-diagrams-markdown-files-mermaid/)
-  and [Gitlab](https://about.gitlab.com/handbook/tools-and-tips/mermaid/#mermaid-diagrams).
+- Automatically append/update the generated graph to your project's README file.
+- Enables you to focus and highlight specific nodes in the graph
+- Exclude specific configurations from the graph.
+- Built in themes and customization options.
+- The raw code block automatically renders as a graph on both [GitHub](https://github.blog/2022-02-14-include-diagrams-markdown-files-mermaid/),
+ [Gitlab](https://about.gitlab.com/handbook/tools-and-tips/mermaid/#mermaid-diagrams), [Jetbrains IDEs](https://plugins.jetbrains.com/plugin/20146-mermaid) and [VSCode ](https://marketplace.visualstudio.com/items?itemName=MermaidChart.vscode-mermaid-chart).
 
 ## Getting Started
 
@@ -61,24 +62,30 @@ plugins {
 ### Configuring the plugin
 
 ```groovy
-  moduleGraphConfig {
+import dev.iurysouza.modulegraph.Orientation
+import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.LinkText
+
+moduleGraphConfig {
     readmePath = "./README.md"
-    heading = '### Dependency Diagram'
+    heading = "### Module Graph"
     showFullPath = false // optional
-    orientation = dev.iurysouza.modulegraph.Orientation.LEFT_TO_RIGHT // optional
-    linkText = dev.iurysouza.modulegraph.LinkText.NONE // optional
-    theme = new dev.iurysouza.modulegraph.Theme.NEUTRAL() // optional
-    // or you can fully customize it by using the BASE theme:
-//   theme = new dev.iurysouza.modulegraph.Theme.BASE(
-//        [
-//            "primaryTextColor": "#fff",
-//            "primaryColor": "#5a4f7c",
-//            "primaryBorderColor": "#5a4f7c",
-//            "lineColor": "#f5a623",
-//            "tertiaryColor": "#40375c",
-//            "fontSize": "11px"
-//        ]
-//    )
+    orientation = Orientation.LEFT_TO_RIGHT // optional
+    linkText = LinkText.NONE // optional
+    excludeConfigurationNames = ["testImplementation"] // optional
+    theme = Theme.NEUTRAL // optional
+    // Or you can fully customize it by using the BASE theme:
+    // theme = new Theme.BASE(
+    //     [
+    //         "primaryTextColor": "#F6F8FAff", // All text colors
+    //         "primaryColor": "#5a4f7c", // Node color
+    //         "primaryBorderColor": "#5a4f7c", // Node border color
+    //         "tertiaryColor": "#40375c", // Container box background
+    //         "lineColor": "#f5a623",
+    //         "fontSize": "12px"
+    //     ],
+    //     focusColor = "#F5A622" // Color of the focused nodes if any
+    // )
 }
 ```
 
@@ -121,28 +128,32 @@ apply(plugin = "dev.iurysouza:modulegraph")
 ### Configuring the plugin
 
 ```kotlin
+import dev.iurysouza.modulegraph.Orientation
+import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.LinkText
+
 moduleGraphConfig {
     readmePath.set("./README.md")
-    heading.set("### Dependency Diagram")
+    heading = "### Module Graph"
     showFullPath.set(false) // optional
     orientation.set(Orientation.LEFT_TO_RIGHT) //optional
     linkText.set(LinkText.NONE) // optional
+    excludeConfigurationNames.set(listOf("testImplementation")) // optional
+    // focusedNodesPattern.set(".*(projectName).*") // optional
     theme.set(Theme.NEUTRAL) // optional
     // or you can fully customize it by using the BASE theme:
-    // theme.set(Theme.BASE(
-    //      mapOf(
-    //          "primaryTextColor" to "#fff",
-    //          "primaryColor" to "#5a4f7c",
-    //          "primaryBorderColor" to "#5a4f7c",
-    //          "lineColor" to "#f5a623",
-    //          "tertiaryColor" to "#40375c",
-    //          "fontSize" to "11px"
-    //      )
-    //   )
+    // Theme.BASE(
+    //     themeVariables = mapOf(
+    //         "primaryTextColor" to "#F6F8FAff", // All text colors
+    //         "primaryColor" to "#5a4f7c", // Node color
+    //         "primaryBorderColor" to "#5a4f7c", // Node border color
+    //         "tertiaryColor" to "#40375c", // Container box background
+    //         "lineColor" to "#f5a623",
+    //         "fontSize" to "12px"
+    //     ),
+    //     focusColor = "#F5A622" // Color of the focused nodes if any
     // )
-    excludeConfigurationNames.set( // optional
-        listOf("testImplementation")
-    )
+    // )
 }
 ```
 
@@ -157,8 +168,10 @@ To configure the Gradle Module Dependency Graph Plugin, you can set the followin
 
 Optional settings:
 
-- **showFullPath**: Whether to show the full path of the modules in the graph. Default is `false`. Use this if you have
-  modules with the same name in different paths. This will remove the subgraphs from the graph.
+- **showFullPath**: Whether to show the full path of the modules in the graph. Default is `false`. **Use this if you have
+  **modules with the same name in different paths**. This will remove the subgraphs from the graph.
+- **focusedNodesPattern**: The Pattern (Regex) to match nodes in the graph (project names) that should be highlighted and focused. By default, no nodes are focused.
+  - If set, the nodes that match the pattern will be highlighted. The color can be customized via the `focusColor` property from `Theme.BASE`.
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling
   the graph. Default is `NEUTRAL`.
   - Further customization is possible by setting the `themeVariables` property on the `BASE` theme. Check the
@@ -188,49 +201,162 @@ After that, just run the following command:
 
 Now, just look for the generated graph in your project's README file.
 
-### Example Diagram
+### Show me that graph!
 
-You can expect the plugin to generate this kind of diagram after running the plugin:
+This is an example of using the plugin on an Android project with a multimodule setup.
+Here, the following configuration was used:
 
+```kotlin
+moduleGraphConfig {
+    readmePath.set("${rootDir}/README.md")
+    heading.set("### Module Graph")
+    theme.set(
+        Theme.BASE(
+            mapOf(
+                "primaryTextColor" to "#fff",
+                "primaryColor" to "#5a4f7c",
+                "primaryBorderColor" to "#5a4f7c",
+                "lineColor" to "#f5a623",
+                "tertiaryColor" to "#40375c",
+                "fontSize" to "12px",
+            ),
+            focusColor = "#FA8140"
+        ),
+    )
+}
+```
+And we got this graph:
 ```mermaid
 %%{
   init: {
-    'theme': 'neutral'
+    'theme': 'base',
+	'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
   }
 }%%
 
 graph LR
-  subgraph app
-    main
-    playground
-  end
-  subgraph core
-    common
-    design-system
-    footballdata
-    reddit
-  end
-  subgraph features
-    match-day
-    match-thread
-  end
-  footballdata --> common
-  match-day --> common
-  match-day --> footballdata
-  match-day --> design-system
-  match-day --> reddit
-  match-thread --> common
-  match-thread --> footballdata
-  match-thread --> design-system
-  match-thread --> reddit
-  playground --> match-thread
-  playground --> match-day
-  playground --> design-system
-  reddit --> common
-  main --> match-thread
-  main --> match-day
-  main --> design-system
-  main --> common
+    subgraph app
+        main
+        playground
+    end
+    subgraph core
+        common
+        design-system
+        footballinfo
+        reddit
+        webview-to-native-player
+    end
+    subgraph features
+        match-day
+        match-thread
+    end
+    footballinfo --> common
+    match-day --> common
+    match-day --> footballinfo
+    match-day --> design-system
+    match-day --> reddit
+    match-thread --> webview-to-native-player
+    match-thread --> common
+    match-thread --> footballinfo
+    match-thread --> design-system
+    match-thread --> reddit
+    playground --> webview-to-native-player
+    playground --> match-thread
+    playground --> match-day
+    playground --> design-system
+    reddit --> common
+    webview-to-native-player --> common
+    main --> match-thread
+    main --> match-day
+    main --> design-system
+    main --> common
+```
+
+Too much information? We can fix that.
+
+## Focusing on specific nodes
+
+If you want to focus on specific nodes in the graph, you can use the `focusedNodesPattern` property in the configuration.
+
+```kotlin
+moduleGraphConfig {
+    //... keep previous configs
+    focusedNodesPattern.set(".*(reddit).*")
+}
+```
+
+By doing this, the plugin will highlight the nodes that match the pattern. and will only show the other nodes that are connected to them.
+It will generate the following graph:
+
+```mermaid
+%%{
+  init: {
+    'theme': 'base',
+	'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
+  }
+}%%
+
+graph LR
+
+    subgraph core
+        common
+        reddit
+    end
+    subgraph features
+        match-day
+        match-thread
+    end
+    match-day --> reddit
+    match-thread --> reddit
+    reddit --> common
+
+    classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
+    class reddit focus
+```
+Since it's just a regex pattern, you can, for example, match multiple nodes by using the `|` operator,
+or you can come up with whatever cryptic regex patterns you want if you're into that kind of thing.
+
+When was the last time Regex made you happy? =)
+
+```kotlin
+focusedNodesPattern.set(".*(reddit|match-day).*") // This matches module names that contain "reddit" or "match-day"
+```
+
+```mermaid
+%%{
+  init: {
+    'theme': 'base',
+	'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
+  }
+}%%
+
+graph LR
+subgraph app
+main
+playground
+end
+subgraph core
+common
+design-system
+footballinfo
+reddit
+end
+subgraph features
+match-day
+match-thread
+end
+match-day --> common
+match-day --> footballinfo
+match-day --> design-system
+match-day --> reddit
+match-thread --> reddit
+playground --> match-day
+reddit --> common
+main --> match-day
+
+classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
+class match-day focus
+class reddit focus
 ```
 
 ## Contributing 🤝

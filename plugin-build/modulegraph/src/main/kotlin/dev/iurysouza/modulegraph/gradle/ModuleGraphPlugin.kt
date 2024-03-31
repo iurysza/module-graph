@@ -21,6 +21,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.heading.set(extension.heading)
             task.readmePath.set(extension.readmePath)
             task.theme.set(extension.theme)
+            task.focusedNodesPattern.set(extension.focusedNodesPattern)
             task.orientation.set(extension.orientation)
             task.linkText.set(extension.linkText)
             task.showFullPath.set(extension.showFullPath)

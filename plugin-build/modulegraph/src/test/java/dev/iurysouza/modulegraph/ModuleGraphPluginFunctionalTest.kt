@@ -5,6 +5,7 @@ import kotlin.random.Random
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -46,14 +47,14 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
 
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
-                    theme.set(dev.iurysouza.modulegraph.Theme.FOREST)
-                    orientation.set(dev.iurysouza.modulegraph.Orientation.RIGHT_TO_LEFT)
-                    readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
+                    theme.set($MODULEGRAPH_PACKAGE.Theme.FOREST)
+                    orientation.set($MODULEGRAPH_PACKAGE.Orientation.RIGHT_TO_LEFT)
+                    readmePath.set("${readmeFilePath()}")
                 }
                 dependencies {
                     implementation(project(":groupFolder:example2"))
@@ -106,11 +107,11 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
-                    theme.set(dev.iurysouza.modulegraph.Theme.BASE(
+                    theme.set($MODULEGRAPH_PACKAGE.Theme.BASE(
                         mapOf(
                             "primaryTextColor" to "#fff",
                             "primaryColor" to "#5a4f7c",
@@ -121,7 +122,7 @@ class ModuleGraphPluginFunctionalTest {
                             )
                         )
                     )
-                    readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
+                    readmePath.set("${readmeFilePath()}")
                 }
                 dependencies {
                     implementation(project(":groupFolder:example2"))
@@ -175,12 +176,12 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
                     showFullPath.set(true)
-                    readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
+                    readmePath.set("${readmeFilePath()}")
                 }
                 dependencies {
                     implementation(project(":groupFolder:example2"))
@@ -230,15 +231,15 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
 
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
-                    theme.set(dev.iurysouza.modulegraph.Theme.FOREST)
-                    orientation.set(dev.iurysouza.modulegraph.Orientation.RIGHT_TO_LEFT)
-                    linkText.set(dev.iurysouza.modulegraph.LinkText.CONFIGURATION)
-                    readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
+                    theme.set($MODULEGRAPH_PACKAGE.Theme.FOREST)
+                    orientation.set($MODULEGRAPH_PACKAGE.Orientation.RIGHT_TO_LEFT)
+                    linkText.set($MODULEGRAPH_PACKAGE.LinkText.CONFIGURATION)
+                    readmePath.set("${readmeFilePath()}")
                 }
                 dependencies {
                     implementation(project(":groupFolder:example2"))
@@ -293,7 +294,7 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
 
                 moduleGraphConfig {
@@ -330,14 +331,14 @@ class ModuleGraphPluginFunctionalTest {
             """
                 plugins {
                     java
-                    id("dev.iurysouza.modulegraph")
+                    id("$MODULEGRAPH_PACKAGE")
                 }
 
                 moduleGraphConfig {
                     heading.set("### Dependency Diagram")
-                    theme.set(dev.iurysouza.modulegraph.Theme.FOREST)
-                    orientation.set(dev.iurysouza.modulegraph.Orientation.RIGHT_TO_LEFT)
-                    readmePath.set("${readmeFile.absolutePath.replace("\\", "\\\\")}")
+                    theme.set($MODULEGRAPH_PACKAGE.Theme.FOREST)
+                    orientation.set($MODULEGRAPH_PACKAGE.Orientation.RIGHT_TO_LEFT)
+                    readmePath.set("${readmeFilePath()}")
                     excludeConfigurationNames.set(listOf("testImplementation"))
                 }
                 dependencies {
@@ -377,4 +378,137 @@ class ModuleGraphPluginFunctionalTest {
             """.trimIndent()
         assertEquals(expectedOutput, readmeFile.readText())
     }
+
+    @Test
+    fun `plugin adds custom styling to focused modules `() {
+        settingsFile.writeText(
+            """
+                rootProject.name = "test"
+                include(":example")
+                include(":groupFolder:example2")
+                include(":groupFolder:example3")
+            """.trimIndent()
+        )
+
+        val pattern = ".*example2.*"
+        val focusColor = "#F5A622"
+        exampleBuildFile.writeText(
+            """
+                plugins {
+                    java
+                    id("$MODULEGRAPH_PACKAGE")
+                }
+
+                moduleGraphConfig {
+                    showFullPath.set(true)
+                    focusedNodesPattern.set("$pattern")
+                    heading.set("### Dependency Diagram")
+                    readmePath.set("${readmeFilePath()}")
+                    theme.set($MODULEGRAPH_PACKAGE.Theme.BASE(focusColor = "$focusColor"))
+
+                }
+                dependencies {
+                    implementation(project(":groupFolder:example2"))
+                    implementation(project(":groupFolder:example3"))
+                }
+            """.trimIndent()
+        )
+        example2BuildFile.writeText(
+            """
+                plugins {
+                    java
+                }
+                dependencies {
+                    implementation(project(":groupFolder:example3"))
+                }
+            """.trimIndent()
+        )
+        example3BuildFile.writeText(
+            """
+                plugins {
+                    java
+                }
+                dependencies {
+                    implementation(project(":example"))
+                }
+            """.trimIndent()
+        )
+        readmeFile.writeText("### Dependency Diagram")
+
+        // Run the plugin task
+        GradleRunner.create()
+            .withProjectDir(testProjectDir)
+            .withArguments("createModuleGraph")
+            .withPluginClasspath()
+            .build()
+
+        // Check if the output matches the expected result
+        val expectedOutput =
+            """
+                ### Dependency Diagram
+
+                ```mermaid
+                %%{
+                  init: {
+                    'theme': 'base'
+                  }
+                }%%
+
+                graph LR
+                  :example --> :groupFolder:example2
+
+                classDef focus fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;
+                class :groupFolder:example2 focus
+                ```
+            """.trimIndent()
+        assertEquals(expectedOutput, readmeFile.readText())
+    }
+
+    @Test
+    fun `plugin throws exception when invalid pattern is provided`() {
+        settingsFile.writeText(
+            """
+            rootProject.name = "test"
+            include(":example")
+            include(":groupFolder:example2")
+            include(":groupFolder:example3")
+            """.trimIndent()
+        )
+
+        val invalidPattern = ".*example5.*"
+        exampleBuildFile.writeText(
+            """
+            plugins {
+                java
+                id("$MODULEGRAPH_PACKAGE")
+            }
+
+            moduleGraphConfig {
+                showFullPath.set(true)
+                focusedNodesPattern.set("$invalidPattern")
+                heading.set("### Dependency Diagram")
+                readmePath.set("${readmeFilePath()}")
+                theme.set($MODULEGRAPH_PACKAGE.Theme.BASE(focusColor = "#F5A622"))
+            }
+            dependencies {
+                implementation(project(":groupFolder:example2"))
+                implementation(project(":groupFolder:example3"))
+            }
+            """.trimIndent()
+        )
+        assertThrows(Exception::class.java) {
+            GradleRunner.create()
+                .withProjectDir(testProjectDir)
+                .withArguments("createModuleGraph")
+                .withPluginClasspath()
+                .build()
+        }
+    }
+
+    /**
+     * This is for Windows compatibility, as the path is used in the build file
+     */
+    private fun readmeFilePath() = readmeFile.absolutePath.replace("\\", "\\\\")
 }
+
+const val MODULEGRAPH_PACKAGE = "dev.iurysouza.modulegraph"

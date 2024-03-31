@@ -11,19 +11,21 @@ moduleGraphConfig {
     readmePath.set("./README.md")
 
     // optional configs
-    showFullPath.set(true)
+//    focusedNodesPattern.set("""^(?=.*container)(?!.*gama).*""")
+    showFullPath.set(false)
     orientation.set(Orientation.TOP_TO_BOTTOM)
     linkText.set(LinkText.NONE)
     theme.set(
         Theme.BASE(
             themeVariables = mapOf(
-                "primaryTextColor" to "#F6F8FAff", // All text colors
-                "primaryColor" to "#5a4f7c", // Box colors
-                "primaryBorderColor" to "#5a4f7c", // Box border color
-                "lineColor" to "#f5a623", // Line color
+                "primaryTextColor" to "#F6F8FAff", // Text
+                "primaryColor" to "#5a4f7c", // Node
+                "primaryBorderColor" to "#5a4f7c", // Node border
                 "tertiaryColor" to "#40375c", // Container box background
-                "fontSize" to "11px"
-            )
+                "lineColor" to "#f5a623",
+                "fontSize" to "12px"
+            ),
+            focusColor = "#F5A622"
         )
     )
     excludeConfigurationNames.set(listOf("testImplementation"))

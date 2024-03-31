@@ -30,6 +30,11 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val theme: Property<Theme>
 
     @get:Input
+    @get:Option(option = "focusedNodesPattern", description = "A Regex to match nodes that should be focused.")
+    @get:Optional
+    abstract val focusedNodesPattern: Property<String>
+
+    @get:Input
     @get:Option(option = "orientation", description = "The flowchart orientation")
     @get:Optional
     abstract val orientation: Property<Orientation>
@@ -67,13 +72,14 @@ abstract class CreateModuleGraphTask : DefaultTask() {
 
     @TaskAction
     fun execute() {
-        try {
+        runCatching {
             val mermaidGraph = buildMermaidGraph(
                 theme = theme.getOrElse(Theme.NEUTRAL),
                 orientation = orientation.getOrElse(Orientation.LEFT_TO_RIGHT),
                 linkText = linkText.getOrElse(LinkText.NONE),
                 dependencies = dependencies.get(),
-                showFullPath = showFullPath.getOrElse(false)
+                showFullPath = showFullPath.getOrElse(false),
+                focusedNodesPattern = Regex(focusedNodesPattern.getOrElse(".*"))
             )
             appendMermaidGraphToReadme(
                 mermaidGraph = mermaidGraph,
@@ -81,8 +87,9 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 readmeFile = outputFile.get().asFile,
                 logger = logger
             )
-        } catch (e: Exception) {
-            logger.log(LogLevel.ERROR, e.message, e)
+        }.onFailure {
+            logger.log(LogLevel.ERROR, it.message, it)
+            throw it
         }
     }
 }
