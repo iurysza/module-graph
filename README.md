@@ -319,7 +319,8 @@ or you can come up with whatever cryptic regex patterns you want if you're into 
 When was the last time Regex made you happy? =)
 
 ```kotlin
-focusedNodesPattern.set(".*(reddit|match-day).*") // This matches module names that contain "reddit" or "match-day"
+// This matches module names that contain "reddit" or "match-day"
+focusedNodesPattern.set(".*(reddit|match-day).*")
 ```
 
 ```mermaid
