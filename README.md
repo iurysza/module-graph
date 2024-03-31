@@ -357,7 +357,6 @@ classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
 class match-day focus
 class reddit focus
 ```
-```
 
 ## Contributing 🤝
 
