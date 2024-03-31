@@ -36,13 +36,11 @@ val increaseVersion by tasks.registering {
         println("New version: $newVersion")
 
         // Stage changes, commit, push, and tag
-        """
-            git add ./plugin-build/gradle.properties ./README.md &&
-            git commit -m 'Bump version to $newVersion' &&
-            git push origin main &&
-            git tag -a v$newVersion -m 'v$newVersion' &&
-            git push origin v$newVersion
-        """.trimIndent().runCommand()
+        "git add ./plugin-build/gradle.properties ./README.md".runCommand()
+        "git commit -m 'Bump version to $newVersion'".runCommand()
+        "git push origin main".runCommand()
+        "git tag -a v$newVersion -m 'v$newVersion'".runCommand()
+        "git push origin v$newVersion".runCommand()
     }
 }
 
