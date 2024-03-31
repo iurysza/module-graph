@@ -42,12 +42,12 @@ internal fun buildMermaidGraph(
     val (mermaidDigraph, focusList, digraph) = buildDigraph(focusedNodesPattern, dependencies, showFullPath, linkText)
     val subgraphs = buildSubgraph(digraph, showFullPath, mostMeaningfulGroups, projectNames)
 
-    if(focusedNodesPattern.isRegexFilterSet()) {
+    if (focusedNodesPattern.isRegexFilterSet()) {
         require(digraph.isNotEmpty() || focusList.isNotEmpty()) {
             """
             No modules match the specified pattern: $focusedNodesPattern
             This was set via the `focusedNodesPattern` property.
-        """.trimIndent()
+            """.trimIndent()
         }
     }
     val highlightedNodes = highlightNodes(focusList, focusedNodesPattern, theme)
@@ -56,10 +56,9 @@ internal fun buildMermaidGraph(
 ${createConfig(theme)}
 
 graph ${orientation.value}
-$subgraphs$mermaidDigraph${if(highlightedNodes.isNotBlank()) "\n$highlightedNodes" else ""}
-""".trimIndent()
+$subgraphs$mermaidDigraph${if (highlightedNodes.isNotBlank()) "\n$highlightedNodes" else ""}
+    """.trimIndent()
 }
-
 
 private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme): String {
     val focusColor = when (theme) {
@@ -68,18 +67,18 @@ private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme)
     }
     val focusClassName = "focus"
     return """${
-        if (focusList.isNotEmpty() && pattern.isRegexFilterSet()) {
-            buildString {
-                append("\n")
-                append("\n")
-                append("classDef $focusClassName fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;")
-                focusList.forEach { projectName ->
-                    append("\nclass $projectName $focusClassName")
-                }
+    if (focusList.isNotEmpty() && pattern.isRegexFilterSet()) {
+        buildString {
+            append("\n")
+            append("\n")
+            append("classDef $focusClassName fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;")
+            focusList.forEach { projectName ->
+                append("\nclass $projectName $focusClassName")
             }
-        } else {
-            ""
         }
+    } else {
+        ""
+    }
     }
     """.trimIndent()
 }
@@ -173,13 +172,13 @@ private fun createConfig(theme: Theme): String = """
 %%{
   init: {
     'theme': '${theme.name}'${
-    if (theme is Theme.BASE && theme.themeVariables.isNotEmpty()) {
-        ",\n\t'themeVariables': ${
-            Json.encodeToString(theme.themeVariables).trimIndent()
-        }"
-    } else {
-        ""
-    }
+if (theme is Theme.BASE && theme.themeVariables.isNotEmpty()) {
+    ",\n\t'themeVariables': ${
+    Json.encodeToString(theme.themeVariables).trimIndent()
+    }"
+} else {
+    ""
+}
 }
   }
 }%%
