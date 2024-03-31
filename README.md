@@ -37,7 +37,7 @@ You'll just need to add it to your project's **root** `build.gradle` or `build.g
 
 ```groovy
 plugins {
-    id "dev.iurysouza.modulegraph" version "0.5.0"
+    id "dev.iurysouza.modulegraph" version "0.6.0"
 }
 ```
 <details>
@@ -51,7 +51,7 @@ plugins {
             }
         }
         dependencies {
-            classpath "dev.iurysouza:modulegraph:0.5.0"
+            classpath "dev.iurysouza:modulegraph:0.6.0"
         }
     }
 
@@ -102,7 +102,7 @@ moduleGraphConfig {
 
 ```kotlin
 plugins {
-    id("dev.iurysouza.modulegraph") version "0.5.0"
+    id("dev.iurysouza.modulegraph") version "0.6.0"
 }
 ```
 
@@ -117,7 +117,7 @@ plugins {
             }
         }
         dependencies {
-            classpath("dev.iurysouza:modulegraph:0.5.0")
+            classpath("dev.iurysouza:modulegraph:0.6.0")
         }
     }
 
@@ -297,11 +297,19 @@ And that will generate this graph:
 
 graph LR
 
+    subgraph core
+        common
+        reddit
+    end
+    subgraph features
+        match-day
+        match-thread
+    end
     match-day --> reddit
     match-thread --> reddit
     reddit --> common
 
-    classDef focus fill:#FA8140,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
     class reddit focus
 ```
 Since it's just a regex pattern, you can, for example, match multiple nodes by using the `|` operator,
@@ -322,20 +330,33 @@ focusedNodesPattern.set(".*(reddit|match-day).*")
 }%%
 
 graph LR
+subgraph app
+main
+playground
+end
+subgraph core
+common
+design-system
+footballinfo
+reddit
+end
+subgraph features
+match-day
+match-thread
+end
+match-day --> common
+match-day --> footballinfo
+match-day --> design-system
+match-day --> reddit
+match-thread --> reddit
+playground --> match-day
+reddit --> common
+main --> match-day
 
-    match-day --> common
-    match-day --> footballinfo
-    match-day --> design-system
-    match-day --> reddit
-    match-thread --> reddit
-    playground --> match-day
-    reddit --> common
-    main --> match-day
-
-    classDef focus fill:#FA8140,stroke:#fff,stroke-width:2px,color:#fff;
-    class match-day focus
-    class reddit focus
-
+classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
+class match-day focus
+class reddit focus
+```
 ```
 
 ## Contributing 🤝
