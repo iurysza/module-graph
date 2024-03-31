@@ -1,7 +1,7 @@
 [![Pre Merge Checks](https://github.com/iurysza/module-graph/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/iurysza/module-graph/actions?query=workflow%3A%22Pre+Merge+Checks%22) [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE) ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
 
-<p align="center">
-  <img src="assets/module-graph-icon.png" alt="module graph icon" width="100"/>
+<p style="text-align:center;">
+  <img src="assets/module-graph-icon.png" alt="module graph icon" style="width:100px; margin:auto;">
 </p>
 
 ## Module Graph Plugin
@@ -11,19 +11,19 @@ This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph o
 
 > A diagram about the current system is only useful if it's generated. If it is produced by hand it
 > documents the author's belief, not the system. Still, important, but not an input for decision
-> making. Development is primarily decision making. Enable it through custom
+> making. Development is primarily decision-making. Enable it through custom
 > tools. [source](https://twitter.com/girba/status/1628326848256962561)
 
 You can read more about the background story of this
 plugin [here](https://iurysouza.dev/automating-project-architecture-graphs/).
 
-## Main Features
+## Main Features ⭐
 
 - Automatically append/update the generated graph to your project's README file.
 - Enables you to focus and highlight specific nodes in the graph
 - Exclude specific configurations from the graph.
 - Built in themes and customization options.
-- The raw code block automatically renders as a graph on both [Github](https://github.blog/2022-02-14-include-diagrams-markdown-files-mermaid/),
+- The raw code block automatically renders as a graph on both [GitHub](https://github.blog/2022-02-14-include-diagrams-markdown-files-mermaid/),
  [Gitlab](https://about.gitlab.com/handbook/tools-and-tips/mermaid/#mermaid-diagrams), [Jetbrains IDEs](https://plugins.jetbrains.com/plugin/20146-mermaid) and [VSCode ](https://marketplace.visualstudio.com/items?itemName=MermaidChart.vscode-mermaid-chart).
 
 ## Getting Started
@@ -37,7 +37,7 @@ You'll just need to add it to your project's **root** `build.gradle` or `build.g
 
 ```groovy
 plugins {
-    id "dev.iurysouza.modulegraph" version "0.6.0"
+    id "dev.iurysouza.modulegraph" version "0.5.0"
 }
 ```
 <details>
@@ -51,7 +51,7 @@ plugins {
             }
         }
         dependencies {
-            classpath "dev.iurysouza:modulegraph:0.6.0"
+            classpath "dev.iurysouza:modulegraph:0.5.0"
         }
     }
 
@@ -102,7 +102,7 @@ moduleGraphConfig {
 
 ```kotlin
 plugins {
-    id("dev.iurysouza.modulegraph") version "0.6.0"
+    id("dev.iurysouza.modulegraph") version "0.5.0"
 }
 ```
 
@@ -117,7 +117,7 @@ plugins {
             }
         }
         dependencies {
-            classpath("dev.iurysouza:modulegraph:0.6.0")
+            classpath("dev.iurysouza:modulegraph:0.5.0")
         }
     }
 
@@ -203,7 +203,7 @@ Now, just look for the generated graph in your project's README file.
 
 ### Show me that graph!
 
-This is an example of using the plugin on an Android project with a multi module setup.
+This is an example of using the plugin on an Android project with a multimodule setup.
 Here, the following configuration was used:
 
 ```kotlin
