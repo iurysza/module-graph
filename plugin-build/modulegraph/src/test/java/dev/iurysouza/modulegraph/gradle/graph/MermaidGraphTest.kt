@@ -12,7 +12,7 @@ class MermaidGraphTest {
 
     @Test
     fun `digraph builder works as expected`() {
-        val dependencies = aModuleGraph()
+        val graphModel = aModuleGraph()
         val graphOptions = GraphOptions(
             linkText = LinkText.NONE,
             theme = Theme.BASE(
@@ -31,7 +31,7 @@ class MermaidGraphTest {
             orientation = Orientation.TOP_TO_BOTTOM,
         )
 
-        val mermaidGraph = Mermaid.generateGraph(dependencies, graphOptions)
+        val mermaidGraph = Mermaid.generateGraph(graphModel, graphOptions)
 
         assertEquals(expectedMermaidGraphCode, mermaidGraph)
     }

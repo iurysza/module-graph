@@ -5,9 +5,9 @@ import dev.iurysouza.modulegraph.GraphOptions
 
 internal object DigraphBuilder {
     fun build(
-        dependencies: Map<String, List<Dependency>>,
+        graphModel: Map<String, List<Dependency>>,
         graphOptions: GraphOptions,
-    ): List<DigraphModel> = dependencies.flatMap { (source, targetList) ->
+    ): List<DigraphModel> = graphModel.flatMap { (source, targetList) ->
         targetList.mapNotNull { target ->
             buildModel(graphOptions, source, target)
         }

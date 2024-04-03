@@ -5,12 +5,12 @@ import dev.iurysouza.modulegraph.graph.*
 internal object Mermaid {
 
     fun generateGraph(
-        input: Map<String, List<Dependency>>,
+        graphModel: Map<String, List<Dependency>>,
         graphOptions: GraphOptions,
     ): String {
         val (linkText, theme, orientation) = graphOptions
-        val digraph = DigraphBuilder.build(input, graphOptions)
-        val configSyntax = ConfigCodeGenerator.createConfig(theme)
+        val digraph = DigraphBuilder.build(graphModel, graphOptions)
+
         val subgraphSyntax = if (graphOptions.showFullPath) {
             MermaidCode()
         } else {
@@ -18,6 +18,7 @@ internal object Mermaid {
         }
         val digraphSyntax = DigraphCodeGenerator.mermaid(digraph, linkText)
         val highlightSyntax = FocusNodeStyleWriter.highlightNode(digraph, theme)
+        val configSyntax = ConfigCodeGenerator.createConfig(theme)
         return """
                 |${configSyntax.value}
                 |
