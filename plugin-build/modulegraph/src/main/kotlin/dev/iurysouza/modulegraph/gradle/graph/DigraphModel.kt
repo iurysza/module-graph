@@ -1,7 +1,6 @@
 package dev.iurysouza.modulegraph.gradle.graph
 
 import dev.iurysouza.modulegraph.Dependency
-import dev.iurysouza.modulegraph.LinkText
 
 internal data class DigraphInput(
     val pattern: Regex,
@@ -19,6 +18,7 @@ data class ModuleNode(
     val isFocused: Boolean,
     val fullName: String,
     val config: ModuleConfig,
+    val parent: String,
 )
 
 @JvmInline
@@ -29,4 +29,5 @@ value class ModuleConfig(val value: String) {
 }
 
 @JvmInline
-value class MermaidSyntax(val value: String)
+value class MermaidSyntax(val value: String = "")
+

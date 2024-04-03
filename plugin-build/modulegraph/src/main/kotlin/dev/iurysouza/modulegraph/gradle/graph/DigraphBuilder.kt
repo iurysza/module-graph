@@ -7,11 +7,18 @@ internal object DigraphBuilder {
         input: DigraphInput,
     ): List<DigraphModel> = input.dependencies.flatMap { (source, targetList) ->
         targetList.mapNotNull { target ->
-            buildDigraph(input, source, target)
+            buildModel(input, source, target)
+        }
+    }.also {
+        require(it.isNotEmpty()) {
+            """
+            No modules match the specified pattern: ${input.pattern}
+            This was set via the `focusedNodesPattern` property.
+            """
         }
     }
 
-    private fun buildDigraph(
+    private fun buildModel(
         input: DigraphInput,
         sourceFullName: String,
         target: Dependency? = null,
@@ -31,25 +38,31 @@ internal object DigraphBuilder {
                     name = sourceFullName.getProjectName(showFullPath),
                     fullName = sourceFullName,
                     isFocused = sourceMatches && regexFilterSet,
-                    config = ModuleConfig.none()
+                    config = ModuleConfig.none(),
+                    parent = getParent(sourceFullName)
                 ),
                 target = ModuleNode(
                     name = targetFullName!!.getProjectName(showFullPath),
                     fullName = targetFullName,
                     isFocused = targetMatches && regexFilterSet,
-                    config = ModuleConfig(target.configName)
+                    config = ModuleConfig(target.configName),
+                    parent = getParent(targetFullName)
                 )
             )
         }
     }
+
+    /**
+     * Eg: ":app:module" -> "app"
+     */
+    private fun getParent(
+        sourceFullName: String,
+    ): String = sourceFullName
+        .split(":")
+        .takeLast(2)
+        .take(1)
+        .joinToString("")
 }
 
 private fun Regex.isRegexFilterSet() = toString() != ".*"
 
-private fun String.getProjectName(showFullPath: Boolean): String {
-    return if (showFullPath) {
-        this
-    } else {
-        this.split(":").last { it.isNotBlank() }
-    }
-}
