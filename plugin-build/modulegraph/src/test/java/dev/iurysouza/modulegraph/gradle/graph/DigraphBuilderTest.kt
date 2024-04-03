@@ -10,7 +10,7 @@ class DigraphBuilderTest {
     @Test
     fun `digraph builder works as expected`() {
         val linkText = LinkText.NONE
-        val anInput = aDigraphInput(regex = ".*gama.*".toRegex())
+        val anInput = aDigraphInput(regex = ".*gama.*")
         val digraphModelList = DigraphBuilder.build(anInput)
         val digraphSyntax = DigraphCodeGenerator.mermaid(digraphModelList, linkText)
 

@@ -5,10 +5,10 @@ import dev.iurysouza.modulegraph.Digraph
 import dev.iurysouza.modulegraph.LinkText
 
 internal fun aDigraphInput(
-    regex: Regex = Regex(".*"),
+    regex: String = ".*",
     showFullPath: Boolean = false,
 ) = DigraphInput(
-    pattern = regex,
+    pattern = regex.toRegex(),
     dependencies = mapOf(
         ":sample:zeta" to listOf(
             Dependency(
