@@ -1,26 +1,23 @@
 package dev.iurysouza.modulegraph
 
 import dev.iurysouza.modulegraph.graph.*
-import dev.iurysouza.modulegraph.graph.DigraphBuilder
-import dev.iurysouza.modulegraph.graph.DigraphInput
 
 internal object Mermaid {
 
     fun generateGraph(
-        input: DigraphInput,
+        input: Map<String, List<Dependency>>,
         graphOptions: GraphOptions,
     ): String {
         val (linkText, theme, orientation) = graphOptions
-        val digraph = DigraphBuilder.build(input)
+        val digraph = DigraphBuilder.build(input, graphOptions)
         val configSyntax = ConfigCodeGenerator.createConfig(theme)
-        val subgraphSyntax = if (input.showFullPath) {
+        val subgraphSyntax = if (graphOptions.showFullPath) {
             MermaidSyntax()
         } else {
             SubgraphBuilder.build(digraph)
         }
         val digraphSyntax = DigraphCodeGenerator.mermaid(digraph, linkText)
         val highlightSyntax = FocusNodeStyleWriter.highlightNode(digraph, theme)
-
         return """
                 |${configSyntax.value}
                 |
@@ -37,4 +34,6 @@ data class GraphOptions(
     val linkText: LinkText,
     val theme: Theme,
     val orientation: Orientation,
+    val pattern: Regex,
+    val showFullPath: Boolean,
 )

@@ -1,29 +1,31 @@
 package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.Dependency
+import dev.iurysouza.modulegraph.GraphOptions
 
 internal object DigraphBuilder {
     fun build(
-        input: DigraphInput,
-    ): List<DigraphModel> = input.dependencies.flatMap { (source, targetList) ->
+        dependencies: Map<String, List<Dependency>>,
+        graphOptions: GraphOptions,
+    ): List<DigraphModel> = dependencies.flatMap { (source, targetList) ->
         targetList.mapNotNull { target ->
-            buildModel(input, source, target)
+            buildModel(graphOptions, source, target)
         }
     }.also {
         require(it.isNotEmpty()) {
             """
-            No modules match the specified pattern: ${input.pattern}
+            No modules match the specified pattern: ${graphOptions.pattern}
             This was set via the `focusedNodesPattern` property.
             """
         }
     }
 
     private fun buildModel(
-        input: DigraphInput,
+        graphOptions: GraphOptions,
         sourceFullName: String,
         target: Dependency? = null,
     ): DigraphModel? {
-        val (pattern, _, showFullPath) = input
+        val (_, _, _, pattern, showFullPath) = graphOptions
         val targetFullName = target?.targetProjectPath
 
         val sourceMatches = sourceFullName.matches(pattern)
@@ -39,14 +41,14 @@ internal object DigraphBuilder {
                     fullName = sourceFullName,
                     isFocused = sourceMatches && regexFilterSet,
                     config = ModuleConfig.none(),
-                    parent = getParent(sourceFullName)
+                    parent = sourceFullName.getParent()
                 ),
                 target = ModuleNode(
                     name = targetFullName!!.getProjectName(showFullPath),
                     fullName = targetFullName,
                     isFocused = targetMatches && regexFilterSet,
                     config = ModuleConfig(target.configName),
-                    parent = getParent(targetFullName)
+                    parent = targetFullName.getParent()
                 )
             )
         }
@@ -55,14 +57,9 @@ internal object DigraphBuilder {
     /**
      * Eg: ":app:module" -> "app"
      */
-    private fun getParent(
-        sourceFullName: String,
-    ): String = sourceFullName
-        .split(":")
+    private fun String.getParent(): String = split(":")
         .takeLast(2)
         .take(1)
         .joinToString("")
 }
-
-internal fun Regex.isRegexFilterSet() = toString() != ".*"
 

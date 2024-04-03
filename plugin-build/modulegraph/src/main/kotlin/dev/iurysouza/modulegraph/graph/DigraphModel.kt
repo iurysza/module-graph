@@ -3,8 +3,8 @@ package dev.iurysouza.modulegraph.graph
 import dev.iurysouza.modulegraph.Dependency
 
 internal data class DigraphInput(
-    val pattern: Regex,
     val dependencies: Map<String, List<Dependency>>,
+    val pattern: Regex,
     val showFullPath: Boolean,
 )
 

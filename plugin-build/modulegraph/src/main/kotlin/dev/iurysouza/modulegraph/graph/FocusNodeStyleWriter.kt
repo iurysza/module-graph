@@ -4,13 +4,25 @@ import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.focusColor
 
 object FocusNodeStyleWriter {
+    /**
+     * @param digraphModel The list of digraph models for which the highlighting is to be done.
+     * @param theme The theme for the highlighting.
+     * @return A `MermaidSyntax` with the code to highlight the focused nodes.
+     *
+     *This would generate a `MermaidSyntax` similar to:
+     *```mermaid
+     *classDef focus fill:#F5A622,stroke:#fff,stroke-width:2px,color:#fff;
+     *class alpha focus
+     *```
+     *Where "alpha" would be one of the focused nodes.
+    */
     fun highlightNode(digraphModel: List<DigraphModel>, theme: Theme): MermaidSyntax {
-        val focusedNodes = digraphModel
-            .flatMap { listOf(it.source, it.target) }
-            .distinctBy { it.name }
-            .filter { it.isFocused }
+    val focusedNodes = digraphModel
+    .flatMap { listOf(it.source, it.target) }
+    .distinctBy { it.name }
+    .filter { it.isFocused }
 
-        return toCode(focusedNodes, theme)
+    return toCode(focusedNodes, theme)
     }
 
     private fun toCode(
