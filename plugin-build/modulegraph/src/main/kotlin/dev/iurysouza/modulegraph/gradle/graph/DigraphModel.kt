@@ -7,7 +7,6 @@ internal data class DigraphInput(
     val pattern: Regex,
     val dependencies: Map<String, List<Dependency>>,
     val showFullPath: Boolean,
-    val linkText: LinkText,
 )
 
 data class DigraphModel(

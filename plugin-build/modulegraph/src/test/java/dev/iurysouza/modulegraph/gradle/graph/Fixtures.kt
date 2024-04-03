@@ -4,9 +4,11 @@ import dev.iurysouza.modulegraph.Dependency
 import dev.iurysouza.modulegraph.Digraph
 import dev.iurysouza.modulegraph.LinkText
 
-internal val mermaidInput = DigraphInput(
-//    pattern = Regex("^(?=.*container)(?!.*gama).*"),
-    pattern = Regex(".*"),
+internal fun aDigraphInput(
+    regex: Regex = Regex(".*"),
+    showFullPath: Boolean = false,
+) = DigraphInput(
+    pattern = regex,
     dependencies = mapOf(
         ":sample:zeta" to listOf(
             Dependency(
@@ -39,8 +41,7 @@ internal val mermaidInput = DigraphInput(
             )
         )
     ),
-    showFullPath = false,
-    linkText = LinkText.CONFIGURATION
+    showFullPath = showFullPath,
 )
 
 internal val expectedDigraph = Digraph(
@@ -66,10 +67,6 @@ internal val expectedDigraph = Digraph(
         )
     ),
     mermaidStringSyntax = """
-        |  zeta --> beta
-        |  alpha --> zeta
-        |  alpha --> beta
-        |  alpha --> gama
-        |  alpha --> delta
-        |  gama --> zeta""".trimMargin()
+        |alpha --> gama
+        |gama --> zeta""".trimMargin()
 )

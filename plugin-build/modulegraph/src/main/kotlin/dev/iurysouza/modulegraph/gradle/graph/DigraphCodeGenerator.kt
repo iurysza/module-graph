@@ -13,7 +13,7 @@ object DigraphCodeGenerator {
     )
 
     private fun toMermaid(it: DigraphModel, linkText: LinkText): CharSequence = """
-        |  ${it.source.name} ${linkText.toLinkString(it.target.config.value)} ${it.target.name}
+        |${it.source.name} ${linkText.toLinkString(it.target.config.value)} ${it.target.name}
     """.trimMargin()
 }
 
