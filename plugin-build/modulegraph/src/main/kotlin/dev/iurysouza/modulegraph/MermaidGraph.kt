@@ -1,5 +1,8 @@
 package dev.iurysouza.modulegraph
 
+import dev.iurysouza.modulegraph.gradle.graph.DigraphCodeGenerator
+import dev.iurysouza.modulegraph.gradle.graph.DigraphInput
+import dev.iurysouza.modulegraph.gradle.graph.DigraphBuilder
 import java.io.File
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -67,18 +70,18 @@ private fun highlightNodes(focusList: Set<String>, pattern: Regex, theme: Theme)
     }
     val focusClassName = "focus"
     return """${
-    if (focusList.isNotEmpty() && pattern.isRegexFilterSet()) {
-        buildString {
-            append("\n")
-            append("\n")
-            append("classDef $focusClassName fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;")
-            focusList.forEach { projectName ->
-                append("\nclass $projectName $focusClassName")
+        if (focusList.isNotEmpty() && pattern.isRegexFilterSet()) {
+            buildString {
+                append("\n")
+                append("\n")
+                append("classDef $focusClassName fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;")
+                focusList.forEach { projectName ->
+                    append("\nclass $projectName $focusClassName")
+                }
             }
+        } else {
+            ""
         }
-    } else {
-        ""
-    }
     }
     """.trimIndent()
 }
@@ -141,7 +144,7 @@ private fun buildDigraph(
     return Digraph(mermaidRawString, focusedProjects, digraph)
 }
 
-private data class Digraph(
+internal data class Digraph(
     val mermaidStringSyntax: String,
     val focusedProjects: Set<String>,
     val digraph: Map<String, Set<String>>,
@@ -172,13 +175,13 @@ private fun createConfig(theme: Theme): String = """
 %%{
   init: {
     'theme': '${theme.name}'${
-if (theme is Theme.BASE && theme.themeVariables.isNotEmpty()) {
-    ",\n\t'themeVariables': ${
-    Json.encodeToString(theme.themeVariables).trimIndent()
-    }"
-} else {
-    ""
-}
+    if (theme is Theme.BASE && theme.themeVariables.isNotEmpty()) {
+        ",\n\t'themeVariables': ${
+            Json.encodeToString(theme.themeVariables).trimIndent()
+        }"
+    } else {
+        ""
+    }
 }
   }
 }%%
