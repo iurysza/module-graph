@@ -38,6 +38,10 @@ sealed class Theme(val name: String) : JavaSerializable {
         val focusColor: FocusColor = DEFAULT_FOCUS_COLOR,
     ) : Theme("base")
 }
+fun Theme.focusColor(): FocusColor = when (this) {
+    is Theme.BASE -> focusColor
+    else -> DEFAULT_FOCUS_COLOR
+}
 
 typealias FocusColor = String
 
