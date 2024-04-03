@@ -1,8 +1,8 @@
 package dev.iurysouza.modulegraph
 
-import dev.iurysouza.modulegraph.gradle.graph.*
-import dev.iurysouza.modulegraph.gradle.graph.DigraphBuilder
-import dev.iurysouza.modulegraph.gradle.graph.DigraphInput
+import dev.iurysouza.modulegraph.graph.*
+import dev.iurysouza.modulegraph.graph.DigraphBuilder
+import dev.iurysouza.modulegraph.graph.DigraphInput
 
 internal object Mermaid {
 

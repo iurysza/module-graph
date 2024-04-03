@@ -2,6 +2,7 @@ package dev.iurysouza.modulegraph.gradle.graph
 
 import dev.iurysouza.modulegraph.Dependency
 import dev.iurysouza.modulegraph.Digraph
+import dev.iurysouza.modulegraph.graph.DigraphInput
 
 internal fun aDigraphInput(
     regex: String = ".*",

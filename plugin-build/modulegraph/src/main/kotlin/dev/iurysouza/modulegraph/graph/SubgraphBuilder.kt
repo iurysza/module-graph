@@ -1,4 +1,4 @@
-package dev.iurysouza.modulegraph.gradle.graph
+package dev.iurysouza.modulegraph.graph
 
 object SubgraphBuilder {
 

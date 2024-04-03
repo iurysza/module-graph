@@ -2,6 +2,8 @@ package dev.iurysouza.modulegraph.gradle.graph
 
 import dev.iurysouza.modulegraph.FocusColor
 import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.graph.DigraphBuilder
+import dev.iurysouza.modulegraph.graph.FocusNodeStyleWriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

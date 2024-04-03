@@ -1,8 +1,5 @@
 package dev.iurysouza.modulegraph
 
-import dev.iurysouza.modulegraph.gradle.graph.DigraphCodeGenerator
-import dev.iurysouza.modulegraph.gradle.graph.DigraphInput
-import dev.iurysouza.modulegraph.gradle.graph.DigraphBuilder
 import java.io.File
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

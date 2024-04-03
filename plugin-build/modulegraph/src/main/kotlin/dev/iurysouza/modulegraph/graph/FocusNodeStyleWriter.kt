@@ -1,4 +1,4 @@
-package dev.iurysouza.modulegraph.gradle.graph
+package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.focusColor

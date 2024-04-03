@@ -1,4 +1,4 @@
-package dev.iurysouza.modulegraph.gradle.graph
+package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.Dependency
 
@@ -64,5 +64,5 @@ internal object DigraphBuilder {
         .joinToString("")
 }
 
-private fun Regex.isRegexFilterSet() = toString() != ".*"
+internal fun Regex.isRegexFilterSet() = toString() != ".*"
 

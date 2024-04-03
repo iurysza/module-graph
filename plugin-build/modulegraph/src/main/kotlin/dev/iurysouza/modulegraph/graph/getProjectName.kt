@@ -1,4 +1,4 @@
-package dev.iurysouza.modulegraph.gradle.graph
+package dev.iurysouza.modulegraph.graph
 
 internal fun String.getProjectName(showFullPath: Boolean): String {
     return if (showFullPath) {

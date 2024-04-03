@@ -1,8 +1,8 @@
 package dev.iurysouza.modulegraph.gradle.graph
 
 import dev.iurysouza.modulegraph.LinkText
-import dev.iurysouza.modulegraph.gradle.graph.DigraphBuilder
-import dev.iurysouza.modulegraph.gradle.graph.DigraphCodeGenerator
+import dev.iurysouza.modulegraph.graph.DigraphBuilder
+import dev.iurysouza.modulegraph.graph.DigraphCodeGenerator
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.assertEquals
