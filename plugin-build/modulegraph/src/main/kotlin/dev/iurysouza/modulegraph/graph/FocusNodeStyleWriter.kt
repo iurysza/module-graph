@@ -7,16 +7,16 @@ object FocusNodeStyleWriter {
     /**
      * @param digraphModel The list of digraph models for which the highlighting is to be done.
      * @param theme The theme for the highlighting.
-     * @return A `MermaidSyntax` with the code to highlight the focused nodes.
+     * @return A `MermaidCode` with the code to highlight the focused nodes.
      *
-     *This would generate a `MermaidSyntax` similar to:
+     *This would generate a `MermaidCode` similar to:
      *```mermaid
      *classDef focus fill:#F5A622,stroke:#fff,stroke-width:2px,color:#fff;
      *class alpha focus
      *```
      *Where "alpha" would be one of the focused nodes.
     */
-    fun highlightNode(digraphModel: List<DigraphModel>, theme: Theme): MermaidSyntax {
+    fun highlightNode(digraphModel: List<DigraphModel>, theme: Theme): MermaidCode {
     val focusedNodes = digraphModel
     .flatMap { listOf(it.source, it.target) }
     .distinctBy { it.name }
@@ -28,7 +28,7 @@ object FocusNodeStyleWriter {
     private fun toCode(
         nodeList: List<ModuleNode>,
         theme: Theme,
-    ): MermaidSyntax = MermaidSyntax(
+    ): MermaidCode = MermaidCode(
         if (nodeList.isEmpty()) {
             ""
         } else {

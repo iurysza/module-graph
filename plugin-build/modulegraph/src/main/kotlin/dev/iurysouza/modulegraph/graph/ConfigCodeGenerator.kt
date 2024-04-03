@@ -6,15 +6,15 @@ import kotlinx.serialization.json.Json
 
 object ConfigCodeGenerator {
     /**
-     * This function generates a `MermaidSyntax` configuration
+     * This function generates a `MermaidCode` configuration
      *
      * @param theme The theme
-     * @return `MermaidSyntax` is returned with the configuration specific to the provided `Theme`.
+     * @return `MermaidCode` is returned with the configuration specific to the provided `Theme`.
      *
      * If the `Theme` is the base theme and it has theme variables,
      * those will be added as `themeVariables` to the configuration.
      *
-     *This might generate a `MermaidSyntax` configuration like:
+     *This might generate a `MermaidCode` configuration like:
      *
      *```mermaid
      *%%{
@@ -25,7 +25,7 @@ object ConfigCodeGenerator {
      *}%%
      *```
      */
-    fun createConfig(theme: Theme): MermaidSyntax = MermaidSyntax(
+    fun createConfig(theme: Theme): MermaidCode = MermaidCode(
         """
         |%%{
         |  init: {

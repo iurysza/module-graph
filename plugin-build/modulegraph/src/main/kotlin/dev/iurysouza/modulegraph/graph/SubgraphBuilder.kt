@@ -6,7 +6,7 @@ object SubgraphBuilder {
      * The `build` function groups digraph models by parent and generates mermaid syntax for subgraphs.
      *
      * @param list The list of digraph models to be grouped by parent.
-     * @return The resulting `MermaidSyntax` corresponding to the structured digraphs.
+     * @return The resulting `MermaidCode` corresponding to the structured digraphs.
      *
      * Example usage:
      *```mermaid
@@ -22,19 +22,19 @@ object SubgraphBuilder {
      *
      *Where "sample" and "container" are parent nodes, and "alpha", "zeta", and "gama" are children.
      */
-    fun build(list: List<DigraphModel>): MermaidSyntax {
+    fun build(list: List<DigraphModel>): MermaidCode {
         val subGraphs = groupDigraphsByParent(list)
-        return toMermaidSyntax(subGraphs)
+        return toMermaidCode(subGraphs)
     }
 
-    private fun toMermaidSyntax(subgraphModel: List<Pair<String, List<ModuleNode>>>): MermaidSyntax {
+    private fun toMermaidCode(subgraphModel: List<Pair<String, List<ModuleNode>>>): MermaidCode {
         val subgraph = subgraphModel.joinToString("\n") { (parent, children) ->
             val childrenNames = children.joinToString("\n") { "    ${it.name}" }
             """|  subgraph $parent
                |$childrenNames
                |  end""".trimMargin()
         }
-        return MermaidSyntax(subgraph)
+        return MermaidCode(subgraph)
     }
 
     private fun groupDigraphsByParent(

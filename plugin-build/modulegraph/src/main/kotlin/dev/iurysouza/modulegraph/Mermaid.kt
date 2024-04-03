@@ -12,7 +12,7 @@ internal object Mermaid {
         val digraph = DigraphBuilder.build(input, graphOptions)
         val configSyntax = ConfigCodeGenerator.createConfig(theme)
         val subgraphSyntax = if (graphOptions.showFullPath) {
-            MermaidSyntax()
+            MermaidCode()
         } else {
             SubgraphBuilder.build(digraph)
         }

@@ -29,5 +29,5 @@ value class ModuleConfig(val value: String) {
 }
 
 @JvmInline
-value class MermaidSyntax(val value: String = "")
+value class MermaidCode(val value: String = "")
 

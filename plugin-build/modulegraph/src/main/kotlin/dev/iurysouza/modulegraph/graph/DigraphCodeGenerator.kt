@@ -9,9 +9,9 @@ object DigraphCodeGenerator {
      *
      * @param digraphModel The list of digraph models
      * @param linkText The text for the link between nodes in the graph.
-     * @return A `MermaidSyntax` representing the list of digraphs.
+     * @return A `MermaidCode` representing the list of digraphs.
      *
-     *This would generate a `MermaidSyntax` similar to:
+     *This would generate a `MermaidCode` similar to:
      *
      *```mermaid
      * alpha --> gama
@@ -21,7 +21,7 @@ object DigraphCodeGenerator {
     fun mermaid(
         digraphModel: List<DigraphModel>,
         linkText: LinkText,
-    ): MermaidSyntax = MermaidSyntax(
+    ): MermaidCode = MermaidCode(
         """
         |${digraphModel.joinToString("\n") { toMermaid(it, linkText) }}
     """.trimMargin()
