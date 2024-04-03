@@ -1,6 +1,8 @@
 package dev.iurysouza.modulegraph.gradle.graph
 
 import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.gradle.graph.DigraphBuilder
+import dev.iurysouza.modulegraph.gradle.graph.DigraphCodeGenerator
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -14,6 +16,9 @@ class DigraphBuilderTest {
         val digraphModelList = DigraphBuilder.build(anInput)
         val digraphSyntax = DigraphCodeGenerator.mermaid(digraphModelList, linkText)
 
-        assertEquals(expectedDigraph.mermaidStringSyntax, digraphSyntax.value)
+        val mermaidStringSyntax = """
+        |alpha --> gama
+        |gama --> zeta""".trimMargin()
+        assertEquals(mermaidStringSyntax, digraphSyntax.value)
     }
 }
