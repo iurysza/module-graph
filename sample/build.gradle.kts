@@ -11,7 +11,8 @@ moduleGraphConfig {
     readmePath.set("./README.md")
 
     // optional configs
-//    focusedNodesPattern.set("""^(?=.*container)(?!.*gama).*""")
+//    pattern = Regex(""".*gama.*"""),
+    focusedNodesPattern.set(""".*gama.*""")
     showFullPath.set(false)
     orientation.set(Orientation.TOP_TO_BOTTOM)
     linkText.set(LinkText.NONE)
