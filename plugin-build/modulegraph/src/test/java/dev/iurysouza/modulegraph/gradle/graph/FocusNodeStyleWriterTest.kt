@@ -2,7 +2,7 @@ package dev.iurysouza.modulegraph.gradle.graph
 
 import dev.iurysouza.modulegraph.FocusColor
 import dev.iurysouza.modulegraph.Theme
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class FocusNodeStyleWriterTest {
