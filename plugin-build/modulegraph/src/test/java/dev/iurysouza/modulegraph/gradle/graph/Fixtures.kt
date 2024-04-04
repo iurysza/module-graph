@@ -1,16 +1,6 @@
 package dev.iurysouza.modulegraph.gradle.graph
 
 import dev.iurysouza.modulegraph.Dependency
-import dev.iurysouza.modulegraph.graph.DigraphInput
-
-internal fun aDigraphInput(
-    regex: String = ".*",
-    showFullPath: Boolean = false,
-) = DigraphInput(
-    pattern = regex.toRegex(),
-    dependencies = aModuleGraph(),
-    showFullPath = showFullPath,
-)
 
 internal fun aModuleGraph() = mapOf(
     ":sample:zeta" to listOf(
@@ -46,11 +36,10 @@ internal fun aModuleGraph() = mapOf(
 )
 
 internal val expectedMermaidGraphCode = """
-        |```mermaid
         |%%{
         |  init: {
         |    'theme': 'base',
-        |	'themeVariables': {"primaryTextColor":"#F6F8FAff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","tertiaryColor":"#40375c","lineColor":"#f5a623","fontSize":"12px"}
+        |    'themeVariables': {"primaryTextColor":"#F6F8FAff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","tertiaryColor":"#40375c","lineColor":"#f5a623","fontSize":"12px"}
         |  }
         |}%%
         |
@@ -66,5 +55,4 @@ internal val expectedMermaidGraphCode = """
         |  gama --> zeta
         |
         |classDef focus fill:#F5A622,stroke:#fff,stroke-width:2px,color:#fff;
-        |class gama focus
-        |```""".trimMargin()
+        |class gama focus""".trimMargin()

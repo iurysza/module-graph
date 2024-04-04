@@ -1,7 +1,6 @@
 package dev.iurysouza.modulegraph.gradle.graph
 
-import dev.iurysouza.modulegraph.FocusColor
-import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.*
 import dev.iurysouza.modulegraph.graph.DigraphBuilder
 import dev.iurysouza.modulegraph.graph.FocusNodeStyleWriter
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -18,11 +17,16 @@ class FocusNodeStyleWriterTest {
     fun `code highlighter works as expected`() {
         val theme = Theme.BASE(focusColor = "#F5A622")
         val focusedNode = "gama"
-        val input = aDigraphInput(regex = ".*$focusedNode.*")
+        val graphOptions = GraphOptions(
+            linkText = LinkText.NONE,
+            theme = theme,
+            showFullPath = false,
+            pattern = ".*$focusedNode.*".toRegex(),
+            orientation = Orientation.TOP_TO_BOTTOM,
+        )
 
-        val digraph = DigraphBuilder.build(input)
+        val digraph = DigraphBuilder.build(aModuleGraph(), graphOptions)
         val highlightSyntax = FocusNodeStyleWriter.highlightNode(digraph, theme)
-
 
         assertEquals(expectedHighlightCode(focusedNode, theme.focusColor), highlightSyntax.value)
     }

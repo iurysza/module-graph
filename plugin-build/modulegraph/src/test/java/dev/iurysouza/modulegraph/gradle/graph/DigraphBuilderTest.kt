@@ -1,6 +1,9 @@
 package dev.iurysouza.modulegraph.gradle.graph
 
+import dev.iurysouza.modulegraph.GraphOptions
 import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.Orientation
+import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.graph.DigraphBuilder
 import dev.iurysouza.modulegraph.graph.DigraphCodeGenerator
 import org.junit.jupiter.api.Test
@@ -11,14 +14,22 @@ class DigraphBuilderTest {
 
     @Test
     fun `digraph builder works as expected`() {
-        val linkText = LinkText.NONE
-        val anInput = aDigraphInput(regex = ".*gama.*")
-        val digraphModelList = DigraphBuilder.build(anInput)
-        val digraphSyntax = DigraphCodeGenerator.mermaid(digraphModelList, linkText)
+
+        val graphModel = aModuleGraph()
+        val graphOptions = GraphOptions(
+            linkText = LinkText.NONE,
+            theme = Theme.NEUTRAL,
+            showFullPath = false,
+            pattern = ".*gama.*".toRegex(),
+            orientation = Orientation.TOP_TO_BOTTOM,
+        )
+
+        val digraphModelList = DigraphBuilder.build(graphModel, graphOptions)
+        val digraphSyntax = DigraphCodeGenerator.mermaid(digraphModelList, graphOptions.linkText)
 
         val mermaidStringSyntax = """
-        |alpha --> gama
-        |gama --> zeta""".trimMargin()
+        |  alpha --> gama
+        |  gama --> zeta""".trimMargin()
         assertEquals(mermaidStringSyntax, digraphSyntax.value)
     }
 }
