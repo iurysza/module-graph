@@ -1,14 +1,55 @@
 package dev.iurysouza.modulegraph.gradle.graph
 
-import dev.iurysouza.modulegraph.LinkText
-import dev.iurysouza.modulegraph.Orientation
-import dev.iurysouza.modulegraph.Theme
-import dev.iurysouza.modulegraph.GraphOptions
+import dev.iurysouza.modulegraph.*
+import dev.iurysouza.modulegraph.Dependency
 import dev.iurysouza.modulegraph.Mermaid
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class MermaidGraphTest {
+
+    @Test
+    fun `plugin adds custom styling to focused modules `() {
+        val reconstructedModel = mapOf(
+            ":example" to listOf(
+                Dependency(
+                    targetProjectPath = ":groupFolder:example2",
+                    configName = "implementation"
+                ),
+                Dependency(
+                    targetProjectPath = ":groupFolder:example3",
+                    configName = "implementation"
+                )
+            )
+        )
+        val focusColor = "#F5A622"
+        val graphOptions = someGraphOptions(
+            regex = ".*example2.*".toRegex(),
+            theme = Theme.BASE(
+                focusColor = focusColor,
+            ),
+            showFullPath = true
+        )
+
+        val mermaidGraph = Mermaid.generateGraph(reconstructedModel, graphOptions)
+
+        assertEquals(
+            """
+                %%{
+                  init: {
+                    'theme': 'base'
+                  }
+                }%%
+
+                graph LR
+                  :example --> :groupFolder:example2
+
+                classDef focus fill:${focusColor},stroke:#fff,stroke-width:2px,color:#fff;
+                class :groupFolder:example2 focus
+            """.trimIndent()
+                , mermaidGraph
+        )
+    }
 
     @Test
     fun `digraph builder works as expected`() {

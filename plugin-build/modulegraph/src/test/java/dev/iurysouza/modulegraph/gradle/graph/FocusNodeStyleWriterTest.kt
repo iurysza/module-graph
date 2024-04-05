@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 class FocusNodeStyleWriterTest {
 
     private fun expectedHighlightCode(focusedNode: String, focusColor: FocusColor) = """
+        |
         |classDef focus fill:${focusColor},stroke:#fff,stroke-width:2px,color:#fff;
         |class $focusedNode focus
     """.trimMargin()

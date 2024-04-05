@@ -15,14 +15,14 @@ object FocusNodeStyleWriter {
      *class alpha focus
      *```
      *Where "alpha" would be one of the focused nodes.
-    */
+     */
     fun highlightNode(digraphModel: List<DigraphModel>, theme: Theme): MermaidCode {
-    val focusedNodes = digraphModel
-    .flatMap { listOf(it.source, it.target) }
-    .distinctBy { it.name }
-    .filter { it.isFocused }
+        val focusedNodes = digraphModel
+            .flatMap { listOf(it.source, it.target) }
+            .distinctBy { it.name }
+            .filter { it.isFocused }
 
-    return toCode(focusedNodes, theme)
+        return toCode(focusedNodes, theme)
     }
 
     private fun toCode(
@@ -33,6 +33,7 @@ object FocusNodeStyleWriter {
             ""
         } else {
             """
+               |
                |classDef $FOCUS_CLASS_NAME fill:${theme.focusColor()},stroke:#fff,stroke-width:2px,color:#fff;
                |${nodeList.joinToString("\n") { "class ${it.name} $FOCUS_CLASS_NAME" }}
            """.trimMargin()

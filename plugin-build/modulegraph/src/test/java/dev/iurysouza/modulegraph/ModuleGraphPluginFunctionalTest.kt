@@ -83,7 +83,6 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph RL
-
                   subgraph groupFolder
                     example2
                   end
@@ -268,7 +267,6 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph RL
-
                   subgraph groupFolder
                     example2
                     example3
@@ -368,7 +366,6 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph RL
-
                   subgraph groupFolder
                     example2
                   end
