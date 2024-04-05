@@ -57,9 +57,13 @@ internal object DigraphBuilder {
     /**
      * Eg: ":app:module" -> "app"
      */
-    private fun String.getParent(): String = split(":")
-        .takeLast(2)
-        .take(1)
-        .joinToString("")
+    private fun String.getParent(): String {
+        val groups = split(":")
+        if (groups.size == 1) return ""
+        return groups
+            .takeLast(2)
+            .take(1)
+            .joinToString("")
+    }
 }
 

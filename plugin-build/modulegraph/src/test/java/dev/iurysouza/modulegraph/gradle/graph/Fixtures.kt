@@ -1,5 +1,6 @@
 package dev.iurysouza.modulegraph.gradle.graph
 
+import dev.iurysouza.modulegraph.*
 import dev.iurysouza.modulegraph.Dependency
 
 internal fun aModuleGraph() = mapOf(
@@ -56,3 +57,17 @@ internal val expectedMermaidGraphCode = """
         |
         |classDef focus fill:#F5A622,stroke:#fff,stroke-width:2px,color:#fff;
         |class gama focus""".trimMargin()
+
+fun someGraphOptions(
+    orientation: Orientation = Orientation.LEFT_TO_RIGHT,
+    linkText: LinkText = LinkText.NONE,
+    regex: Regex = ".*".toRegex(),
+    showFullPath: Boolean = false,
+    theme: Theme = Theme.NEUTRAL,
+) = GraphOptions(
+    linkText = linkText,
+    orientation = orientation,
+    pattern = regex,
+    showFullPath = showFullPath,
+    theme = theme,
+)

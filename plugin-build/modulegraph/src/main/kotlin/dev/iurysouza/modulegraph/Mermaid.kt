@@ -19,15 +19,26 @@ internal object Mermaid {
         val digraphSyntax = DigraphCodeGenerator.mermaid(digraph, linkText)
         val highlightSyntax = FocusNodeStyleWriter.highlightNode(digraph, theme)
         val configSyntax = ConfigCodeGenerator.createConfig(theme)
-        return """
-                |${configSyntax.value}
-                |
-                |graph ${orientation.value}
-                |${subgraphSyntax.value}
-                |${digraphSyntax.value}
-                |
-                |${highlightSyntax.value}
-            """.trimMargin()
+        return buildString {
+            append(configSyntax.value)
+            lineBreak()
+            lineBreak()
+            append("graph ${orientation.value}")
+            if (!subgraphSyntax.isEmpty()) {
+                lineBreak()
+                append(subgraphSyntax.value)
+            }
+            lineBreak()
+            append(digraphSyntax.value)
+            if (!highlightSyntax.isEmpty()) {
+                lineBreak()
+                append(highlightSyntax.value)
+            }
+        }
+    }
+
+    private fun StringBuilder.lineBreak() {
+        append("\n")
     }
 }
 

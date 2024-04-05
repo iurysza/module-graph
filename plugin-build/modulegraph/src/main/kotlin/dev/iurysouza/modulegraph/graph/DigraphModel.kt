@@ -29,5 +29,11 @@ value class ModuleConfig(val value: String) {
 }
 
 @JvmInline
-value class MermaidCode(val value: String = "")
+value class MermaidCode(val value: String = "") {
+    fun isEmpty(): Boolean = value.isEmpty()
+
+    companion object {
+        val EMPTY: CharSequence = ""
+    }
+}
 

@@ -29,12 +29,14 @@ object SubgraphBuilder {
 
     private fun toMermaidCode(subgraphModel: List<Pair<String, List<ModuleNode>>>): MermaidCode {
         val subgraph = subgraphModel.joinToString("\n") { (parent, children) ->
+            if (parent.isEmpty()) return@joinToString MermaidCode.EMPTY
             val childrenNames = children.joinToString("\n") { "    ${it.name}" }
             """|  subgraph $parent
                |$childrenNames
                |  end""".trimMargin()
         }
-        return MermaidCode(subgraph)
+
+        return MermaidCode(subgraph.trimMargin())
     }
 
     private fun groupDigraphsByParent(
