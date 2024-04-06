@@ -17,6 +17,8 @@ internal object Mermaid {
         val highlightCode = FocusNodeStyleBuilder.build(digraph, theme)
 
         return buildString {
+            append("```mermaid")
+            lineBreak()
             appendCode(configCode)
             lineBreak()
             lineBreak()
@@ -31,6 +33,8 @@ internal object Mermaid {
                 lineBreak()
                 appendCode(highlightCode)
             }
+            lineBreak()
+            append("```")
         }
     }
 

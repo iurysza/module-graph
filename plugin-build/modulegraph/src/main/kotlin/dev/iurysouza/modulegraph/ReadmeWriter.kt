@@ -25,9 +25,9 @@ internal object ReadmeWriter {
 
         readmeLines.subList(sectionStartIndex + 1, sectionEndIndex).clear()
         if (sectionStartIndex == -1) {
-            readmeLines.add(0, "$readMeSection\n\n```mermaid\n$mermaidGraph\n```")
+            readmeLines.add(0, "$readMeSection\n\n$mermaidGraph")
         } else {
-            readmeLines.add(sectionStartIndex + 1, "\n```mermaid\n$mermaidGraph\n```")
+            readmeLines.add(sectionStartIndex + 1, "\n$mermaidGraph")
         }
         readmeFile.writeText(readmeLines.joinToString("\n"))
         logger.debug("Module graph added to ${readmeFile.path} under the $readMeSection section")

@@ -36,6 +36,7 @@ class MermaidGraphTest {
 
         assertEquals(
             """
+                ```mermaid
                 %%{
                   init: {
                     'theme': 'base'
@@ -47,6 +48,7 @@ class MermaidGraphTest {
 
                 classDef focus fill:${focusColor},stroke:#fff,stroke-width:2px,color:#fff;
                 class :groupFolder:example2 focus
+                ```
             """.trimIndent(), mermaidGraph
         )
     }
