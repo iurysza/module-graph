@@ -12,7 +12,6 @@ plugins {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(gradleApi())
-    implementation(libs.pprint)
     implementation(libs.kotlinxSerializationJson)
 
     testImplementation(libs.junit5Api)
