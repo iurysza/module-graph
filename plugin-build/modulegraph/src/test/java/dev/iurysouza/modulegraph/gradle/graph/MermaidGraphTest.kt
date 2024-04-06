@@ -64,6 +64,29 @@ class MermaidGraphTest {
         }
 
     }
+    @Test
+    fun `livematch graph works`() {
+        val graphModel = liveMatchReconstructedModel
+        val graphOptions = GraphOptions(
+            linkText = LinkText.NONE,
+            theme = Theme.BASE(
+                mapOf(
+                    "primaryTextColor" to "#fff",
+                    "primaryColor" to "#5a4f7c",
+                    "primaryBorderColor" to "#5a4f7c",
+                    "lineColor" to "#f5a623",
+                    "tertiaryColor" to "#40375c",
+                    "fontSize" to "12px",
+                ),
+            ),
+            showFullPath = false,
+            orientation = Orientation.LEFT_TO_RIGHT,
+        )
+
+        val mermaidGraph = Mermaid.generateGraph(graphModel, graphOptions)
+
+        assertEquals(expectedLiveMatchGraph, mermaidGraph)
+    }
 
     @Test
     fun `digraph builder works as expected`() {

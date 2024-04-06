@@ -71,3 +71,146 @@ fun someGraphOptions(
     showFullPath = showFullPath,
     theme = theme,
 )
+
+internal val liveMatchReconstructedModel = mapOf(
+    ":core:footballinfo" to listOf(
+        Dependency(
+            targetProjectPath = ":core:common",
+            configName = "implementation"
+        )
+    ),
+    ":features:match-day" to listOf(
+        Dependency(
+            targetProjectPath = ":core:common",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":core:footballinfo",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":core:design-system",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":core:reddit",
+            configName = "implementation"
+        )
+    ),
+    ":features:match-thread" to listOf(
+        Dependency(
+            targetProjectPath = ":core:webview-to-native-player",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":core:common",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":core:footballinfo",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":core:design-system",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":core:reddit",
+            configName = "implementation"
+        )
+    ),
+    ":app:playground" to listOf(
+        Dependency(
+            targetProjectPath = ":core:webview-to-native-player",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":features:match-thread",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":core:design-system",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":features:match-day",
+            configName = "testImplementation"
+        )
+    ),
+    ":core:reddit" to listOf(
+        Dependency(
+            targetProjectPath = ":core:common",
+            configName = "implementation"
+        )
+    ),
+    ":core:webview-to-native-player" to listOf(
+        Dependency(
+            targetProjectPath = ":core:common",
+            configName = "implementation"
+        )
+    ),
+    ":app:main" to listOf(
+        Dependency(
+            targetProjectPath = ":features:match-thread",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":features:match-day",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":core:design-system",
+            configName = "implementation"
+        ),
+        Dependency(
+            targetProjectPath = ":core:common",
+            configName = "implementation"
+        )
+    )
+)
+
+internal val expectedLiveMatchGraph = """
+    %%{
+      init: {
+        'theme': 'base',
+        'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
+      }
+    }%%
+
+    graph LR
+      subgraph app
+        playground
+        main
+      end
+      subgraph core
+        footballinfo
+        common
+        design-system
+        reddit
+        webview-to-native-player
+      end
+      subgraph features
+        match-day
+        match-thread
+      end
+      footballinfo --> common
+      match-day --> common
+      match-day --> footballinfo
+      match-day --> design-system
+      match-day --> reddit
+      match-thread --> webview-to-native-player
+      match-thread --> common
+      match-thread --> footballinfo
+      match-thread --> design-system
+      match-thread --> reddit
+      playground --> webview-to-native-player
+      playground --> match-thread
+      playground --> design-system
+      playground --> match-day
+      reddit --> common
+      webview-to-native-player --> common
+      main --> match-thread
+      main --> match-day
+      main --> design-system
+      main --> common
+""".trimIndent()
