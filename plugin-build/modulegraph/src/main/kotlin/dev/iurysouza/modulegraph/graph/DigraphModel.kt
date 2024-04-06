@@ -30,10 +30,10 @@ value class ModuleConfig(val value: String) {
 
 @JvmInline
 value class MermaidCode(val value: String = "") {
-    fun isEmpty(): Boolean = value.isEmpty()
+    fun isNotEmpty(): Boolean = value.isNotEmpty()
 
     companion object {
-        val EMPTY: CharSequence = ""
+        val EMPTY = MermaidCode("")
     }
 }
 

@@ -29,7 +29,7 @@ object SubgraphBuilder {
 
     private fun toMermaidCode(subgraphModel: List<Pair<String, List<ModuleNode>>>): MermaidCode {
         val subgraph = subgraphModel.joinToString("\n") { (parent, children) ->
-            if (parent.isEmpty()) return@joinToString MermaidCode.EMPTY
+            if (parent.isEmpty()) return@joinToString ""
             val childrenNames = children.joinToString("\n") { "    ${it.name}" }
             """|  subgraph $parent
                |$childrenNames

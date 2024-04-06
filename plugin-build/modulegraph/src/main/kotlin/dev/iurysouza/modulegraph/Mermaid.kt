@@ -11,32 +11,36 @@ internal object Mermaid {
         val (linkText, theme, orientation) = graphOptions
         val digraph = DigraphBuilder.build(graphModel, graphOptions)
 
+        val configSyntax = ConfigCodeGenerator.createConfig(theme)
         val subgraphSyntax = if (graphOptions.showFullPath) {
-            MermaidCode()
+            MermaidCode.EMPTY
         } else {
             SubgraphBuilder.build(digraph)
         }
         val digraphSyntax = DigraphCodeGenerator.mermaid(digraph, linkText)
         val highlightSyntax = FocusNodeStyleWriter.highlightNode(digraph, theme)
-        val configSyntax = ConfigCodeGenerator.createConfig(theme)
+
         return buildString {
-            append(configSyntax.value)
+            appendCode(configSyntax)
             lineBreak()
             lineBreak()
             append("graph ${orientation.value}")
-            if (!subgraphSyntax.isEmpty()) {
+            if (subgraphSyntax.isNotEmpty()) {
                 lineBreak()
-                append(subgraphSyntax.value)
+                appendCode(subgraphSyntax)
             }
             lineBreak()
-            append(digraphSyntax.value)
-            if (!highlightSyntax.isEmpty()) {
+            appendCode(digraphSyntax)
+            if (highlightSyntax.isNotEmpty()) {
                 lineBreak()
-                append(highlightSyntax.value)
+                appendCode(highlightSyntax)
             }
         }
     }
 
+    private fun StringBuilder.appendCode(code: MermaidCode) {
+        append(code.value)
+    }
     private fun StringBuilder.lineBreak() {
         append("\n")
     }
