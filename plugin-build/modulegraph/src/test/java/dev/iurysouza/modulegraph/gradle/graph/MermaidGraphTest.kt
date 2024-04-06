@@ -5,6 +5,7 @@ import dev.iurysouza.modulegraph.Dependency
 import dev.iurysouza.modulegraph.Mermaid
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class MermaidGraphTest {
 
@@ -46,9 +47,22 @@ class MermaidGraphTest {
 
                 classDef focus fill:${focusColor},stroke:#fff,stroke-width:2px,color:#fff;
                 class :groupFolder:example2 focus
-            """.trimIndent()
-                , mermaidGraph
+            """.trimIndent(), mermaidGraph
         )
+    }
+
+    @Test
+    fun `a single module project will throw an error`() {
+        val graphModel = mapOf(
+            ":example" to listOf<Dependency>()
+        )
+
+        val graphOptions = someGraphOptions()
+
+        assertThrows<IllegalArgumentException> {
+            Mermaid.generateGraph(graphModel, graphOptions)
+        }
+
     }
 
     @Test

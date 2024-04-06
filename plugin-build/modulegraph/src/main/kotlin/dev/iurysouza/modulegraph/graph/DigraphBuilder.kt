@@ -7,16 +7,33 @@ internal object DigraphBuilder {
     fun build(
         graphModel: Map<String, List<Dependency>>,
         graphOptions: GraphOptions,
-    ): List<DigraphModel> = graphModel.flatMap { (source, targetList) ->
-        targetList.mapNotNull { target ->
-            buildModel(graphOptions, source, target)
+    ): List<DigraphModel> {
+        throwIfSingleProject(graphModel)
+
+        return graphModel.flatMap { (source, targetList) ->
+            targetList.mapNotNull { target ->
+                buildModel(graphOptions, source, target)
+            }
+        }.also { result ->
+            throwIfNothingMatches(result, graphOptions.pattern)
         }
-    }.also {
-        require(it.isNotEmpty()) {
+    }
+
+    private fun throwIfNothingMatches(modelList: List<DigraphModel>, regex: Regex?) {
+        require(modelList.isNotEmpty()) {
             """
-            No modules match the specified pattern: ${graphOptions.pattern}
-            This was set via the `focusedNodesPattern` property.
+                    |No modules match the specified pattern: $regex
+                    |This was set via the `focusedNodesPattern` property.
+                    """.trimMargin()
+        }
+    }
+
+    private fun throwIfSingleProject(graphModel: Map<String, List<Dependency>>) {
+        val dependencies = graphModel.values.flatten().distinctBy { it.targetProjectPath }.size
+        require(graphModel.keys.size > 1 || dependencies > 0) {
             """
+                    |The project must have at least two modules to generate a graph.
+                    """.trimMargin()
         }
     }
 
@@ -28,9 +45,11 @@ internal object DigraphBuilder {
         val (_, _, _, pattern, showFullPath) = graphOptions
         val targetFullName = target?.targetProjectPath
 
-        val sourceMatches = sourceFullName.matches(pattern)
-        val targetMatches = targetFullName?.matches(pattern) ?: false
-        val regexFilterSet = pattern.isRegexFilterSet()
+        val (sourceMatches, targetMatches) = when {
+            pattern == null -> true to true
+            else -> sourceFullName.matches(pattern) to (targetFullName?.matches(pattern) ?: false)
+        }
+        val regexFilterSet = pattern != null
         val shouldNotAddToGraph = sourceFullName == targetFullName || (!sourceMatches && !targetMatches)
 
         return when {

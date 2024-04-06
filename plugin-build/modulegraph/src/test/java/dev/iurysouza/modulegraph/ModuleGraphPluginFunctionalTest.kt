@@ -285,7 +285,6 @@ class ModuleGraphPluginFunctionalTest {
             """
                 rootProject.name = "test"
                 include(":example")
-                include(":groupFolder:example2")
             """.trimIndent()
         )
         exampleBuildFile.writeText(
@@ -300,7 +299,6 @@ class ModuleGraphPluginFunctionalTest {
                     readmePath.set("${missingFile.absolutePath.replace("\\", "\\\\")}")
                 }
                 dependencies {
-                    implementation(project(":groupFolder:example2"))
                 }
 
             """.trimIndent()
@@ -465,6 +463,36 @@ class ModuleGraphPluginFunctionalTest {
         assertEquals(expectedOutput, readmeFile.readText())
     }
 
+    @Test
+    fun `plugin throws exception when single module project is used`() {
+        settingsFile.writeText(
+            """
+            rootProject.name = "test"
+            include(":example")
+            """.trimIndent()
+        )
+
+        exampleBuildFile.writeText(
+            """
+            plugins {
+                java
+                id("$MODULEGRAPH_PACKAGE")
+            }
+
+            moduleGraphConfig {
+                heading.set("### Dependency Diagram")
+                readmePath.set("${readmeFilePath()}")
+            }
+            """.trimIndent()
+        )
+        assertThrows(Exception::class.java) {
+            GradleRunner.create()
+                .withProjectDir(testProjectDir)
+                .withArguments("createModuleGraph")
+                .withPluginClasspath()
+                .build()
+        }
+    }
     @Test
     fun `plugin throws exception when invalid pattern is provided`() {
         settingsFile.writeText(
