@@ -2,7 +2,7 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.LinkText
 
-object DigraphCodeBuilder {
+internal object DigraphCodeBuilder {
 
     /**
      * Converts a list of digraph models into a Mermaid syntax.

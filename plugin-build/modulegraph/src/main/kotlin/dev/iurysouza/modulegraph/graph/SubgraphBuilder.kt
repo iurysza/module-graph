@@ -1,6 +1,6 @@
 package dev.iurysouza.modulegraph.graph
 
-object SubgraphBuilder {
+internal object SubgraphBuilder {
 
     /**
      * The `build` function groups digraph models by parent and generates mermaid syntax for subgraphs.
