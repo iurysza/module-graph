@@ -1,11 +1,6 @@
 package dev.iurysouza.modulegraph
 
-import dev.iurysouza.modulegraph.graph.ConfigCodeBuilder
-import dev.iurysouza.modulegraph.graph.DigraphBuilder
-import dev.iurysouza.modulegraph.graph.DigraphCodeBuilder
-import dev.iurysouza.modulegraph.graph.FocusNodeStyleBuilder
-import dev.iurysouza.modulegraph.graph.MermaidCode
-import dev.iurysouza.modulegraph.graph.SubgraphBuilder
+import dev.iurysouza.modulegraph.graph.*
 
 internal object Mermaid {
 

@@ -9,12 +9,12 @@
 }%%
 
 graph TB
+  subgraph container
+    gama
+  end
   subgraph sample
     alpha
     zeta
-  end
-  subgraph container
-    gama
   end
   alpha --> gama
   gama --> zeta
