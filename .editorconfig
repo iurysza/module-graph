@@ -5,8 +5,11 @@ charset = utf-8
 indent_size = 4
 insert_final_newline = true
 trim_trailing_whitespace = true
-ij_kotlin_allow_trailing_comma=true
 ij_kotlin_imports_layout=*
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+ij_kotlin_packages_to_use_import_on_demand = nothing
+ktlint_disabled_rules=no-wildcard-imports
 
 [*{.yml,yaml}]
 indent_style = space

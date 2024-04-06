@@ -11,7 +11,7 @@ moduleGraphConfig {
     readmePath.set("./README.md")
 
     // optional configs
-//    focusedNodesPattern.set("""^(?=.*container)(?!.*gama).*""")
+    focusedNodesPattern.set(""".*gama.*""")
     showFullPath.set(false)
     orientation.set(Orientation.TOP_TO_BOTTOM)
     linkText.set(LinkText.NONE)
@@ -23,10 +23,10 @@ moduleGraphConfig {
                 "primaryBorderColor" to "#5a4f7c", // Node border
                 "tertiaryColor" to "#40375c", // Container box background
                 "lineColor" to "#f5a623",
-                "fontSize" to "12px"
+                "fontSize" to "12px",
             ),
-            focusColor = "#F5A622"
-        )
+            focusColor = "#F5A622",
+        ),
     )
     excludeConfigurationNames.set(listOf("testImplementation"))
 }

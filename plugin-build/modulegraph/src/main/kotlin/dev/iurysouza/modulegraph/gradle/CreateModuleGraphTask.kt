@@ -1,11 +1,6 @@
 package dev.iurysouza.modulegraph.gradle
 
-import dev.iurysouza.modulegraph.Dependency
-import dev.iurysouza.modulegraph.LinkText
-import dev.iurysouza.modulegraph.Orientation
-import dev.iurysouza.modulegraph.Theme
-import dev.iurysouza.modulegraph.appendMermaidGraphToReadme
-import dev.iurysouza.modulegraph.buildMermaidGraph
+import dev.iurysouza.modulegraph.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
@@ -73,19 +68,19 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @TaskAction
     fun execute() {
         runCatching {
-            val mermaidGraph = buildMermaidGraph(
+            val graphOptions = GraphOptions(
                 theme = theme.getOrElse(Theme.NEUTRAL),
                 orientation = orientation.getOrElse(Orientation.LEFT_TO_RIGHT),
-                linkText = linkText.getOrElse(LinkText.NONE),
-                dependencies = dependencies.get(),
+                pattern = focusedNodesPattern.orNull?.let { Regex(it) },
                 showFullPath = showFullPath.getOrElse(false),
-                focusedNodesPattern = Regex(focusedNodesPattern.getOrElse(".*"))
+                linkText = linkText.getOrElse(LinkText.NONE),
             )
-            appendMermaidGraphToReadme(
+            val mermaidGraph = Mermaid.generateGraph(dependencies.get(), graphOptions)
+            ReadmeWriter.appendOrOverwriteGraph(
                 mermaidGraph = mermaidGraph,
                 readMeSection = heading.get(),
                 readmeFile = outputFile.get().asFile,
-                logger = logger
+                logger = logger,
             )
         }.onFailure {
             logger.log(LogLevel.ERROR, it.message, it)

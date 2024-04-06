@@ -40,7 +40,7 @@ class ModuleGraphPluginFunctionalTest {
                 rootProject.name = "test"
                 include(":example")
                 include(":groupFolder:example2")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -59,7 +59,7 @@ class ModuleGraphPluginFunctionalTest {
                 dependencies {
                     implementation(project(":groupFolder:example2"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -83,7 +83,6 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph RL
-
                   subgraph groupFolder
                     example2
                   end
@@ -100,7 +99,7 @@ class ModuleGraphPluginFunctionalTest {
                 rootProject.name = "test"
                 include(":example")
                 include(":groupFolder:example2")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -127,7 +126,7 @@ class ModuleGraphPluginFunctionalTest {
                 dependencies {
                     implementation(project(":groupFolder:example2"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -147,12 +146,11 @@ class ModuleGraphPluginFunctionalTest {
                 %%{
                   init: {
                     'theme': 'base',
-                	'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"11px"}
+                    'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"11px"}
                   }
                 }%%
 
                 graph LR
-
                   subgraph groupFolder
                     example2
                   end
@@ -169,7 +167,7 @@ class ModuleGraphPluginFunctionalTest {
                 rootProject.name = "test"
                 include(":example")
                 include(":groupFolder:example2")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -186,7 +184,7 @@ class ModuleGraphPluginFunctionalTest {
                 dependencies {
                     implementation(project(":groupFolder:example2"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -224,7 +222,7 @@ class ModuleGraphPluginFunctionalTest {
                 include(":example")
                 include(":groupFolder:example2")
                 include(":groupFolder:example3")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -245,7 +243,7 @@ class ModuleGraphPluginFunctionalTest {
                     implementation(project(":groupFolder:example2"))
                     runtimeOnly(project(":groupFolder:example3"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -269,7 +267,6 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph RL
-
                   subgraph groupFolder
                     example2
                     example3
@@ -288,7 +285,8 @@ class ModuleGraphPluginFunctionalTest {
             """
                 rootProject.name = "test"
                 include(":example")
-            """.trimIndent()
+                include(":groupFolder:example2")
+            """.trimIndent(),
         )
         exampleBuildFile.writeText(
             """
@@ -301,7 +299,11 @@ class ModuleGraphPluginFunctionalTest {
                     heading.set("### Dependency Diagram")
                     readmePath.set("${missingFile.absolutePath.replace("\\", "\\\\")}")
                 }
-            """.trimIndent()
+                dependencies {
+                    implementation(project(":groupFolder:example2"))
+                }
+
+            """.trimIndent(),
         )
 
         // Run the plugin task
@@ -324,7 +326,7 @@ class ModuleGraphPluginFunctionalTest {
                 include(":example")
                 include(":groupFolder:example2")
                 include(":ignoredExample")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -345,7 +347,7 @@ class ModuleGraphPluginFunctionalTest {
                     implementation(project(":groupFolder:example2"))
                     testImplementation(project(":ignoredExample"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -369,7 +371,6 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph RL
-
                   subgraph groupFolder
                     example2
                   end
@@ -387,7 +388,7 @@ class ModuleGraphPluginFunctionalTest {
                 include(":example")
                 include(":groupFolder:example2")
                 include(":groupFolder:example3")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         val pattern = ".*example2.*"
@@ -411,7 +412,7 @@ class ModuleGraphPluginFunctionalTest {
                     implementation(project(":groupFolder:example2"))
                     implementation(project(":groupFolder:example3"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         example2BuildFile.writeText(
             """
@@ -421,7 +422,7 @@ class ModuleGraphPluginFunctionalTest {
                 dependencies {
                     implementation(project(":groupFolder:example3"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         example3BuildFile.writeText(
             """
@@ -431,7 +432,7 @@ class ModuleGraphPluginFunctionalTest {
                 dependencies {
                     implementation(project(":example"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -465,6 +466,37 @@ class ModuleGraphPluginFunctionalTest {
     }
 
     @Test
+    fun `plugin throws exception when single module project is used`() {
+        settingsFile.writeText(
+            """
+            rootProject.name = "test"
+            include(":example")
+            """.trimIndent(),
+        )
+
+        exampleBuildFile.writeText(
+            """
+            plugins {
+                java
+                id("$MODULEGRAPH_PACKAGE")
+            }
+
+            moduleGraphConfig {
+                heading.set("### Dependency Diagram")
+                readmePath.set("${readmeFilePath()}")
+            }
+            """.trimIndent(),
+        )
+        assertThrows(Exception::class.java) {
+            GradleRunner.create()
+                .withProjectDir(testProjectDir)
+                .withArguments("createModuleGraph")
+                .withPluginClasspath()
+                .build()
+        }
+    }
+
+    @Test
     fun `plugin throws exception when invalid pattern is provided`() {
         settingsFile.writeText(
             """
@@ -472,7 +504,7 @@ class ModuleGraphPluginFunctionalTest {
             include(":example")
             include(":groupFolder:example2")
             include(":groupFolder:example3")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         val invalidPattern = ".*example5.*"
@@ -494,7 +526,7 @@ class ModuleGraphPluginFunctionalTest {
                 implementation(project(":groupFolder:example2"))
                 implementation(project(":groupFolder:example3"))
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
         assertThrows(Exception::class.java) {
             GradleRunner.create()
