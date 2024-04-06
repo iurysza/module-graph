@@ -22,7 +22,8 @@ object SubgraphBuilder {
      *
      *Where "sample" and "container" are parent nodes, and "alpha", "zeta", and "gama" are children.
      */
-    fun build(list: List<DigraphModel>): MermaidCode {
+    fun build(list: List<DigraphModel>, showFullPath: Boolean): MermaidCode {
+        if (showFullPath) return MermaidCode.EMPTY
         val subGraphs = groupDigraphsByParent(list)
         return toMermaidCode(subGraphs)
     }

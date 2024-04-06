@@ -20,13 +20,29 @@ class SubgraphBuilderTest {
         )
 
         val digraph = DigraphBuilder.build(graphModel, someGraphOptions())
-        val subgraph = SubgraphBuilder.build(digraph).value
+        val subgraph = SubgraphBuilder.build(digraph, showFullPath = false).value
         val expectedSubgraphSyntax = """
             |  subgraph groupFolder
             |    example2
             |  end
 """.trimMargin()
         assertEquals(expectedSubgraphSyntax, subgraph)
+    }
+
+    @Test
+    fun `when showFullPath is true, an empty graph is generated`() {
+        val graphModel = aModuleGraph()
+        val graphOptions = GraphOptions(
+            linkText = LinkText.NONE,
+            theme = Theme.NEUTRAL,
+            showFullPath = false,
+            pattern = ".*gama.*".toRegex(),
+            orientation = Orientation.TOP_TO_BOTTOM,
+        )
+
+        val digraph = DigraphBuilder.build(graphModel, graphOptions)
+        val subgraph = SubgraphBuilder.build(digraph, showFullPath = true)
+        assertEquals("", subgraph.value)
     }
 
     @Test
@@ -41,7 +57,7 @@ class SubgraphBuilderTest {
         )
 
         val digraph = DigraphBuilder.build(graphModel, graphOptions)
-        val subgraph = SubgraphBuilder.build(digraph)
+        val subgraph = SubgraphBuilder.build(digraph, showFullPath = false)
         val expectedSubgraphSyntax = """
             |  subgraph sample
             |    alpha
