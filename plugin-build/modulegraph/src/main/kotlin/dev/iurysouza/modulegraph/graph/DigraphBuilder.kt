@@ -19,24 +19,6 @@ internal object DigraphBuilder {
         }
     }
 
-    private fun throwIfNothingMatches(modelList: List<DigraphModel>, regex: Regex?) {
-        require(modelList.isNotEmpty()) {
-            """
-                    |No modules match the specified pattern: $regex
-                    |This was set via the `focusedNodesPattern` property.
-                    """.trimMargin()
-        }
-    }
-
-    private fun throwIfSingleProject(graphModel: Map<String, List<Dependency>>) {
-        val dependencies = graphModel.values.flatten().distinctBy { it.targetProjectPath }.size
-        require(graphModel.keys.size > 1 || dependencies > 0) {
-            """
-                    |The project must have at least two modules to generate a graph.
-                    """.trimMargin()
-        }
-    }
-
     private fun buildModel(
         graphOptions: GraphOptions,
         sourceFullName: String,
@@ -70,6 +52,24 @@ internal object DigraphBuilder {
                     parent = targetFullName.getParent()
                 )
             )
+        }
+    }
+
+    private fun throwIfNothingMatches(modelList: List<DigraphModel>, regex: Regex?) {
+        require(modelList.isNotEmpty()) {
+            """
+                    |No modules match the specified pattern: $regex
+                    |This was set via the `focusedNodesPattern` property.
+                    """.trimMargin()
+        }
+    }
+
+    private fun throwIfSingleProject(graphModel: Map<String, List<Dependency>>) {
+        val dependencies = graphModel.values.flatten().distinctBy { it.targetProjectPath }.size
+        require(graphModel.keys.size > 1 || dependencies > 0) {
+            """
+                    |The project must have at least two modules to generate a graph.
+                    """.trimMargin()
         }
     }
 
