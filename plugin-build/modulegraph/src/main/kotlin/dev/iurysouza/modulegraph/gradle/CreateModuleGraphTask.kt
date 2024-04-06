@@ -80,7 +80,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 mermaidGraph = mermaidGraph,
                 readMeSection = heading.get(),
                 readmeFile = outputFile.get().asFile,
-                logger = logger
+                logger = logger,
             )
         }.onFailure {
             logger.log(LogLevel.ERROR, it.message, it)

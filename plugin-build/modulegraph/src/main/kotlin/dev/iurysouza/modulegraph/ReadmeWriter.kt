@@ -16,7 +16,7 @@ internal object ReadmeWriter {
                 """
                 The specified README file was not found.
                 A new file has been created at: ${readmeFile.path}
-            """.trimMargin()
+                """.trimMargin(),
             )
         }
         val readmeLines = readmeFile.readLines().toMutableList()
@@ -42,5 +42,4 @@ internal object ReadmeWriter {
             if (it != -1) it + startIndex + 1 else readmeLines.size
         }
     }
-
 }

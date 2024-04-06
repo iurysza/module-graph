@@ -4,15 +4,13 @@ import dev.iurysouza.modulegraph.GraphOptions
 import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class DigraphBuilderTest {
 
     @Test
     fun `digraph builder works as expected`() {
-
         val graphModel = aModuleGraph()
         val graphOptions = GraphOptions(
             linkText = LinkText.NONE,
@@ -27,7 +25,8 @@ class DigraphBuilderTest {
 
         val mermaidStringSyntax = """
         |  alpha --> gama
-        |  gama --> zeta""".trimMargin()
+        |  gama --> zeta
+        """.trimMargin()
         assertEquals(mermaidStringSyntax, digraphSyntax.value)
     }
 }

@@ -36,10 +36,9 @@ internal object FocusNodeStyleBuilder {
                |
                |classDef $FOCUS_CLASS_NAME fill:${theme.focusColor()},stroke:#fff,stroke-width:2px,color:#fff;
                |${nodeList.joinToString("\n") { "class ${it.name} $FOCUS_CLASS_NAME" }}
-           """.trimMargin()
-        }
+            """.trimMargin()
+        },
     )
 
     private const val FOCUS_CLASS_NAME = "focus"
 }
-

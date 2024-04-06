@@ -24,7 +24,8 @@ internal object DigraphBuilder {
         sourceFullName: String,
         target: Dependency? = null,
     ): DigraphModel? {
-        val (_, _, _, pattern, showFullPath) = graphOptions
+        val pattern = graphOptions.pattern
+        val showFullPath = graphOptions.showFullPath
         val targetFullName = target?.targetProjectPath
 
         val (sourceMatches, targetMatches) = when {
@@ -42,15 +43,15 @@ internal object DigraphBuilder {
                     fullName = sourceFullName,
                     isFocused = sourceMatches && regexFilterSet,
                     config = ModuleConfig.none(),
-                    parent = sourceFullName.getParent()
+                    parent = sourceFullName.getParent(),
                 ),
                 target = ModuleNode(
                     name = targetFullName!!.getProjectName(showFullPath),
                     fullName = targetFullName,
                     isFocused = targetMatches && regexFilterSet,
                     config = ModuleConfig(target.configName),
-                    parent = targetFullName.getParent()
-                )
+                    parent = targetFullName.getParent(),
+                ),
             )
         }
     }
@@ -60,7 +61,7 @@ internal object DigraphBuilder {
             """
                     |No modules match the specified pattern: $regex
                     |This was set via the `focusedNodesPattern` property.
-                    """.trimMargin()
+            """.trimMargin()
         }
     }
 
@@ -69,7 +70,7 @@ internal object DigraphBuilder {
         require(graphModel.keys.size > 1 || dependencies > 0) {
             """
                     |The project must have at least two modules to generate a graph.
-                    """.trimMargin()
+            """.trimMargin()
         }
     }
 
@@ -85,4 +86,3 @@ internal object DigraphBuilder {
             .joinToString("")
     }
 }
-

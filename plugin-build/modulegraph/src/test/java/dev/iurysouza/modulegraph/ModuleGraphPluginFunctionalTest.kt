@@ -40,7 +40,7 @@ class ModuleGraphPluginFunctionalTest {
                 rootProject.name = "test"
                 include(":example")
                 include(":groupFolder:example2")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -59,7 +59,7 @@ class ModuleGraphPluginFunctionalTest {
                 dependencies {
                     implementation(project(":groupFolder:example2"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -99,7 +99,7 @@ class ModuleGraphPluginFunctionalTest {
                 rootProject.name = "test"
                 include(":example")
                 include(":groupFolder:example2")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -126,7 +126,7 @@ class ModuleGraphPluginFunctionalTest {
                 dependencies {
                     implementation(project(":groupFolder:example2"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -167,7 +167,7 @@ class ModuleGraphPluginFunctionalTest {
                 rootProject.name = "test"
                 include(":example")
                 include(":groupFolder:example2")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -184,7 +184,7 @@ class ModuleGraphPluginFunctionalTest {
                 dependencies {
                     implementation(project(":groupFolder:example2"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -222,7 +222,7 @@ class ModuleGraphPluginFunctionalTest {
                 include(":example")
                 include(":groupFolder:example2")
                 include(":groupFolder:example3")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -243,7 +243,7 @@ class ModuleGraphPluginFunctionalTest {
                     implementation(project(":groupFolder:example2"))
                     runtimeOnly(project(":groupFolder:example3"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -286,7 +286,7 @@ class ModuleGraphPluginFunctionalTest {
                 rootProject.name = "test"
                 include(":example")
                 include(":groupFolder:example2")
-            """.trimIndent()
+            """.trimIndent(),
         )
         exampleBuildFile.writeText(
             """
@@ -303,7 +303,7 @@ class ModuleGraphPluginFunctionalTest {
                     implementation(project(":groupFolder:example2"))
                 }
 
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         // Run the plugin task
@@ -326,7 +326,7 @@ class ModuleGraphPluginFunctionalTest {
                 include(":example")
                 include(":groupFolder:example2")
                 include(":ignoredExample")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -347,7 +347,7 @@ class ModuleGraphPluginFunctionalTest {
                     implementation(project(":groupFolder:example2"))
                     testImplementation(project(":ignoredExample"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -388,7 +388,7 @@ class ModuleGraphPluginFunctionalTest {
                 include(":example")
                 include(":groupFolder:example2")
                 include(":groupFolder:example3")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         val pattern = ".*example2.*"
@@ -412,7 +412,7 @@ class ModuleGraphPluginFunctionalTest {
                     implementation(project(":groupFolder:example2"))
                     implementation(project(":groupFolder:example3"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         example2BuildFile.writeText(
             """
@@ -422,7 +422,7 @@ class ModuleGraphPluginFunctionalTest {
                 dependencies {
                     implementation(project(":groupFolder:example3"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         example3BuildFile.writeText(
             """
@@ -432,7 +432,7 @@ class ModuleGraphPluginFunctionalTest {
                 dependencies {
                     implementation(project(":example"))
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         readmeFile.writeText("### Dependency Diagram")
 
@@ -471,7 +471,7 @@ class ModuleGraphPluginFunctionalTest {
             """
             rootProject.name = "test"
             include(":example")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         exampleBuildFile.writeText(
@@ -485,7 +485,7 @@ class ModuleGraphPluginFunctionalTest {
                 heading.set("### Dependency Diagram")
                 readmePath.set("${readmeFilePath()}")
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
         assertThrows(Exception::class.java) {
             GradleRunner.create()
@@ -495,6 +495,7 @@ class ModuleGraphPluginFunctionalTest {
                 .build()
         }
     }
+
     @Test
     fun `plugin throws exception when invalid pattern is provided`() {
         settingsFile.writeText(
@@ -503,7 +504,7 @@ class ModuleGraphPluginFunctionalTest {
             include(":example")
             include(":groupFolder:example2")
             include(":groupFolder:example3")
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         val invalidPattern = ".*example5.*"
@@ -525,7 +526,7 @@ class ModuleGraphPluginFunctionalTest {
                 implementation(project(":groupFolder:example2"))
                 implementation(project(":groupFolder:example3"))
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
         assertThrows(Exception::class.java) {
             GradleRunner.create()

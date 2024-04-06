@@ -11,12 +11,12 @@ open class ModuleGraphPlugin : Plugin<Project> {
         val extension = project.extensions.create(
             EXTENSION_NAME,
             ModuleGraphExtension::class.java,
-            project
+            project,
         )
 
         project.tasks.register(
             TASK_NAME,
-            CreateModuleGraphTask::class.java
+            CreateModuleGraphTask::class.java,
         ) { task ->
             task.heading.set(extension.heading)
             task.readmePath.set(extension.readmePath)
@@ -27,7 +27,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.showFullPath.set(extension.showFullPath)
             task.excludeConfigurationNames.set(extension.excludeConfigurationNames)
             task.dependencies.set(
-                project.parseProjectStructure(extension.excludeConfigurationNames.getOrElse(emptyList()))
+                project.parseProjectStructure(extension.excludeConfigurationNames.getOrElse(emptyList())),
             )
             task.outputFile.set(project.layout.projectDirectory.file(extension.readmePath))
         }

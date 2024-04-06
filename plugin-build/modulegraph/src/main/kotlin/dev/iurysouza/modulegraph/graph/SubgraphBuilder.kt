@@ -34,7 +34,8 @@ internal object SubgraphBuilder {
             val childrenNames = children.joinToString("\n") { "    ${it.name}" }
             """|  subgraph $parent
                |$childrenNames
-               |  end""".trimMargin()
+               |  end
+            """.trimMargin()
         }
 
         return MermaidCode(subgraph.trimMargin())
@@ -47,5 +48,4 @@ internal object SubgraphBuilder {
         .groupBy { it.parent }
         .map { (parent, children) -> parent to children.distinctBy { it.name } }
         .sortedBy { it.first }
-
 }

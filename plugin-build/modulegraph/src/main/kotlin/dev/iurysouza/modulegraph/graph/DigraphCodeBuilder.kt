@@ -24,7 +24,7 @@ internal object DigraphCodeBuilder {
     ): MermaidCode = MermaidCode(
         """
         |${digraphModel.joinToString("\n") { toMermaid(it, linkText) }}
-    """.trimMargin()
+        """.trimMargin(),
     )
 
     private fun toMermaid(it: DigraphModel, linkText: LinkText): CharSequence = """

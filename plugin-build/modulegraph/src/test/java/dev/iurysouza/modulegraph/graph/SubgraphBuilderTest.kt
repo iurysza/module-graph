@@ -12,9 +12,9 @@ class SubgraphBuilderTest {
             ":example" to listOf(
                 Dependency(
                     targetProjectPath = ":groupFolder:example2",
-                    configName = "implementation"
-                )
-            )
+                    configName = "implementation",
+                ),
+            ),
         )
 
         val digraph = DigraphBuilder.build(graphModel, someGraphOptions())
@@ -23,7 +23,7 @@ class SubgraphBuilderTest {
             |  subgraph groupFolder
             |    example2
             |  end
-""".trimMargin()
+        """.trimMargin()
         assertEquals(expectedSubgraphSyntax, subgraph)
     }
 
@@ -64,7 +64,7 @@ class SubgraphBuilderTest {
             |    alpha
             |    zeta
             |  end
-""".trimMargin()
+        """.trimMargin()
         assertEquals(expectedSubgraphSyntax, subgraph.value)
     }
 }

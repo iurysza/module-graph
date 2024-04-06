@@ -17,7 +17,7 @@ class ConfigCodeGeneratorTest {
                   }
                 }%%
             """.trimIndent(),
-            configCode.value
+            configCode.value,
         )
     }
 
@@ -30,8 +30,8 @@ class ConfigCodeGeneratorTest {
                 "primaryBorderColor" to "#5a4f7c",
                 "lineColor" to "#f5a623",
                 "tertiaryColor" to "#40375c",
-                "fontSize" to "11px"
-            )
+                "fontSize" to "11px",
+            ),
         )
 
         val configCode = ConfigCodeBuilder.build(theme)
@@ -45,9 +45,7 @@ class ConfigCodeGeneratorTest {
                   }
                 }%%
             """.trimIndent(),
-            configCode.value
+            configCode.value,
         )
     }
-
-
 }

@@ -28,4 +28,3 @@ internal value class MermaidCode(val value: String = "") {
         val EMPTY = MermaidCode("")
     }
 }
-

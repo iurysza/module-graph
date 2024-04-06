@@ -20,7 +20,7 @@ internal object ConfigCodeBuilder {
      *%%{
      *  init: {
      *    'theme': 'base',
-     *    'themeVariables': {"primaryTextColor":"#F6F8FAff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","tertiaryColor":"#40375c","lineColor":"#f5a623","fontSize":"12px"}
+     *    'themeVariables': {"primaryColor":"#F6F8FAff",""fontSize":"12px"}
      *  }
      *}%%
      *```
@@ -32,15 +32,15 @@ internal object ConfigCodeBuilder {
         |    'theme': '${theme.name}'${theme.themeVariablesJson()}
         |  }
         |}%%
-        """.trimMargin()
+        """.trimMargin(),
     )
 
     private fun Theme.themeVariablesJson() = if (this is Theme.BASE && themeVariables.isNotEmpty()) {
         """
             |,
-            |    'themeVariables': ${Json.encodeToString(themeVariables).trimIndent()}""".trimMargin()
+            |    'themeVariables': ${Json.encodeToString(themeVariables).trimIndent()}
+        """.trimMargin()
     } else {
         ""
     }
-
 }

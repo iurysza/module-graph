@@ -15,13 +15,13 @@ class MermaidGraphTest {
             ":example" to listOf(
                 Dependency(
                     targetProjectPath = ":groupFolder:example2",
-                    configName = "implementation"
+                    configName = "implementation",
                 ),
                 Dependency(
                     targetProjectPath = ":groupFolder:example3",
-                    configName = "implementation"
-                )
-            )
+                    configName = "implementation",
+                ),
+            ),
         )
         val focusColor = "#F5A622"
         val graphOptions = someGraphOptions(
@@ -29,7 +29,7 @@ class MermaidGraphTest {
             theme = Theme.BASE(
                 focusColor = focusColor,
             ),
-            showFullPath = true
+            showFullPath = true,
         )
 
         val mermaidGraph = Mermaid.generateGraph(reconstructedModel, graphOptions)
@@ -46,17 +46,18 @@ class MermaidGraphTest {
                 graph LR
                   :example --> :groupFolder:example2
 
-                classDef focus fill:${focusColor},stroke:#fff,stroke-width:2px,color:#fff;
+                classDef focus fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;
                 class :groupFolder:example2 focus
                 ```
-            """.trimIndent(), mermaidGraph
+            """.trimIndent(),
+            mermaidGraph,
         )
     }
 
     @Test
     fun `a single module project will throw an error`() {
         val graphModel = mapOf(
-            ":example" to listOf<Dependency>()
+            ":example" to listOf<Dependency>(),
         )
 
         val graphOptions = someGraphOptions()
@@ -64,8 +65,8 @@ class MermaidGraphTest {
         assertThrows<IllegalArgumentException> {
             Mermaid.generateGraph(graphModel, graphOptions)
         }
-
     }
+
     @Test
     fun `livematch graph works`() {
         val graphModel = liveMatchReconstructedModel
@@ -103,7 +104,7 @@ class MermaidGraphTest {
                     "primaryBorderColor" to "#5a4f7c",
                     "tertiaryColor" to "#40375c",
                     "lineColor" to "#f5a623",
-                    "fontSize" to "12px"
+                    "fontSize" to "12px",
                 ),
             ),
             showFullPath = false,
@@ -115,5 +116,4 @@ class MermaidGraphTest {
 
         assertEquals(expectedMermaidGraphCode, mermaidGraph)
     }
-
 }
