@@ -285,6 +285,7 @@ class ModuleGraphPluginFunctionalTest {
             """
                 rootProject.name = "test"
                 include(":example")
+                include(":groupFolder:example2")
             """.trimIndent()
         )
         exampleBuildFile.writeText(
@@ -298,6 +299,10 @@ class ModuleGraphPluginFunctionalTest {
                     heading.set("### Dependency Diagram")
                     readmePath.set("${missingFile.absolutePath.replace("\\", "\\\\")}")
                 }
+                dependencies {
+                    implementation(project(":groupFolder:example2"))
+                }
+
             """.trimIndent()
         )
 
