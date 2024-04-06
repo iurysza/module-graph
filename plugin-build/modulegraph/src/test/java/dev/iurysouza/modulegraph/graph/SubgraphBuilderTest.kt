@@ -1,9 +1,7 @@
-package dev.iurysouza.modulegraph.gradle.graph
+package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.*
 import dev.iurysouza.modulegraph.Dependency
-import dev.iurysouza.modulegraph.graph.DigraphBuilder
-import dev.iurysouza.modulegraph.graph.SubgraphBuilder
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

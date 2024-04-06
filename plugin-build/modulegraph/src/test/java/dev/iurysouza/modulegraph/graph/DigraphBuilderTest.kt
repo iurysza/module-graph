@@ -1,11 +1,9 @@
-package dev.iurysouza.modulegraph.gradle.graph
+package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.GraphOptions
 import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
-import dev.iurysouza.modulegraph.graph.DigraphBuilder
-import dev.iurysouza.modulegraph.graph.DigraphCodeBuilder
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.assertEquals

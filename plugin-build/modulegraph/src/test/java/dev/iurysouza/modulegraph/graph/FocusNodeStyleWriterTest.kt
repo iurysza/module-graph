@@ -1,8 +1,6 @@
-package dev.iurysouza.modulegraph.gradle.graph
+package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.*
-import dev.iurysouza.modulegraph.graph.DigraphBuilder
-import dev.iurysouza.modulegraph.graph.FocusNodeStyleBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
