@@ -8,7 +8,7 @@ class ConfigCodeGeneratorTest {
 
     @Test
     fun `should generate simple theme code`() {
-        val configCode = ConfigCodeGenerator.createConfig(Theme.NEUTRAL)
+        val configCode = ConfigCodeBuilder.build(Theme.NEUTRAL)
         assertEquals(
             """
                 %%{
@@ -34,7 +34,7 @@ class ConfigCodeGeneratorTest {
             )
         )
 
-        val configCode = ConfigCodeGenerator.createConfig(theme)
+        val configCode = ConfigCodeBuilder.build(theme)
 
         assertEquals(
             """

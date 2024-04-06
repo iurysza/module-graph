@@ -3,7 +3,7 @@ package dev.iurysouza.modulegraph.graph
 import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.focusColor
 
-object FocusNodeStyleWriter {
+object FocusNodeStyleBuilder {
     /**
      * @param digraphModel The list of digraph models for which the highlighting is to be done.
      * @param theme The theme for the highlighting.
@@ -16,7 +16,7 @@ object FocusNodeStyleWriter {
      *```
      *Where "alpha" would be one of the focused nodes.
      */
-    fun highlightNode(digraphModel: List<DigraphModel>, theme: Theme): MermaidCode {
+    fun build(digraphModel: List<DigraphModel>, theme: Theme): MermaidCode {
         val focusedNodes = digraphModel
             .flatMap { listOf(it.source, it.target) }
             .distinctBy { it.name }

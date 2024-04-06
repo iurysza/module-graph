@@ -2,7 +2,7 @@ package dev.iurysouza.modulegraph.gradle.graph
 
 import dev.iurysouza.modulegraph.*
 import dev.iurysouza.modulegraph.graph.DigraphBuilder
-import dev.iurysouza.modulegraph.graph.FocusNodeStyleWriter
+import dev.iurysouza.modulegraph.graph.FocusNodeStyleBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -27,7 +27,7 @@ class FocusNodeStyleWriterTest {
         )
 
         val digraph = DigraphBuilder.build(aModuleGraph(), graphOptions)
-        val highlightSyntax = FocusNodeStyleWriter.highlightNode(digraph, theme)
+        val highlightSyntax = FocusNodeStyleBuilder.build(digraph, theme)
 
         assertEquals(expectedHighlightCode(focusedNode, theme.focusColor), highlightSyntax.value)
     }

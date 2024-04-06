@@ -4,7 +4,7 @@ import dev.iurysouza.modulegraph.Theme
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-object ConfigCodeGenerator {
+object ConfigCodeBuilder {
     /**
      * This function generates a `MermaidCode` configuration
      *
@@ -25,7 +25,7 @@ object ConfigCodeGenerator {
      *}%%
      *```
      */
-    fun createConfig(theme: Theme): MermaidCode = MermaidCode(
+    fun build(theme: Theme): MermaidCode = MermaidCode(
         """
         |%%{
         |  init: {

@@ -2,7 +2,7 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.LinkText
 
-object DigraphCodeGenerator {
+object DigraphCodeBuilder {
 
     /**
      * Converts a list of digraph models into a Mermaid syntax.
@@ -18,7 +18,7 @@ object DigraphCodeGenerator {
      * gama -- implementation --> zeta
      *```
      */
-    fun mermaid(
+    fun build(
         digraphModel: List<DigraphModel>,
         linkText: LinkText,
     ): MermaidCode = MermaidCode(

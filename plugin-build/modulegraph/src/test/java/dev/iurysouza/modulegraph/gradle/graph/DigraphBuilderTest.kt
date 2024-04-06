@@ -5,7 +5,7 @@ import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.graph.DigraphBuilder
-import dev.iurysouza.modulegraph.graph.DigraphCodeGenerator
+import dev.iurysouza.modulegraph.graph.DigraphCodeBuilder
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -25,7 +25,7 @@ class DigraphBuilderTest {
         )
 
         val digraphModelList = DigraphBuilder.build(graphModel, graphOptions)
-        val digraphSyntax = DigraphCodeGenerator.mermaid(digraphModelList, graphOptions.linkText)
+        val digraphSyntax = DigraphCodeBuilder.build(digraphModelList, graphOptions.linkText)
 
         val mermaidStringSyntax = """
         |  alpha --> gama
