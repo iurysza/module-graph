@@ -46,5 +46,6 @@ object SubgraphBuilder {
         .flatMap { listOf(it.source, it.target) }
         .groupBy { it.parent }
         .map { (parent, children) -> parent to children.distinctBy { it.name } }
+        .sortedBy { it.first }
 
 }

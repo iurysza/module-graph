@@ -59,12 +59,12 @@ class SubgraphBuilderTest {
         val digraph = DigraphBuilder.build(graphModel, graphOptions)
         val subgraph = SubgraphBuilder.build(digraph, showFullPath = false)
         val expectedSubgraphSyntax = """
+            |  subgraph container
+            |    gama
+            |  end
             |  subgraph sample
             |    alpha
             |    zeta
-            |  end
-            |  subgraph container
-            |    gama
             |  end
 """.trimMargin()
         assertEquals(expectedSubgraphSyntax, subgraph.value)
