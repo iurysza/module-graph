@@ -7,4 +7,3 @@ internal fun String.getProjectName(showFullPath: Boolean): String {
         this.split(":").last { it.isNotBlank() }
     }
 }
-internal fun Regex.isRegexFilterSet() = toString() != ".*"

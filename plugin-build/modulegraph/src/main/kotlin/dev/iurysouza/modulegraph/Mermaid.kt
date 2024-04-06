@@ -47,6 +47,6 @@ data class GraphOptions(
     val linkText: LinkText,
     val theme: Theme,
     val orientation: Orientation,
-    val pattern: Regex,
+    val pattern: Regex?,
     val showFullPath: Boolean,
 )
