@@ -2,6 +2,7 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.Dependency
 import dev.iurysouza.modulegraph.GraphOptions
+import dev.iurysouza.modulegraph.LinkText
 
 internal object DigraphBuilder {
     fun build(
@@ -11,7 +12,10 @@ internal object DigraphBuilder {
         throwIfSingleProject(graphModel)
 
         return graphModel.flatMap { (source, targetList) ->
-            targetList.mapNotNull { target ->
+            when (graphOptions.linkText) {
+                LinkText.NONE -> targetList.distinctBy { it.targetProjectPath }
+                else -> targetList
+            }.mapNotNull { target ->
                 buildModel(graphOptions, source, target)
             }
         }.also { result ->
