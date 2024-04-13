@@ -37,7 +37,7 @@ You'll just need to add it to your project's **root** `build.gradle` or `build.g
 
 ```groovy
 plugins {
-    id "dev.iurysouza.modulegraph" version "0.6.0"
+    id "dev.iurysouza.modulegraph" version "0.6.1"
 }
 ```
 <details>
@@ -51,7 +51,7 @@ plugins {
             }
         }
         dependencies {
-            classpath "dev.iurysouza:modulegraph:0.6.0"
+            classpath "dev.iurysouza:modulegraph:0.6.1"
         }
     }
 
@@ -102,7 +102,7 @@ moduleGraphConfig {
 
 ```kotlin
 plugins {
-    id("dev.iurysouza.modulegraph") version "0.6.0"
+    id("dev.iurysouza.modulegraph") version "0.6.1"
 }
 ```
 
@@ -117,7 +117,7 @@ plugins {
             }
         }
         dependencies {
-            classpath("dev.iurysouza:modulegraph:0.6.0")
+            classpath("dev.iurysouza:modulegraph:0.6.1")
         }
     }
 
