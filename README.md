@@ -1,7 +1,7 @@
 [![Pre Merge Checks](https://github.com/iurysza/module-graph/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/iurysza/module-graph/actions?query=workflow%3A%22Pre+Merge+Checks%22) [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE) ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
 
-<p style="text-align:center;">
-  <img src="assets/module-graph-icon.png" alt="module graph icon" style="width:100px; margin:auto;">
+<p align="center">
+  <img src="assets/module-graph-icon.png" alt="module graph icon" width="100"/>
 </p>
 
 ## Module Graph Plugin
