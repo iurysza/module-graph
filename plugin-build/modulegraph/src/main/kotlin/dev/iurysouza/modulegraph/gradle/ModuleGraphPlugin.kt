@@ -27,7 +27,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.showFullPath.set(extension.showFullPath)
             task.excludeConfigurationNames.set(extension.excludeConfigurationNames)
             task.dependencies.set(
-                project.parseProjectStructure(extension.excludeConfigurationNames.getOrElse(emptyList())),
+                project.parseProjectStructure(setOf(ExclusionStrategy.Project("match-day"), ExclusionStrategy.Configuration(".*(debug).*"))),
             )
             task.outputFile.set(project.layout.projectDirectory.file(extension.readmePath))
         }
