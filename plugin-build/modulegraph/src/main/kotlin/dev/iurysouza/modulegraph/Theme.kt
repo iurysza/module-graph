@@ -34,8 +34,8 @@ sealed class Theme(val name: String) : JavaSerializable {
      * You can read more about it [here](https://mermaid.js.org/config/theming.html#theme-variables).
      */
     data class BASE(
-        val themeVariables: Map<String, String> = emptyMap(),
-        val focusColor: FocusColor = DEFAULT_FOCUS_COLOR,
+        var themeVariables: Map<String, String> = emptyMap(),
+        var focusColor: FocusColor = DEFAULT_FOCUS_COLOR,
     ) : Theme("base")
 }
 fun Theme.focusColor(): FocusColor = when (this) {
