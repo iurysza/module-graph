@@ -1,11 +1,12 @@
 package dev.iurysouza.modulegraph
 
+import dev.iurysouza.modulegraph.gradle.Dependency
 import dev.iurysouza.modulegraph.graph.*
 
 internal object Mermaid {
 
     fun generateGraph(
-        graphModel: Map<String, List<Dependency>>,
+        graphModel: Map<Dependency, List<Dependency>>,
         graphOptions: GraphOptions,
     ): String {
         val (linkText, theme, orientation) = graphOptions

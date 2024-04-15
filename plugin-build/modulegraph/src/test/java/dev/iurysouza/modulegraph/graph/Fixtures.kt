@@ -1,39 +1,46 @@
 package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.*
-import dev.iurysouza.modulegraph.Dependency
+import dev.iurysouza.modulegraph.gradle.Dependency
 
 internal fun aModuleGraph() = mapOf(
-    ":sample:zeta" to listOf(
+    Dependency(
+        path = ":sample:zeta",
+    ) to listOf(
         Dependency(
-            targetProjectPath = ":sample:beta",
+            path = ":sample:beta",
             configName = "implementation",
         ),
     ),
-    ":sample:alpha" to listOf(
+    Dependency(
+        path = ":sample:alpha",
+    ) to listOf(
         Dependency(
-            targetProjectPath = ":sample:zeta",
+            path = ":sample:zeta",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":sample:beta",
+            path = ":sample:beta",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":sample:container:gama",
+            path = ":sample:container:gama",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":sample:container:delta",
-            configName = "implementation",
-        ),
-    ),
-    ":sample:container:gama" to listOf(
-        Dependency(
-            targetProjectPath = ":sample:zeta",
+            path = ":sample:container:delta",
             configName = "implementation",
         ),
     ),
+    Dependency(
+        path = ":sample:container:gama",
+    )
+        to listOf(
+            Dependency(
+                path = ":sample:zeta",
+                configName = "implementation",
+            ),
+        ),
 )
 
 internal val expectedMermaidGraphCode = """
@@ -78,95 +85,95 @@ fun someGraphOptions(
 internal val liveMatchReconstructedModel = mapOf(
     ":core:footballinfo" to listOf(
         Dependency(
-            targetProjectPath = ":core:common",
+            path = ":core:common",
             configName = "implementation",
         ),
     ),
     ":features:match-day" to listOf(
         Dependency(
-            targetProjectPath = ":core:common",
+            path = ":core:common",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":core:footballinfo",
+            path = ":core:footballinfo",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":core:design-system",
+            path = ":core:design-system",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":core:reddit",
+            path = ":core:reddit",
             configName = "implementation",
         ),
     ),
     ":features:match-thread" to listOf(
         Dependency(
-            targetProjectPath = ":core:webview-to-native-player",
+            path = ":core:webview-to-native-player",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":core:common",
+            path = ":core:common",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":core:footballinfo",
+            path = ":core:footballinfo",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":core:design-system",
+            path = ":core:design-system",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":core:reddit",
+            path = ":core:reddit",
             configName = "implementation",
         ),
     ),
     ":app:playground" to listOf(
         Dependency(
-            targetProjectPath = ":core:webview-to-native-player",
+            path = ":core:webview-to-native-player",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":features:match-thread",
+            path = ":features:match-thread",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":core:design-system",
+            path = ":core:design-system",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":features:match-day",
+            path = ":features:match-day",
             configName = "testImplementation",
         ),
     ),
     ":core:reddit" to listOf(
         Dependency(
-            targetProjectPath = ":core:common",
+            path = ":core:common",
             configName = "implementation",
         ),
     ),
     ":core:webview-to-native-player" to listOf(
         Dependency(
-            targetProjectPath = ":core:common",
+            path = ":core:common",
             configName = "implementation",
         ),
     ),
     ":app:main" to listOf(
         Dependency(
-            targetProjectPath = ":features:match-thread",
+            path = ":features:match-thread",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":features:match-day",
+            path = ":features:match-day",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":core:design-system",
+            path = ":core:design-system",
             configName = "implementation",
         ),
         Dependency(
-            targetProjectPath = ":core:common",
+            path = ":core:common",
             configName = "implementation",
         ),
     ),

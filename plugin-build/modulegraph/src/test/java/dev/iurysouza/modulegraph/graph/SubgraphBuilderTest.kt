@@ -1,7 +1,7 @@
 package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.*
-import dev.iurysouza.modulegraph.Dependency
+import dev.iurysouza.modulegraph.gradle.Dependency
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -9,9 +9,9 @@ class SubgraphBuilderTest {
     @Test
     fun `new example works as expected`() {
         val graphModel = mapOf(
-            ":example" to listOf(
+            Dependency(":example") to listOf(
                 Dependency(
-                    targetProjectPath = ":groupFolder:example2",
+                    path = ":groupFolder:example2",
                     configName = "implementation",
                 ),
             ),

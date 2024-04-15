@@ -62,7 +62,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
 
     @get:Input
     @get:Option(option = "dependencies", description = "The project dependencies")
-    internal abstract val dependencies: MapProperty<String, List<Dependency>>
+    internal abstract val dependencies: MapProperty<Dependency, List<Dependency>>
 
     @get:OutputFile
     abstract val outputFile: RegularFileProperty

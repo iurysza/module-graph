@@ -1,19 +1,19 @@
 package dev.iurysouza.modulegraph.graph
 
-import dev.iurysouza.modulegraph.Dependency
 import dev.iurysouza.modulegraph.GraphOptions
 import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.gradle.Dependency
 
 internal object DigraphBuilder {
     fun build(
-        graphModel: Map<String, List<Dependency>>,
+        graphModel: Map<Dependency, List<Dependency>>,
         graphOptions: GraphOptions,
     ): List<DigraphModel> {
         throwIfSingleProject(graphModel)
 
         return graphModel.flatMap { (source, targetList) ->
             when (graphOptions.linkText) {
-                LinkText.NONE -> targetList.distinctBy { it.targetProjectPath }
+                LinkText.NONE -> targetList.distinctBy { it.path }
                 else -> targetList
             }.mapNotNull { target ->
                 buildModel(graphOptions, source, target)
@@ -25,13 +25,13 @@ internal object DigraphBuilder {
 
     private fun buildModel(
         graphOptions: GraphOptions,
-        sourceFullName: String,
+        source: Dependency,
         target: Dependency? = null,
     ): DigraphModel? {
         val pattern = graphOptions.pattern
         val showFullPath = graphOptions.showFullPath
-        val targetFullName = target?.targetProjectPath
-
+        val targetFullName = target?.path
+        val sourceFullName = source.path
         val (sourceMatches, targetMatches) = when {
             pattern == null -> true to true
             else -> sourceFullName.matches(pattern) to (targetFullName?.matches(pattern) ?: false)
@@ -53,7 +53,7 @@ internal object DigraphBuilder {
                     name = targetFullName!!.getProjectName(showFullPath),
                     fullName = targetFullName,
                     isFocused = targetMatches && regexFilterSet,
-                    config = ModuleConfig(target.configName),
+                    config = target.configName?.let { ModuleConfig(it) } ?: ModuleConfig.none(),
                     parent = targetFullName.getParent(),
                 ),
             )
@@ -69,8 +69,8 @@ internal object DigraphBuilder {
         }
     }
 
-    private fun throwIfSingleProject(graphModel: Map<String, List<Dependency>>) {
-        val dependencies = graphModel.values.flatten().distinctBy { it.targetProjectPath }.size
+    private fun throwIfSingleProject(graphModel: Map<Dependency, List<Dependency>>) {
+        val dependencies = graphModel.values.flatten().distinctBy { it.path }.size
         require(graphModel.keys.size > 1 || dependencies > 0) {
             """
                     |The project must have at least two modules to generate a graph.

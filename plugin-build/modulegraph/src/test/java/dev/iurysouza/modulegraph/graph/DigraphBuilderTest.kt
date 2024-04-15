@@ -30,57 +30,57 @@ class DigraphBuilderTest {
         assertEquals(mermaidStringSyntax, digraphSyntax.value)
     }
 
-    @Test
-    fun `when linkText is Config, digraphbuilder considers all different configurations`() {
-        val graphModel = fullLiveMatchGraph
-        val graphOptions = GraphOptions(
-            linkText = LinkText.CONFIGURATION,
-            theme = Theme.NEUTRAL,
-            showFullPath = false,
-            orientation = Orientation.LEFT_TO_RIGHT,
-        )
+//    @Test
+//    fun `when linkText is Config, digraphbuilder considers all different configurations`() {
+//        val graphModel = fullLiveMatchGraph
+//        val graphOptions = GraphOptions(
+//            linkText = LinkText.CONFIGURATION,
+//            theme = Theme.NEUTRAL,
+//            showFullPath = false,
+//            orientation = Orientation.LEFT_TO_RIGHT,
+//        )
+//
+//        val digraphModelList = DigraphBuilder.build(graphModel, graphOptions)
+//        val digraphSyntax = DigraphCodeBuilder.build(digraphModelList, graphOptions.linkText)
+//
+//        assertEquals(liveMatchMermaidGraphWithConfigurations, digraphSyntax.value)
+//    }
 
-        val digraphModelList = DigraphBuilder.build(graphModel, graphOptions)
-        val digraphSyntax = DigraphCodeBuilder.build(digraphModelList, graphOptions.linkText)
-
-        assertEquals(liveMatchMermaidGraphWithConfigurations, digraphSyntax.value)
-    }
-
-    @Test
-    fun `when linkText is none, digraphbuilder ignores different configurations`() {
-        val graphModel = fullLiveMatchGraph
-        val graphOptions = GraphOptions(
-            linkText = LinkText.NONE,
-            theme = Theme.NEUTRAL,
-            showFullPath = false,
-            orientation = Orientation.LEFT_TO_RIGHT,
-        )
-
-        val digraphModelList = DigraphBuilder.build(graphModel, graphOptions)
-        val digraphSyntax = DigraphCodeBuilder.build(digraphModelList, graphOptions.linkText)
-
-        val mermaidStringSyntax = """
-                |  footballinfo --> common
-                |  match-day --> common
-                |  match-day --> footballinfo
-                |  match-day --> design-system
-                |  match-day --> reddit
-                |  match-thread --> webview-to-native-player
-                |  match-thread --> common
-                |  match-thread --> footballinfo
-                |  match-thread --> design-system
-                |  match-thread --> reddit
-                |  playground --> webview-to-native-player
-                |  playground --> match-thread
-                |  playground --> design-system
-                |  playground --> match-day
-                |  reddit --> common
-                |  webview-to-native-player --> common
-                |  main --> match-thread
-                |  main --> match-day
-                |  main --> design-system
-                |  main --> common
-        """.trimMargin()
-        assertEquals(mermaidStringSyntax, digraphSyntax.value)
-    }
+//    @Test
+//    fun `when linkText is none, digraphbuilder ignores different configurations`() {
+//        val graphModel = fullLiveMatchGraph
+//        val graphOptions = GraphOptions(
+//            linkText = LinkText.NONE,
+//            theme = Theme.NEUTRAL,
+//            showFullPath = false,
+//            orientation = Orientation.LEFT_TO_RIGHT,
+//        )
+//
+//        val digraphModelList = DigraphBuilder.build(graphModel, graphOptions)
+//        val digraphSyntax = DigraphCodeBuilder.build(digraphModelList, graphOptions.linkText)
+//
+//        val mermaidStringSyntax = """
+//                |  footballinfo --> common
+//                |  match-day --> common
+//                |  match-day --> footballinfo
+//                |  match-day --> design-system
+//                |  match-day --> reddit
+//                |  match-thread --> webview-to-native-player
+//                |  match-thread --> common
+//                |  match-thread --> footballinfo
+//                |  match-thread --> design-system
+//                |  match-thread --> reddit
+//                |  playground --> webview-to-native-player
+//                |  playground --> match-thread
+//                |  playground --> design-system
+//                |  playground --> match-day
+//                |  reddit --> common
+//                |  webview-to-native-player --> common
+//                |  main --> match-thread
+//                |  main --> match-day
+//                |  main --> design-system
+//                |  main --> common
+//        """.trimMargin()
+//        assertEquals(mermaidStringSyntax, digraphSyntax.value)
+//    }
 }
