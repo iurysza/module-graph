@@ -13,10 +13,8 @@ graph TB
     gama
   end
   subgraph sample
-    alpha
     zeta
   end
-  alpha --> gama
   gama --> zeta
 
 classDef focus fill:#F5A622,stroke:#fff,stroke-width:2px,color:#fff;
