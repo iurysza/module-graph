@@ -341,7 +341,8 @@ class ModuleGraphPluginFunctionalTest {
                     theme.set($MODULEGRAPH_PACKAGE.Theme.FOREST)
                     orientation.set($MODULEGRAPH_PACKAGE.Orientation.RIGHT_TO_LEFT)
                     readmePath.set("${readmeFilePath()}")
-                    excludeConfigurationNames.set(listOf("testImplementation"))
+                    excludedModulesRegex.set("project")
+                    excludedConfigurationsRegex.set("testImplementation")
                 }
                 dependencies {
                     implementation(project(":groupFolder:example2"))

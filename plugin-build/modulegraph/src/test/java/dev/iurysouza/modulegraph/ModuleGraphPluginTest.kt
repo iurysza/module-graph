@@ -32,7 +32,6 @@ class ModuleGraphPluginTest {
         project.pluginManager.apply(pluginId)
         val aFilePath = "${project.projectDir}/README.md"
         val aRegexPattern = ".*"
-        val aExcludeConfigurationNames = listOf("implementation")
         (project.extensions.getByName(pluginExtension) as ModuleGraphExtension).apply {
             heading.set("### Dependency Diagram")
             theme.set(Theme.NEUTRAL)
@@ -41,7 +40,8 @@ class ModuleGraphPluginTest {
             focusedNodesPattern.set(aRegexPattern)
             orientation.set(Orientation.TOP_TO_BOTTOM)
             readmePath.set(aFilePath)
-            excludeConfigurationNames.set(aExcludeConfigurationNames)
+            excludedConfigurationsRegex.set("implementation")
+            excludedModulesRegex.set("project")
         }
 
         val task = project.tasks.getByName("createModuleGraph") as CreateModuleGraphTask
@@ -53,6 +53,7 @@ class ModuleGraphPluginTest {
         assertEquals(Theme.NEUTRAL, task.theme.get())
         assertEquals(Orientation.TOP_TO_BOTTOM, task.orientation.get())
         assertEquals(aRegexPattern, task.focusedNodesPattern.get())
-        assertEquals(aExcludeConfigurationNames, task.excludeConfigurationNames.get())
+        assertEquals("implementation", task.excludedConfigurationsRegex.get())
+        assertEquals("project", task.excludedModulesRegex.get())
     }
 }

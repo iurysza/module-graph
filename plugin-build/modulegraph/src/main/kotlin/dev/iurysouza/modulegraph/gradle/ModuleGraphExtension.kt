@@ -5,7 +5,6 @@ import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
 import javax.inject.Inject
 import org.gradle.api.Project
-import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 
 /**
@@ -54,11 +53,14 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
     val linkText: Property<LinkText> = objects.property(LinkText::class.java)
 
     /**
-     * List of configuration names to be ignored.
-     * e.g. "implementation", "testImplementation" will be set.
-     * This is an optional input. Defaults to [emptyList].
+     * A Regex to match configurations that should be ignored.
      */
-    val excludeConfigurationNames: ListProperty<String> = objects.listProperty(String::class.java)
+    val excludedConfigurationsRegex: Property<String> = objects.property(String::class.java)
+
+    /**
+     * A Regex to match modules that should be excluded from the graph.
+     */
+    val excludedModulesRegex: Property<String> = objects.property(String::class.java)
 
     /**
      * Whether to show the full path of the module in the graph.
