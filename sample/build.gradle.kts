@@ -28,7 +28,8 @@ moduleGraphConfig {
             focusColor = "#F5A622",
         ),
     )
-    excludeConfigurationNames.set(listOf("testImplementation"))
+    excludedConfigurationsRegex.set(""".*test.*""")
+    excludedModulesRegex.set(".*alpha.*")
 }
 
 task("check") {

@@ -4,7 +4,6 @@ import dev.iurysouza.modulegraph.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
-import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
@@ -49,9 +48,17 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val linkText: Property<LinkText>
 
     @get:Input
-    @get:Option(option = "excludeConfigurationNames", description = "List of configuration names to be ignored")
+    @get:Option(
+        option = "excludedConfigurationsRegex",
+        description = "A Regex to match configurations that should removed",
+    )
     @get:Optional
-    abstract val excludeConfigurationNames: ListProperty<String>
+    abstract val excludedConfigurationsRegex: Property<String>
+
+    @get:Input
+    @get:Option(option = "excludedModulesRegex", description = "A Regex to match nodes that should removed")
+    @get:Optional
+    abstract val excludedModulesRegex: Property<String>
 
     @get:Input
     @get:Option(option = "dependencies", description = "The project dependencies")
