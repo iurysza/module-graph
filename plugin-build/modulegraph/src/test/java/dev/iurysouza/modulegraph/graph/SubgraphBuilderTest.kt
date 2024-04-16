@@ -1,13 +1,14 @@
 package dev.iurysouza.modulegraph.graph
 
-import dev.iurysouza.modulegraph.*
+import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.gradle.Dependency
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class SubgraphBuilderTest {
+
     @Test
-    fun `new example works as expected`() {
+    fun `Subgraph with default options produces correct structure`() {
         val graphModel = mapOf(
             Dependency(":example") to listOf(
                 Dependency(
@@ -16,9 +17,13 @@ class SubgraphBuilderTest {
                 ),
             ),
         )
+        val graphOptions = withGraphOptions()
 
-        val digraph = DigraphBuilder.build(graphModel, someGraphOptions())
-        val subgraph = SubgraphBuilder.build(digraph, showFullPath = false).value
+        val subgraph = SubgraphBuilder.build(
+            list = DigraphBuilder.build(graphModel, graphOptions),
+            showFullPath = false,
+        ).value
+
         val expectedSubgraphSyntax = """
             |  subgraph groupFolder
             |    example2
@@ -30,32 +35,32 @@ class SubgraphBuilderTest {
     @Test
     fun `when showFullPath is true, an empty graph is generated`() {
         val graphModel = aModuleGraph()
-        val graphOptions = GraphOptions(
-            linkText = LinkText.NONE,
-            theme = Theme.NEUTRAL,
-            showFullPath = false,
-            pattern = ".*gama.*".toRegex(),
+        val graphOptions = withGraphOptions(
+            focusedModulesRegex = ".*gama.*",
             orientation = Orientation.TOP_TO_BOTTOM,
         )
 
-        val digraph = DigraphBuilder.build(graphModel, graphOptions)
-        val subgraph = SubgraphBuilder.build(digraph, showFullPath = true)
+        val subgraph = SubgraphBuilder.build(
+            list = DigraphBuilder.build(graphModel, graphOptions),
+            showFullPath = true,
+        )
+
         assertEquals("", subgraph.value)
     }
 
     @Test
-    fun `works as expected`() {
+    fun `Subgraph partitions correctly based on given module configuration`() {
         val graphModel = aModuleGraph()
-        val graphOptions = GraphOptions(
-            linkText = LinkText.NONE,
-            theme = Theme.NEUTRAL,
-            showFullPath = false,
-            pattern = ".*gama.*".toRegex(),
+        val graphOptions = withGraphOptions(
+            focusedModulesRegex = ".*gama.*",
             orientation = Orientation.TOP_TO_BOTTOM,
         )
 
-        val digraph = DigraphBuilder.build(graphModel, graphOptions)
-        val subgraph = SubgraphBuilder.build(digraph, showFullPath = false)
+        val subgraph = SubgraphBuilder.build(
+            list = DigraphBuilder.build(graphModel, graphOptions),
+            showFullPath = false,
+        )
+
         val expectedSubgraphSyntax = """
             |  subgraph container
             |    gama

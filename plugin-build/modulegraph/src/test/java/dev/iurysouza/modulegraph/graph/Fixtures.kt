@@ -68,28 +68,28 @@ internal val expectedMermaidGraphCode = """
         |```
 """.trimMargin()
 
-fun someGraphOptions(
+fun withGraphOptions(
     orientation: Orientation = Orientation.LEFT_TO_RIGHT,
     linkText: LinkText = LinkText.NONE,
-    regex: Regex = ".*".toRegex(),
+    focusedModulesRegex: String? = null,
     showFullPath: Boolean = false,
     theme: Theme = Theme.NEUTRAL,
 ) = GraphOptions(
     linkText = linkText,
     orientation = orientation,
-    pattern = regex,
+    pattern = focusedModulesRegex?.toRegex(),
     showFullPath = showFullPath,
     theme = theme,
 )
 
 internal val liveMatchReconstructedModel = mapOf(
-    ":core:footballinfo" to listOf(
+    Dependency(":core:footballinfo") to listOf(
         Dependency(
             path = ":core:common",
             configName = "implementation",
         ),
     ),
-    ":features:match-day" to listOf(
+    Dependency(":features:match-day") to listOf(
         Dependency(
             path = ":core:common",
             configName = "implementation",
@@ -107,7 +107,7 @@ internal val liveMatchReconstructedModel = mapOf(
             configName = "implementation",
         ),
     ),
-    ":features:match-thread" to listOf(
+    Dependency(":features:match-thread") to listOf(
         Dependency(
             path = ":core:webview-to-native-player",
             configName = "implementation",
@@ -129,7 +129,7 @@ internal val liveMatchReconstructedModel = mapOf(
             configName = "implementation",
         ),
     ),
-    ":app:playground" to listOf(
+    Dependency(":app:playground") to listOf(
         Dependency(
             path = ":core:webview-to-native-player",
             configName = "implementation",
@@ -147,19 +147,19 @@ internal val liveMatchReconstructedModel = mapOf(
             configName = "testImplementation",
         ),
     ),
-    ":core:reddit" to listOf(
+    Dependency(":core:reddit") to listOf(
         Dependency(
             path = ":core:common",
             configName = "implementation",
         ),
     ),
-    ":core:webview-to-native-player" to listOf(
+    Dependency(":core:webview-to-native-player") to listOf(
         Dependency(
             path = ":core:common",
             configName = "implementation",
         ),
     ),
-    ":app:main" to listOf(
+    Dependency(":app:main") to listOf(
         Dependency(
             path = ":features:match-thread",
             configName = "implementation",
@@ -227,8 +227,8 @@ internal val expectedLiveMatchGraph = """
     |```
 """.trimMargin()
 
-internal val fullLiveMatchGraph: Map<String, List<Dependency>> = mapOf(
-    ":core:footballinfo" to listOf(
+internal val fullLiveMatchGraph = mapOf(
+    Dependency(":core:footballinfo") to listOf(
         Dependency(":core:footballinfo", "debugAndroidTestCompileClasspath"),
         Dependency(":core:common", "debugAndroidTestCompileClasspath"),
         Dependency(":core:footballinfo", "debugAndroidTestRuntimeClasspath"),
@@ -240,7 +240,7 @@ internal val fullLiveMatchGraph: Map<String, List<Dependency>> = mapOf(
         Dependency(":core:common", "releaseUnitTestCompileClasspath"),
         Dependency(":core:footballinfo", "releaseUnitTestRuntimeClasspath"),
     ),
-    ":features:match-day" to listOf(
+    Dependency(":features:match-day") to listOf(
         Dependency(":features:match-day", "debugAndroidTestCompileClasspath"),
         Dependency(":core:common", "debugAndroidTestCompileClasspath"),
         Dependency(":core:footballinfo", "debugAndroidTestCompileClasspath"),
@@ -264,7 +264,31 @@ internal val fullLiveMatchGraph: Map<String, List<Dependency>> = mapOf(
         Dependency(":core:reddit", "releaseUnitTestCompileClasspath"),
         Dependency(":features:match-day", "releaseUnitTestRuntimeClasspath"),
     ),
-    ":features:match-thread" to listOf(
+    Dependency(":features:match-day") to listOf(
+        Dependency(":features:match-day", "debugAndroidTestCompileClasspath"),
+        Dependency(":core:common", "debugAndroidTestCompileClasspath"),
+        Dependency(":core:footballinfo", "debugAndroidTestCompileClasspath"),
+        Dependency(":core:design-system", "debugAndroidTestCompileClasspath"),
+        Dependency(":core:reddit", "debugAndroidTestCompileClasspath"),
+        Dependency(":features:match-day", "debugAndroidTestRuntimeClasspath"),
+        Dependency(":features:match-day", "debugUnitTestCompileClasspath"),
+        Dependency(":core:common", "debugUnitTestCompileClasspath"),
+        Dependency(":core:footballinfo", "debugUnitTestCompileClasspath"),
+        Dependency(":core:design-system", "debugUnitTestCompileClasspath"),
+        Dependency(":core:reddit", "debugUnitTestCompileClasspath"),
+        Dependency(":features:match-day", "debugUnitTestRuntimeClasspath"),
+        Dependency(":core:common", "implementation"),
+        Dependency(":core:footballinfo", "implementation"),
+        Dependency(":core:design-system", "implementation"),
+        Dependency(":core:reddit", "implementation"),
+        Dependency(":features:match-day", "releaseUnitTestCompileClasspath"),
+        Dependency(":core:common", "releaseUnitTestCompileClasspath"),
+        Dependency(":core:footballinfo", "releaseUnitTestCompileClasspath"),
+        Dependency(":core:design-system", "releaseUnitTestCompileClasspath"),
+        Dependency(":core:reddit", "releaseUnitTestCompileClasspath"),
+        Dependency(":features:match-day", "releaseUnitTestRuntimeClasspath"),
+    ),
+    Dependency(":features:match-thread") to listOf(
         Dependency(":features:match-thread", "debugAndroidTestCompileClasspath"),
         Dependency(":core:webview-to-native-player", "debugAndroidTestCompileClasspath"),
         Dependency(":core:common", "debugAndroidTestCompileClasspath"),
@@ -292,7 +316,7 @@ internal val fullLiveMatchGraph: Map<String, List<Dependency>> = mapOf(
         Dependency(":core:reddit", "releaseUnitTestCompileClasspath"),
         Dependency(":features:match-thread", "releaseUnitTestRuntimeClasspath"),
     ),
-    ":app:playground" to listOf(
+    Dependency(":app:playground") to listOf(
         Dependency(":app:playground", "debugAndroidTestCompileClasspath"),
         Dependency(":core:webview-to-native-player", "debugAndroidTestCompileClasspath"),
         Dependency(":features:match-thread", "debugAndroidTestCompileClasspath"),
@@ -312,7 +336,7 @@ internal val fullLiveMatchGraph: Map<String, List<Dependency>> = mapOf(
         Dependency(":app:playground", "releaseUnitTestRuntimeClasspath"),
         Dependency(":features:match-day", "testImplementation"),
     ),
-    ":core:reddit" to listOf(
+    Dependency(":core:reddit") to listOf(
         Dependency(":core:reddit", "debugAndroidTestCompileClasspath"),
         Dependency(":core:common", "debugAndroidTestCompileClasspath"),
         Dependency(":core:reddit", "debugAndroidTestRuntimeClasspath"),
@@ -324,7 +348,7 @@ internal val fullLiveMatchGraph: Map<String, List<Dependency>> = mapOf(
         Dependency(":core:common", "releaseUnitTestCompileClasspath"),
         Dependency(":core:reddit", "releaseUnitTestRuntimeClasspath"),
     ),
-    ":core:webview-to-native-player" to listOf(
+    Dependency(":core:webview-to-native-player") to listOf(
         Dependency(":core:webview-to-native-player", "debugAndroidTestCompileClasspath"),
         Dependency(":core:webview-to-native-player", "debugAndroidTestRuntimeClasspath"),
         Dependency(":core:webview-to-native-player", "debugUnitTestCompileClasspath"),
@@ -333,7 +357,7 @@ internal val fullLiveMatchGraph: Map<String, List<Dependency>> = mapOf(
         Dependency(":core:webview-to-native-player", "releaseUnitTestCompileClasspath"),
         Dependency(":core:webview-to-native-player", "releaseUnitTestRuntimeClasspath"),
     ),
-    ":app:main" to listOf(
+    Dependency(":app:main") to listOf(
         Dependency(":app:main", "debugAndroidTestCompileClasspath"),
         Dependency(":features:match-thread", "debugAndroidTestCompileClasspath"),
         Dependency(":features:match-day", "debugAndroidTestCompileClasspath"),
@@ -356,7 +380,7 @@ internal val fullLiveMatchGraph: Map<String, List<Dependency>> = mapOf(
         Dependency(":core:common", "releaseUnitTestCompileClasspath"),
         Dependency(":app:main", "releaseUnitTestRuntimeClasspath"),
     ),
-    ":core:common" to listOf(
+    Dependency(":core:common") to listOf(
         Dependency(":core:common", "debugAndroidTestCompileClasspath"),
         Dependency(":core:common", "debugAndroidTestRuntimeClasspath"),
         Dependency(":core:common", "debugUnitTestCompileClasspath"),
@@ -364,7 +388,7 @@ internal val fullLiveMatchGraph: Map<String, List<Dependency>> = mapOf(
         Dependency(":core:common", "releaseUnitTestCompileClasspath"),
         Dependency(":core:common", "releaseUnitTestRuntimeClasspath"),
     ),
-    ":core:design-system" to listOf(
+    Dependency(":core:design-system") to listOf(
         Dependency(":core:design-system", "debugAndroidTestCompileClasspath"),
         Dependency(":core:design-system", "debugAndroidTestRuntimeClasspath"),
         Dependency(":core:design-system", "debugUnitTestCompileClasspath"),
