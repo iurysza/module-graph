@@ -54,5 +54,5 @@ data class GraphOptions(
     val orientation: Orientation,
     val pattern: Regex? = null,
     val showFullPath: Boolean,
-    val styleNodeByPluginType: Boolean,
+    val setStyleByPluginType: Boolean,
 )

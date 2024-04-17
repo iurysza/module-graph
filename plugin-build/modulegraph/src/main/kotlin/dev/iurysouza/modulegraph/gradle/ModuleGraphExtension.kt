@@ -55,7 +55,7 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
     /**
      * Whether to use custom styling for module nodes based on the plugin type.
      */
-    val styleNodeByPluginType: Property<Boolean> = objects.property(Boolean::class.java)
+    val setStyleByPluginType: Property<Boolean> = objects.property(Boolean::class.java)
 
     /**
      * A Regex to match configurations that should be ignored.
