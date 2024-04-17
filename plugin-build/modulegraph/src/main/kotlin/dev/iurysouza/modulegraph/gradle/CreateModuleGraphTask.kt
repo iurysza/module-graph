@@ -61,6 +61,11 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val excludedModulesRegex: Property<String>
 
     @get:Input
+    @get:Option(option = "styleNodeByPluginType", description = "Whether to customize the node by the plugin type")
+    @get:Optional
+    abstract val styleNodeByPluginType: Property<Boolean>
+
+    @get:Input
     @get:Option(option = "dependencies", description = "The project dependencies")
     internal abstract val dependencies: MapProperty<Dependency, List<Dependency>>
 
@@ -81,6 +86,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 pattern = focusedNodesPattern.orNull?.let { Regex(it) },
                 showFullPath = showFullPath.getOrElse(false),
                 linkText = linkText.getOrElse(LinkText.NONE),
+                styleNodeByPluginType = styleNodeByPluginType.getOrElse(false),
             )
             val mermaidGraph = Mermaid.generateGraph(dependencies.get(), graphOptions)
             ReadmeWriter.appendOrOverwriteGraph(

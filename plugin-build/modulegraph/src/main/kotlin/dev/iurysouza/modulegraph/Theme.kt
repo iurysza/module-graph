@@ -1,5 +1,6 @@
 package dev.iurysouza.modulegraph
 
+import dev.iurysouza.modulegraph.gradle.PluginType
 import java.io.Serializable as JavaSerializable
 import kotlinx.serialization.Serializable
 
@@ -36,8 +37,10 @@ sealed class Theme(val name: String) : JavaSerializable {
     data class BASE(
         var themeVariables: Map<String, String> = emptyMap(),
         var focusColor: FocusColor = DEFAULT_FOCUS_COLOR,
+        var customPluginsColors: List<PluginType> = emptyList(),
     ) : Theme("base")
 }
+
 fun Theme.focusColor(): FocusColor = when (this) {
     is Theme.BASE -> focusColor
     else -> DEFAULT_FOCUS_COLOR

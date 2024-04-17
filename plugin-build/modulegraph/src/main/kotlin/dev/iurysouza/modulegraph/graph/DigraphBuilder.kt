@@ -47,6 +47,7 @@ internal object DigraphBuilder {
                     fullName = sourceFullName,
                     isFocused = sourceMatches && regexFilterSet,
                     config = ModuleConfig.none(),
+                    plugin = source.plugin,
                     parent = sourceFullName.getParent(),
                 ),
                 target = ModuleNode(
@@ -54,6 +55,7 @@ internal object DigraphBuilder {
                     fullName = targetFullName,
                     isFocused = targetMatches && regexFilterSet,
                     config = target.configName?.let { ModuleConfig(it) } ?: ModuleConfig.none(),
+                    plugin = target.plugin,
                     parent = targetFullName.getParent(),
                 ),
             )

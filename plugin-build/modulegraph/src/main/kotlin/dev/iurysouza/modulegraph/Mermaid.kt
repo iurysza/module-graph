@@ -15,7 +15,7 @@ internal object Mermaid {
         val configCode = ConfigCodeBuilder.build(theme)
         val subgraphCode = SubgraphBuilder.build(digraph, graphOptions.showFullPath)
         val digraphCode = DigraphCodeBuilder.build(digraph, linkText)
-        val highlightCode = FocusNodeStyleBuilder.build(digraph, theme)
+        val highlightCode = NodeStyleBuilder.build(digraph, graphOptions)
 
         return buildString {
             append("```mermaid")
@@ -54,4 +54,5 @@ data class GraphOptions(
     val orientation: Orientation,
     val pattern: Regex? = null,
     val showFullPath: Boolean,
+    val styleNodeByPluginType: Boolean,
 )
