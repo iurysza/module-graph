@@ -17,6 +17,10 @@ graph TB
   end
   gama --> zeta
 
+classDef java fill:#C3E88D,stroke:#fff,stroke-width:2px,color:#fff;
+class gama java
+class zeta java
+
 classDef focus fill:#F5A622,stroke:#fff,stroke-width:2px,color:#fff;
 class gama focus
 ```
