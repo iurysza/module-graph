@@ -74,12 +74,14 @@ fun withGraphOptions(
     focusedModulesRegex: String? = null,
     showFullPath: Boolean = false,
     theme: Theme = Theme.NEUTRAL,
+    customizeNodeByPluginType: Boolean = false,
 ) = GraphOptions(
     linkText = linkText,
+    theme = theme,
     orientation = orientation,
     pattern = focusedModulesRegex?.toRegex(),
     showFullPath = showFullPath,
-    theme = theme,
+    customizeNodeByPluginType = customizeNodeByPluginType,
 )
 
 internal val liveMatchReconstructedModel = mapOf(

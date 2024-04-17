@@ -54,8 +54,7 @@ class MermaidGraphTest {
     @Test
     fun `Given the LiveMatch App graph model, when generating graph, then it returns expected mermaid code`() {
         val graphModel = liveMatchReconstructedModel
-        val graphOptions = GraphOptions(
-            linkText = LinkText.NONE,
+        val graphOptions = withGraphOptions(
             theme = Theme.BASE(
                 mapOf(
                     "primaryTextColor" to "#fff",
@@ -66,7 +65,6 @@ class MermaidGraphTest {
                     "fontSize" to "12px",
                 ),
             ),
-            showFullPath = false,
             orientation = Orientation.LEFT_TO_RIGHT,
         )
 
@@ -78,8 +76,7 @@ class MermaidGraphTest {
     @Test
     fun `Given a module graph with theme settings, when generating graph, proper mermaid code is created`() {
         val graphModel = aModuleGraph()
-        val graphOptions = GraphOptions(
-            linkText = LinkText.NONE,
+        val graphOptions = withGraphOptions(
             theme = Theme.BASE(
                 focusColor = "#F5A622",
                 themeVariables = mapOf(
@@ -91,9 +88,8 @@ class MermaidGraphTest {
                     "fontSize" to "12px",
                 ),
             ),
-            showFullPath = false,
-            pattern = ".*gama.*".toRegex(),
             orientation = Orientation.TOP_TO_BOTTOM,
+            focusedModulesRegex = ".*gama.*",
         )
 
         val mermaidGraph = Mermaid.generateGraph(graphModel, graphOptions)
