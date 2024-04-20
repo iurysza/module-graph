@@ -1,7 +1,7 @@
 package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.*
-import dev.iurysouza.modulegraph.gradle.Dependency
+import dev.iurysouza.modulegraph.gradle.Module
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -11,9 +11,9 @@ class MermaidGraphTest {
     @Test
     fun `Focused modules adds custom styling to mermaid code`() {
         val reconstructedModel = mapOf(
-            Dependency(":example") to listOf(
-                Dependency(path = ":groupFolder:example2", configName = "implementation"),
-                Dependency(path = ":groupFolder:example3", configName = "implementation"),
+            Module(":example") to listOf(
+                Module(path = ":groupFolder:example2", configName = "implementation"),
+                Module(path = ":groupFolder:example3", configName = "implementation"),
             ),
         )
         val focusColor = "#F5A622"
@@ -44,7 +44,7 @@ class MermaidGraphTest {
 
     @Test
     fun `Given a single module project, when generating graph, then it throws IllegalArgumentException`() {
-        val graphModel = mapOf(Dependency(":example") to listOf<Dependency>())
+        val graphModel = mapOf(Module(":example") to listOf<Module>())
 
         assertThrows<IllegalArgumentException> {
             Mermaid.generateGraph(graphModel, withGraphOptions())

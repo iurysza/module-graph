@@ -2,11 +2,11 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.GraphOptions
 import dev.iurysouza.modulegraph.LinkText
-import dev.iurysouza.modulegraph.gradle.Dependency
+import dev.iurysouza.modulegraph.gradle.Module
 
 internal object DigraphBuilder {
     fun build(
-        graphModel: Map<Dependency, List<Dependency>>,
+        graphModel: Map<Module, List<Module>>,
         graphOptions: GraphOptions,
     ): List<DigraphModel> {
         throwIfSingleProject(graphModel)
@@ -25,8 +25,8 @@ internal object DigraphBuilder {
 
     private fun buildModel(
         graphOptions: GraphOptions,
-        source: Dependency,
-        target: Dependency? = null,
+        source: Module,
+        target: Module? = null,
     ): DigraphModel? {
         val pattern = graphOptions.pattern
         val showFullPath = graphOptions.showFullPath
@@ -47,7 +47,7 @@ internal object DigraphBuilder {
                     fullName = sourceFullName,
                     isFocused = sourceMatches && regexFilterSet,
                     config = ModuleConfig.none(),
-                    plugin = source.plugin,
+                    type = source.type,
                     parent = sourceFullName.getParent(),
                 ),
                 target = ModuleNode(
@@ -55,7 +55,7 @@ internal object DigraphBuilder {
                     fullName = targetFullName,
                     isFocused = targetMatches && regexFilterSet,
                     config = target.configName?.let { ModuleConfig(it) } ?: ModuleConfig.none(),
-                    plugin = target.plugin,
+                    type = target.type,
                     parent = targetFullName.getParent(),
                 ),
             )
@@ -71,7 +71,7 @@ internal object DigraphBuilder {
         }
     }
 
-    private fun throwIfSingleProject(graphModel: Map<Dependency, List<Dependency>>) {
+    private fun throwIfSingleProject(graphModel: Map<Module, List<Module>>) {
         val dependencies = graphModel.values.flatten().distinctBy { it.path }.size
         require(graphModel.keys.size > 1 || dependencies > 0) {
             """

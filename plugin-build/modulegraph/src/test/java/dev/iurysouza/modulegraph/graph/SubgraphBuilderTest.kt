@@ -1,7 +1,7 @@
 package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.Orientation
-import dev.iurysouza.modulegraph.gradle.Dependency
+import dev.iurysouza.modulegraph.gradle.Module
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -10,8 +10,8 @@ class SubgraphBuilderTest {
     @Test
     fun `Subgraph with default options produces correct structure`() {
         val graphModel = mapOf(
-            Dependency(":example") to listOf(
-                Dependency(
+            Module(":example") to listOf(
+                Module(
                     path = ":groupFolder:example2",
                     configName = "implementation",
                 ),

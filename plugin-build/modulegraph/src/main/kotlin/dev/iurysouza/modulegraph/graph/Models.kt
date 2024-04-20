@@ -1,6 +1,6 @@
 package dev.iurysouza.modulegraph.graph
 
-import dev.iurysouza.modulegraph.gradle.PluginType
+import dev.iurysouza.modulegraph.ModuleType
 
 internal data class DigraphModel(
     val source: ModuleNode,
@@ -12,7 +12,7 @@ internal data class ModuleNode(
     val isFocused: Boolean,
     val fullName: String,
     val config: ModuleConfig,
-    val plugin: PluginType,
+    val type: ModuleType,
     val parent: String,
 )
 

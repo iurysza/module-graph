@@ -15,7 +15,7 @@ moduleGraphConfig {
     showFullPath.set(false)
     orientation.set(Orientation.TOP_TO_BOTTOM)
     linkText.set(LinkText.NONE)
-    setStyleByPluginType.set(true)
+    setStyleByModuleType.set(true)
     theme.set(
         Theme.BASE(
             themeVariables = mapOf(

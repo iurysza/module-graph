@@ -1,42 +1,42 @@
 package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.*
-import dev.iurysouza.modulegraph.gradle.Dependency
+import dev.iurysouza.modulegraph.gradle.Module
 
 internal fun aModuleGraph() = mapOf(
-    Dependency(
+    Module(
         path = ":sample:zeta",
     ) to listOf(
-        Dependency(
+        Module(
             path = ":sample:beta",
             configName = "implementation",
         ),
     ),
-    Dependency(
+    Module(
         path = ":sample:alpha",
     ) to listOf(
-        Dependency(
+        Module(
             path = ":sample:zeta",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":sample:beta",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":sample:container:gama",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":sample:container:delta",
             configName = "implementation",
         ),
     ),
-    Dependency(
+    Module(
         path = ":sample:container:gama",
     )
         to listOf(
-            Dependency(
+            Module(
                 path = ":sample:zeta",
                 configName = "implementation",
             ),
@@ -74,107 +74,107 @@ fun withGraphOptions(
     focusedModulesRegex: String? = null,
     showFullPath: Boolean = false,
     theme: Theme = Theme.NEUTRAL,
-    setStyleByPluginType: Boolean = false,
+    setStyleByModuleType: Boolean = false,
 ) = GraphOptions(
     linkText = linkText,
     theme = theme,
     orientation = orientation,
     pattern = focusedModulesRegex?.toRegex(),
     showFullPath = showFullPath,
-    setStyleByPluginType = setStyleByPluginType,
+    setStyleByModuleType = setStyleByModuleType,
 )
 
 internal val liveMatchReconstructedModel = mapOf(
-    Dependency(":core:footballinfo") to listOf(
-        Dependency(
+    Module(":core:footballinfo") to listOf(
+        Module(
             path = ":core:common",
             configName = "implementation",
         ),
     ),
-    Dependency(":features:match-day") to listOf(
-        Dependency(
+    Module(":features:match-day") to listOf(
+        Module(
             path = ":core:common",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":core:footballinfo",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":core:design-system",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":core:reddit",
             configName = "implementation",
         ),
     ),
-    Dependency(":features:match-thread") to listOf(
-        Dependency(
+    Module(":features:match-thread") to listOf(
+        Module(
             path = ":core:webview-to-native-player",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":core:common",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":core:footballinfo",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":core:design-system",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":core:reddit",
             configName = "implementation",
         ),
     ),
-    Dependency(":app:playground") to listOf(
-        Dependency(
+    Module(":app:playground") to listOf(
+        Module(
             path = ":core:webview-to-native-player",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":features:match-thread",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":core:design-system",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":features:match-day",
             configName = "testImplementation",
         ),
     ),
-    Dependency(":core:reddit") to listOf(
-        Dependency(
+    Module(":core:reddit") to listOf(
+        Module(
             path = ":core:common",
             configName = "implementation",
         ),
     ),
-    Dependency(":core:webview-to-native-player") to listOf(
-        Dependency(
+    Module(":core:webview-to-native-player") to listOf(
+        Module(
             path = ":core:common",
             configName = "implementation",
         ),
     ),
-    Dependency(":app:main") to listOf(
-        Dependency(
+    Module(":app:main") to listOf(
+        Module(
             path = ":features:match-thread",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":features:match-day",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":core:design-system",
             configName = "implementation",
         ),
-        Dependency(
+        Module(
             path = ":core:common",
             configName = "implementation",
         ),
@@ -230,173 +230,173 @@ internal val expectedLiveMatchGraph = """
 """.trimMargin()
 
 internal val fullLiveMatchGraph = mapOf(
-    Dependency(":core:footballinfo") to listOf(
-        Dependency(":core:footballinfo", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:common", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:footballinfo", "debugAndroidTestRuntimeClasspath"),
-        Dependency(":core:footballinfo", "debugUnitTestCompileClasspath"),
-        Dependency(":core:common", "debugUnitTestCompileClasspath"),
-        Dependency(":core:footballinfo", "debugUnitTestRuntimeClasspath"),
-        Dependency(":core:common", "implementation"),
-        Dependency(":core:footballinfo", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:common", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:footballinfo", "releaseUnitTestRuntimeClasspath"),
+    Module(":core:footballinfo") to listOf(
+        Module(":core:footballinfo", "debugAndroidTestCompileClasspath"),
+        Module(":core:common", "debugAndroidTestCompileClasspath"),
+        Module(":core:footballinfo", "debugAndroidTestRuntimeClasspath"),
+        Module(":core:footballinfo", "debugUnitTestCompileClasspath"),
+        Module(":core:common", "debugUnitTestCompileClasspath"),
+        Module(":core:footballinfo", "debugUnitTestRuntimeClasspath"),
+        Module(":core:common", "implementation"),
+        Module(":core:footballinfo", "releaseUnitTestCompileClasspath"),
+        Module(":core:common", "releaseUnitTestCompileClasspath"),
+        Module(":core:footballinfo", "releaseUnitTestRuntimeClasspath"),
     ),
-    Dependency(":features:match-day") to listOf(
-        Dependency(":features:match-day", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:common", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:footballinfo", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:design-system", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:reddit", "debugAndroidTestCompileClasspath"),
-        Dependency(":features:match-day", "debugAndroidTestRuntimeClasspath"),
-        Dependency(":features:match-day", "debugUnitTestCompileClasspath"),
-        Dependency(":core:common", "debugUnitTestCompileClasspath"),
-        Dependency(":core:footballinfo", "debugUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "debugUnitTestCompileClasspath"),
-        Dependency(":core:reddit", "debugUnitTestCompileClasspath"),
-        Dependency(":features:match-day", "debugUnitTestRuntimeClasspath"),
-        Dependency(":core:common", "implementation"),
-        Dependency(":core:footballinfo", "implementation"),
-        Dependency(":core:design-system", "implementation"),
-        Dependency(":core:reddit", "implementation"),
-        Dependency(":features:match-day", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:common", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:footballinfo", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:reddit", "releaseUnitTestCompileClasspath"),
-        Dependency(":features:match-day", "releaseUnitTestRuntimeClasspath"),
+    Module(":features:match-day") to listOf(
+        Module(":features:match-day", "debugAndroidTestCompileClasspath"),
+        Module(":core:common", "debugAndroidTestCompileClasspath"),
+        Module(":core:footballinfo", "debugAndroidTestCompileClasspath"),
+        Module(":core:design-system", "debugAndroidTestCompileClasspath"),
+        Module(":core:reddit", "debugAndroidTestCompileClasspath"),
+        Module(":features:match-day", "debugAndroidTestRuntimeClasspath"),
+        Module(":features:match-day", "debugUnitTestCompileClasspath"),
+        Module(":core:common", "debugUnitTestCompileClasspath"),
+        Module(":core:footballinfo", "debugUnitTestCompileClasspath"),
+        Module(":core:design-system", "debugUnitTestCompileClasspath"),
+        Module(":core:reddit", "debugUnitTestCompileClasspath"),
+        Module(":features:match-day", "debugUnitTestRuntimeClasspath"),
+        Module(":core:common", "implementation"),
+        Module(":core:footballinfo", "implementation"),
+        Module(":core:design-system", "implementation"),
+        Module(":core:reddit", "implementation"),
+        Module(":features:match-day", "releaseUnitTestCompileClasspath"),
+        Module(":core:common", "releaseUnitTestCompileClasspath"),
+        Module(":core:footballinfo", "releaseUnitTestCompileClasspath"),
+        Module(":core:design-system", "releaseUnitTestCompileClasspath"),
+        Module(":core:reddit", "releaseUnitTestCompileClasspath"),
+        Module(":features:match-day", "releaseUnitTestRuntimeClasspath"),
     ),
-    Dependency(":features:match-day") to listOf(
-        Dependency(":features:match-day", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:common", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:footballinfo", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:design-system", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:reddit", "debugAndroidTestCompileClasspath"),
-        Dependency(":features:match-day", "debugAndroidTestRuntimeClasspath"),
-        Dependency(":features:match-day", "debugUnitTestCompileClasspath"),
-        Dependency(":core:common", "debugUnitTestCompileClasspath"),
-        Dependency(":core:footballinfo", "debugUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "debugUnitTestCompileClasspath"),
-        Dependency(":core:reddit", "debugUnitTestCompileClasspath"),
-        Dependency(":features:match-day", "debugUnitTestRuntimeClasspath"),
-        Dependency(":core:common", "implementation"),
-        Dependency(":core:footballinfo", "implementation"),
-        Dependency(":core:design-system", "implementation"),
-        Dependency(":core:reddit", "implementation"),
-        Dependency(":features:match-day", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:common", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:footballinfo", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:reddit", "releaseUnitTestCompileClasspath"),
-        Dependency(":features:match-day", "releaseUnitTestRuntimeClasspath"),
+    Module(":features:match-day") to listOf(
+        Module(":features:match-day", "debugAndroidTestCompileClasspath"),
+        Module(":core:common", "debugAndroidTestCompileClasspath"),
+        Module(":core:footballinfo", "debugAndroidTestCompileClasspath"),
+        Module(":core:design-system", "debugAndroidTestCompileClasspath"),
+        Module(":core:reddit", "debugAndroidTestCompileClasspath"),
+        Module(":features:match-day", "debugAndroidTestRuntimeClasspath"),
+        Module(":features:match-day", "debugUnitTestCompileClasspath"),
+        Module(":core:common", "debugUnitTestCompileClasspath"),
+        Module(":core:footballinfo", "debugUnitTestCompileClasspath"),
+        Module(":core:design-system", "debugUnitTestCompileClasspath"),
+        Module(":core:reddit", "debugUnitTestCompileClasspath"),
+        Module(":features:match-day", "debugUnitTestRuntimeClasspath"),
+        Module(":core:common", "implementation"),
+        Module(":core:footballinfo", "implementation"),
+        Module(":core:design-system", "implementation"),
+        Module(":core:reddit", "implementation"),
+        Module(":features:match-day", "releaseUnitTestCompileClasspath"),
+        Module(":core:common", "releaseUnitTestCompileClasspath"),
+        Module(":core:footballinfo", "releaseUnitTestCompileClasspath"),
+        Module(":core:design-system", "releaseUnitTestCompileClasspath"),
+        Module(":core:reddit", "releaseUnitTestCompileClasspath"),
+        Module(":features:match-day", "releaseUnitTestRuntimeClasspath"),
     ),
-    Dependency(":features:match-thread") to listOf(
-        Dependency(":features:match-thread", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:webview-to-native-player", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:common", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:footballinfo", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:design-system", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:reddit", "debugAndroidTestCompileClasspath"),
-        Dependency(":features:match-thread", "debugAndroidTestRuntimeClasspath"),
-        Dependency(":features:match-thread", "debugUnitTestCompileClasspath"),
-        Dependency(":core:webview-to-native-player", "debugUnitTestCompileClasspath"),
-        Dependency(":core:common", "debugUnitTestCompileClasspath"),
-        Dependency(":core:footballinfo", "debugUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "debugUnitTestCompileClasspath"),
-        Dependency(":core:reddit", "debugUnitTestCompileClasspath"),
-        Dependency(":features:match-thread", "debugUnitTestRuntimeClasspath"),
-        Dependency(":core:webview-to-native-player", "implementation"),
-        Dependency(":core:common", "implementation"),
-        Dependency(":core:footballinfo", "implementation"),
-        Dependency(":core:design-system", "implementation"),
-        Dependency(":core:reddit", "implementation"),
-        Dependency(":features:match-thread", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:webview-to-native-player", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:common", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:footballinfo", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:reddit", "releaseUnitTestCompileClasspath"),
-        Dependency(":features:match-thread", "releaseUnitTestRuntimeClasspath"),
+    Module(":features:match-thread") to listOf(
+        Module(":features:match-thread", "debugAndroidTestCompileClasspath"),
+        Module(":core:webview-to-native-player", "debugAndroidTestCompileClasspath"),
+        Module(":core:common", "debugAndroidTestCompileClasspath"),
+        Module(":core:footballinfo", "debugAndroidTestCompileClasspath"),
+        Module(":core:design-system", "debugAndroidTestCompileClasspath"),
+        Module(":core:reddit", "debugAndroidTestCompileClasspath"),
+        Module(":features:match-thread", "debugAndroidTestRuntimeClasspath"),
+        Module(":features:match-thread", "debugUnitTestCompileClasspath"),
+        Module(":core:webview-to-native-player", "debugUnitTestCompileClasspath"),
+        Module(":core:common", "debugUnitTestCompileClasspath"),
+        Module(":core:footballinfo", "debugUnitTestCompileClasspath"),
+        Module(":core:design-system", "debugUnitTestCompileClasspath"),
+        Module(":core:reddit", "debugUnitTestCompileClasspath"),
+        Module(":features:match-thread", "debugUnitTestRuntimeClasspath"),
+        Module(":core:webview-to-native-player", "implementation"),
+        Module(":core:common", "implementation"),
+        Module(":core:footballinfo", "implementation"),
+        Module(":core:design-system", "implementation"),
+        Module(":core:reddit", "implementation"),
+        Module(":features:match-thread", "releaseUnitTestCompileClasspath"),
+        Module(":core:webview-to-native-player", "releaseUnitTestCompileClasspath"),
+        Module(":core:common", "releaseUnitTestCompileClasspath"),
+        Module(":core:footballinfo", "releaseUnitTestCompileClasspath"),
+        Module(":core:design-system", "releaseUnitTestCompileClasspath"),
+        Module(":core:reddit", "releaseUnitTestCompileClasspath"),
+        Module(":features:match-thread", "releaseUnitTestRuntimeClasspath"),
     ),
-    Dependency(":app:playground") to listOf(
-        Dependency(":app:playground", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:webview-to-native-player", "debugAndroidTestCompileClasspath"),
-        Dependency(":features:match-thread", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:design-system", "debugAndroidTestCompileClasspath"),
-        Dependency(":app:playground", "debugUnitTestCompileClasspath"),
-        Dependency(":core:webview-to-native-player", "debugUnitTestCompileClasspath"),
-        Dependency(":features:match-thread", "debugUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "debugUnitTestCompileClasspath"),
-        Dependency(":app:playground", "debugUnitTestRuntimeClasspath"),
-        Dependency(":core:webview-to-native-player", "implementation"),
-        Dependency(":features:match-thread", "implementation"),
-        Dependency(":core:design-system", "implementation"),
-        Dependency(":app:playground", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:webview-to-native-player", "releaseUnitTestCompileClasspath"),
-        Dependency(":features:match-thread", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "releaseUnitTestCompileClasspath"),
-        Dependency(":app:playground", "releaseUnitTestRuntimeClasspath"),
-        Dependency(":features:match-day", "testImplementation"),
+    Module(":app:playground") to listOf(
+        Module(":app:playground", "debugAndroidTestCompileClasspath"),
+        Module(":core:webview-to-native-player", "debugAndroidTestCompileClasspath"),
+        Module(":features:match-thread", "debugAndroidTestCompileClasspath"),
+        Module(":core:design-system", "debugAndroidTestCompileClasspath"),
+        Module(":app:playground", "debugUnitTestCompileClasspath"),
+        Module(":core:webview-to-native-player", "debugUnitTestCompileClasspath"),
+        Module(":features:match-thread", "debugUnitTestCompileClasspath"),
+        Module(":core:design-system", "debugUnitTestCompileClasspath"),
+        Module(":app:playground", "debugUnitTestRuntimeClasspath"),
+        Module(":core:webview-to-native-player", "implementation"),
+        Module(":features:match-thread", "implementation"),
+        Module(":core:design-system", "implementation"),
+        Module(":app:playground", "releaseUnitTestCompileClasspath"),
+        Module(":core:webview-to-native-player", "releaseUnitTestCompileClasspath"),
+        Module(":features:match-thread", "releaseUnitTestCompileClasspath"),
+        Module(":core:design-system", "releaseUnitTestCompileClasspath"),
+        Module(":app:playground", "releaseUnitTestRuntimeClasspath"),
+        Module(":features:match-day", "testImplementation"),
     ),
-    Dependency(":core:reddit") to listOf(
-        Dependency(":core:reddit", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:common", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:reddit", "debugAndroidTestRuntimeClasspath"),
-        Dependency(":core:reddit", "debugUnitTestCompileClasspath"),
-        Dependency(":core:common", "debugUnitTestCompileClasspath"),
-        Dependency(":core:reddit", "debugUnitTestRuntimeClasspath"),
-        Dependency(":core:common", "implementation"),
-        Dependency(":core:reddit", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:common", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:reddit", "releaseUnitTestRuntimeClasspath"),
+    Module(":core:reddit") to listOf(
+        Module(":core:reddit", "debugAndroidTestCompileClasspath"),
+        Module(":core:common", "debugAndroidTestCompileClasspath"),
+        Module(":core:reddit", "debugAndroidTestRuntimeClasspath"),
+        Module(":core:reddit", "debugUnitTestCompileClasspath"),
+        Module(":core:common", "debugUnitTestCompileClasspath"),
+        Module(":core:reddit", "debugUnitTestRuntimeClasspath"),
+        Module(":core:common", "implementation"),
+        Module(":core:reddit", "releaseUnitTestCompileClasspath"),
+        Module(":core:common", "releaseUnitTestCompileClasspath"),
+        Module(":core:reddit", "releaseUnitTestRuntimeClasspath"),
     ),
-    Dependency(":core:webview-to-native-player") to listOf(
-        Dependency(":core:webview-to-native-player", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:webview-to-native-player", "debugAndroidTestRuntimeClasspath"),
-        Dependency(":core:webview-to-native-player", "debugUnitTestCompileClasspath"),
-        Dependency(":core:webview-to-native-player", "debugUnitTestRuntimeClasspath"),
-        Dependency(":core:common", "implementation"),
-        Dependency(":core:webview-to-native-player", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:webview-to-native-player", "releaseUnitTestRuntimeClasspath"),
+    Module(":core:webview-to-native-player") to listOf(
+        Module(":core:webview-to-native-player", "debugAndroidTestCompileClasspath"),
+        Module(":core:webview-to-native-player", "debugAndroidTestRuntimeClasspath"),
+        Module(":core:webview-to-native-player", "debugUnitTestCompileClasspath"),
+        Module(":core:webview-to-native-player", "debugUnitTestRuntimeClasspath"),
+        Module(":core:common", "implementation"),
+        Module(":core:webview-to-native-player", "releaseUnitTestCompileClasspath"),
+        Module(":core:webview-to-native-player", "releaseUnitTestRuntimeClasspath"),
     ),
-    Dependency(":app:main") to listOf(
-        Dependency(":app:main", "debugAndroidTestCompileClasspath"),
-        Dependency(":features:match-thread", "debugAndroidTestCompileClasspath"),
-        Dependency(":features:match-day", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:design-system", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:common", "debugAndroidTestCompileClasspath"),
-        Dependency(":app:main", "debugUnitTestCompileClasspath"),
-        Dependency(":features:match-thread", "debugUnitTestCompileClasspath"),
-        Dependency(":features:match-day", "debugUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "debugUnitTestCompileClasspath"),
-        Dependency(":core:common", "debugUnitTestCompileClasspath"),
-        Dependency(":app:main", "debugUnitTestRuntimeClasspath"),
-        Dependency(":features:match-thread", "implementation"),
-        Dependency(":features:match-day", "implementation"),
-        Dependency(":core:design-system", "implementation"),
-        Dependency(":core:common", "implementation"),
-        Dependency(":app:main", "releaseUnitTestCompileClasspath"),
-        Dependency(":features:match-thread", "releaseUnitTestCompileClasspath"),
-        Dependency(":features:match-day", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:common", "releaseUnitTestCompileClasspath"),
-        Dependency(":app:main", "releaseUnitTestRuntimeClasspath"),
+    Module(":app:main") to listOf(
+        Module(":app:main", "debugAndroidTestCompileClasspath"),
+        Module(":features:match-thread", "debugAndroidTestCompileClasspath"),
+        Module(":features:match-day", "debugAndroidTestCompileClasspath"),
+        Module(":core:design-system", "debugAndroidTestCompileClasspath"),
+        Module(":core:common", "debugAndroidTestCompileClasspath"),
+        Module(":app:main", "debugUnitTestCompileClasspath"),
+        Module(":features:match-thread", "debugUnitTestCompileClasspath"),
+        Module(":features:match-day", "debugUnitTestCompileClasspath"),
+        Module(":core:design-system", "debugUnitTestCompileClasspath"),
+        Module(":core:common", "debugUnitTestCompileClasspath"),
+        Module(":app:main", "debugUnitTestRuntimeClasspath"),
+        Module(":features:match-thread", "implementation"),
+        Module(":features:match-day", "implementation"),
+        Module(":core:design-system", "implementation"),
+        Module(":core:common", "implementation"),
+        Module(":app:main", "releaseUnitTestCompileClasspath"),
+        Module(":features:match-thread", "releaseUnitTestCompileClasspath"),
+        Module(":features:match-day", "releaseUnitTestCompileClasspath"),
+        Module(":core:design-system", "releaseUnitTestCompileClasspath"),
+        Module(":core:common", "releaseUnitTestCompileClasspath"),
+        Module(":app:main", "releaseUnitTestRuntimeClasspath"),
     ),
-    Dependency(":core:common") to listOf(
-        Dependency(":core:common", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:common", "debugAndroidTestRuntimeClasspath"),
-        Dependency(":core:common", "debugUnitTestCompileClasspath"),
-        Dependency(":core:common", "debugUnitTestRuntimeClasspath"),
-        Dependency(":core:common", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:common", "releaseUnitTestRuntimeClasspath"),
+    Module(":core:common") to listOf(
+        Module(":core:common", "debugAndroidTestCompileClasspath"),
+        Module(":core:common", "debugAndroidTestRuntimeClasspath"),
+        Module(":core:common", "debugUnitTestCompileClasspath"),
+        Module(":core:common", "debugUnitTestRuntimeClasspath"),
+        Module(":core:common", "releaseUnitTestCompileClasspath"),
+        Module(":core:common", "releaseUnitTestRuntimeClasspath"),
     ),
-    Dependency(":core:design-system") to listOf(
-        Dependency(":core:design-system", "debugAndroidTestCompileClasspath"),
-        Dependency(":core:design-system", "debugAndroidTestRuntimeClasspath"),
-        Dependency(":core:design-system", "debugUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "debugUnitTestRuntimeClasspath"),
-        Dependency(":core:design-system", "releaseUnitTestCompileClasspath"),
-        Dependency(":core:design-system", "releaseUnitTestRuntimeClasspath"),
+    Module(":core:design-system") to listOf(
+        Module(":core:design-system", "debugAndroidTestCompileClasspath"),
+        Module(":core:design-system", "debugAndroidTestRuntimeClasspath"),
+        Module(":core:design-system", "debugUnitTestCompileClasspath"),
+        Module(":core:design-system", "debugUnitTestRuntimeClasspath"),
+        Module(":core:design-system", "releaseUnitTestCompileClasspath"),
+        Module(":core:design-system", "releaseUnitTestRuntimeClasspath"),
     ),
 )
 internal val liveMatchMermaidGraphWithConfigurations = """

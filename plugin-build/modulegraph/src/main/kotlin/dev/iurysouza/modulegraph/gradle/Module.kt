@@ -1,15 +1,12 @@
 package dev.iurysouza.modulegraph.gradle
 
+import dev.iurysouza.modulegraph.ModuleType
 import java.io.Serializable
 
-/**
- * Represents a dependency on a project.
- * Contains the name of the configuration to which the dependency belongs.
- */
-internal data class Dependency(
+internal data class Module(
     val path: String,
     val configName: String? = null,
-    val plugin: PluginType = PluginType.Java(),
+    val type: ModuleType = ModuleType.Java(),
 ) : Serializable {
     companion object {
         private const val serialVersionUID: Long = 46465844

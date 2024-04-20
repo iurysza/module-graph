@@ -1,6 +1,7 @@
 package dev.iurysouza.modulegraph.gradle
 
 import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.getModuleType
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
 
@@ -8,24 +9,23 @@ internal fun Project.parseProjectStructure(
     excludedConfigurations: String?,
     excludedModules: String?,
     theme: Theme,
-): HashMap<Dependency, List<Dependency>> {
-    val dependencies = hashMapOf<Dependency, List<Dependency>>()
+): HashMap<Module, List<Module>> {
+    val dependencies = hashMapOf<Module, List<Module>>()
 
     val configExclusionPattern = excludedConfigurations?.let { ExclusionStrategy.Configuration(it) }
     val projectExclusionPattern = excludedModules?.let { ExclusionStrategy.Project(it) }
 
-    val customPlugins = if (theme is Theme.BASE) {
-        theme.customPluginsColors
-    } else {
-        emptyList()
+    val customModuleTypes = when (theme) {
+        is Theme.BASE -> theme.moduleTypes
+        else -> emptyList()
     }
     project.allprojects
         .asSequence()
         .filterNot { projectExclusionPattern.matches(it.path) }
         .forEach { sourceProject ->
-            val sourceDependency = Dependency(
+            val sourceModule = Module(
                 path = sourceProject.path,
-                plugin = sourceProject.identifyPlugin(customPlugins),
+                type = sourceProject.getModuleType(customModuleTypes),
             )
             sourceProject.configurations.forEach { config ->
                 config.dependencies
@@ -35,12 +35,12 @@ internal fun Project.parseProjectStructure(
                     .filterNot { configExclusionPattern.matches(config.name) }
                     .filterNot { projectExclusionPattern.matches(it.path) }
                     .forEach { targetProject ->
-                        dependencies[sourceDependency] = dependencies.getOrDefault(sourceDependency, emptyList())
+                        dependencies[sourceModule] = dependencies.getOrDefault(sourceModule, emptyList())
                             .plus(
-                                Dependency(
+                                Module(
                                     path = targetProject.path,
                                     configName = config.name,
-                                    plugin = targetProject.identifyPlugin(customPlugins),
+                                    type = targetProject.getModuleType(customModuleTypes),
                                 ),
                             )
                     }

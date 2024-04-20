@@ -1,12 +1,12 @@
 package dev.iurysouza.modulegraph
 
-import dev.iurysouza.modulegraph.gradle.Dependency
+import dev.iurysouza.modulegraph.gradle.Module
 import dev.iurysouza.modulegraph.graph.*
 
 internal object Mermaid {
 
     fun generateGraph(
-        graphModel: Map<Dependency, List<Dependency>>,
+        graphModel: Map<Module, List<Module>>,
         graphOptions: GraphOptions,
     ): String {
         val (linkText, theme, orientation) = graphOptions
@@ -54,5 +54,5 @@ data class GraphOptions(
     val orientation: Orientation,
     val pattern: Regex? = null,
     val showFullPath: Boolean,
-    val setStyleByPluginType: Boolean,
+    val setStyleByModuleType: Boolean,
 )

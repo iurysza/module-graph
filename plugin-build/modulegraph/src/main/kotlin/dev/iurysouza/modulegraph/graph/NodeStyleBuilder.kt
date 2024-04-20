@@ -1,6 +1,7 @@
 package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.GraphOptions
+import dev.iurysouza.modulegraph.ModuleType
 import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.focusColor
 
@@ -44,14 +45,14 @@ internal object NodeStyleBuilder {
         options: GraphOptions,
         nodeList: List<ModuleNode>,
     ): String {
-        return if (options.setStyleByPluginType) {
+        return if (options.setStyleByModuleType) {
             """
                 |
                 |${
             nodeList
-                .distinctBy { it.plugin }
+                .distinctBy { it.type }
                 .joinToString("\n") {
-                    defineStyleClass(it.pluginClass(), it.plugin.color)
+                    defineStyleClass(it.pluginClass(), it.type.color)
                 }
             }
             """.trimMargin() + """
@@ -66,7 +67,10 @@ internal object NodeStyleBuilder {
     private fun defineStyleClass(className: String, color: String) =
         """classDef $className fill:$color,stroke:#fff,stroke-width:2px,color:#fff;"""
 
-    private fun ModuleNode.pluginClass() = plugin.id.split(".").takeLast(2).joinToString("_")
+    private fun ModuleNode.pluginClass(): String = when (type) {
+        is ModuleType.ReactNativeLibrary -> "react-native"
+        else -> type.id.split(".").takeLast(2).joinToString("-")
+    }
 
     private fun highlightFocusedNodes(
         nodeList: List<ModuleNode>,

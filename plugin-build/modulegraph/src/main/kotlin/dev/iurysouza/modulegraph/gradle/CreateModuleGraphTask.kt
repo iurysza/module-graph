@@ -4,6 +4,7 @@ import dev.iurysouza.modulegraph.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
+import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
@@ -60,12 +61,16 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val excludedModulesRegex: Property<String>
 
     @get:Input
-    @get:Option(option = "setStyleByPluginType", description = "Whether to customize the node by the plugin type")
+    @get:Option(option = "setStyleByModuleType", description = "Whether to customize the node by the plugin type")
     @get:Optional
-    abstract val setStyleByPluginType: Property<Boolean>
+    abstract val setStyleByModuleType: Property<Boolean>
 
     @get:OutputFile
     abstract val outputFile: RegularFileProperty
+
+    @get:Input
+    @get:Option(option = "graphModel", description = "The project graph model")
+    internal abstract val graphModel: MapProperty<Module, List<Module>>
 
     init {
         group = "Reporting"
@@ -81,14 +86,9 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 pattern = focusedNodesPattern.orNull?.let { Regex(it) },
                 showFullPath = showFullPath.getOrElse(false),
                 linkText = linkText.getOrElse(LinkText.NONE),
-                setStyleByPluginType = setStyleByPluginType.getOrElse(false),
+                setStyleByModuleType = setStyleByModuleType.getOrElse(false),
             )
-            val projectGraphModel = project.parseProjectStructure(
-                excludedConfigurations = excludedConfigurationsRegex.orNull,
-                excludedModules = excludedModulesRegex.orNull,
-                theme = graphOptions.theme,
-            )
-            val mermaidGraph = Mermaid.generateGraph(projectGraphModel, graphOptions)
+            val mermaidGraph = Mermaid.generateGraph(graphModel.get(), graphOptions)
             ReadmeWriter.appendOrOverwriteGraph(
                 mermaidGraph = mermaidGraph,
                 readMeSection = heading.get(),
