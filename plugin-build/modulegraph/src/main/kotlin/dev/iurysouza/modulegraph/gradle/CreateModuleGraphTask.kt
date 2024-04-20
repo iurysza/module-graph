@@ -61,11 +61,16 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val excludedModulesRegex: Property<String>
 
     @get:Input
-    @get:Option(option = "dependencies", description = "The project dependencies")
-    internal abstract val dependencies: MapProperty<String, List<Dependency>>
+    @get:Option(option = "setStyleByModuleType", description = "Whether to customize the node by the plugin type")
+    @get:Optional
+    abstract val setStyleByModuleType: Property<Boolean>
 
     @get:OutputFile
     abstract val outputFile: RegularFileProperty
+
+    @get:Input
+    @get:Option(option = "graphModel", description = "The project graph model")
+    internal abstract val graphModel: MapProperty<Module, List<Module>>
 
     init {
         group = "Reporting"
@@ -81,8 +86,9 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 pattern = focusedNodesPattern.orNull?.let { Regex(it) },
                 showFullPath = showFullPath.getOrElse(false),
                 linkText = linkText.getOrElse(LinkText.NONE),
+                setStyleByModuleType = setStyleByModuleType.getOrElse(false),
             )
-            val mermaidGraph = Mermaid.generateGraph(dependencies.get(), graphOptions)
+            val mermaidGraph = Mermaid.generateGraph(graphModel.get(), graphOptions)
             ReadmeWriter.appendOrOverwriteGraph(
                 mermaidGraph = mermaidGraph,
                 readMeSection = heading.get(),

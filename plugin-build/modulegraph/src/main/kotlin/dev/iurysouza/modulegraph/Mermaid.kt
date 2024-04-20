@@ -1,11 +1,12 @@
 package dev.iurysouza.modulegraph
 
+import dev.iurysouza.modulegraph.gradle.Module
 import dev.iurysouza.modulegraph.graph.*
 
 internal object Mermaid {
 
     fun generateGraph(
-        graphModel: Map<String, List<Dependency>>,
+        graphModel: Map<Module, List<Module>>,
         graphOptions: GraphOptions,
     ): String {
         val (linkText, theme, orientation) = graphOptions
@@ -14,7 +15,7 @@ internal object Mermaid {
         val configCode = ConfigCodeBuilder.build(theme)
         val subgraphCode = SubgraphBuilder.build(digraph, graphOptions.showFullPath)
         val digraphCode = DigraphCodeBuilder.build(digraph, linkText)
-        val highlightCode = FocusNodeStyleBuilder.build(digraph, theme)
+        val highlightCode = NodeStyleBuilder.build(digraph, graphOptions)
 
         return buildString {
             append("```mermaid")
@@ -53,4 +54,5 @@ data class GraphOptions(
     val orientation: Orientation,
     val pattern: Regex? = null,
     val showFullPath: Boolean,
+    val setStyleByModuleType: Boolean,
 )

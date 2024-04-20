@@ -53,6 +53,11 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
     val linkText: Property<LinkText> = objects.property(LinkText::class.java)
 
     /**
+     * Whether to use custom styling for module nodes based on the plugin type.
+     */
+    val setStyleByModuleType: Property<Boolean> = objects.property(Boolean::class.java)
+
+    /**
      * A Regex to match configurations that should be ignored.
      */
     val excludedConfigurationsRegex: Property<String> = objects.property(String::class.java)

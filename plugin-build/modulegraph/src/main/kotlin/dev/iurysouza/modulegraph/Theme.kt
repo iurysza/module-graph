@@ -36,8 +36,10 @@ sealed class Theme(val name: String) : JavaSerializable {
     data class BASE(
         var themeVariables: Map<String, String> = emptyMap(),
         var focusColor: FocusColor = DEFAULT_FOCUS_COLOR,
+        var moduleTypes: List<ModuleType> = emptyList(),
     ) : Theme("base")
 }
+
 fun Theme.focusColor(): FocusColor = when (this) {
     is Theme.BASE -> focusColor
     else -> DEFAULT_FOCUS_COLOR
