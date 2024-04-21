@@ -500,9 +500,9 @@ graph LR
     reddit --> common
     webview-to-native-player --> common
     footballinfo --> common
-    classDef android_library fill: #292B2B, stroke: #fff, stroke-width: 2px, color: #fff;
-    classDef app_compose fill: #82AAFF, stroke: #fff, stroke-width: 2px, color: #fff;
-    classDef android_application fill: #3CD483, stroke: #fff, stroke-width: 2px, color: #fff;
+    classDef android_library fill:#292B2B,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef app_compose fill:#82AAFF,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef android_application fill:#3CD483,stroke:#fff,stroke-width: 2px,color:#fff;
     class match-thread app_compose
     class webview-to-native-player android_library
     class common android_library
