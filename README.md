@@ -359,6 +359,133 @@ classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
 class match-day focus
 class reddit focus
 ```
+## Module type based styling
+
+This feature enables detecting and rendering modules based on their type, eg.: kotlin, java, android-library, kotlin-multiplatform, etc
+
+### Getting Started
+
+Just toggle this option on:
+
+```kotlin
+moduleGraphConfig {
+    //..
+    setStyleByPluginType.set(true)
+}
+```
+
+That's it. Just run the task and you'll get a graph identifying modules by their type.
+
+### Batteries included
+
+We have default styling for these module types:
+
+- React Native
+- Kotlin Multiplatform
+- Android Application
+- Android Library
+- Kotlin
+- Java Library
+- Java
+
+These supported plugins are pre-configured with a default color pattern, but can be customized further if needed. **You can also add you own module type.**
+
+### Customization
+
+The **supported plugins already have a default color pattern** , but you can also customize them via the `Theme.BASE` object.
+
+Additionally, you can detect and customize styling for **other plugins** by providing a `CustomPlugin` with an `id` and its color. The `ID` will be used to match a Gradle plugin applied to that module and will have higher precedence than all the others. For example, if you have a plugin defined with the `app.compose` id, you can pass it as `Custom("app.compose", "#0E0E0E")` and the graph will be generated accordingly.
+eg.:
+
+```kotlin
+import dev.iurysouza.modulegraph.ModuleType.*
+import dev.iurysouza.modulegraph.Theme
+
+moduleGraphConfig {
+  theme.set(
+    Theme.BASE(
+      moduleTypes = listOf(
+        Custom(id = "app.compose", color = "#0E0E0E"),
+        AndroidApp("#3CD483"),
+        AndroidLibrary("#292B2B"),
+      ),
+    ),
+  )
+}
+```
+
+Below is an example of how the module graph would show up:
+
+```mermaid
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {"lineColor":"#676767"},
+  }
+}%%
+
+graph LR
+  subgraph app
+    playground
+    main
+  end
+  subgraph core
+    webview-to-native-player
+    common
+    footballinfo
+    design-system
+    reddit
+  end
+  subgraph features
+    match-thread
+    match-day
+  end
+  match-thread --> webview-to-native-player
+  match-thread --> common
+  match-thread --> footballinfo
+  match-thread --> design-system
+  match-thread --> reddit
+  match-day --> common
+  match-day --> footballinfo
+  match-day --> design-system
+  match-day --> reddit
+  playground --> webview-to-native-player
+  playground --> match-thread
+  playground --> design-system
+  playground --> match-day
+  main --> match-thread
+  main --> match-day
+  main --> design-system
+  main --> common
+  reddit --> common
+  webview-to-native-player --> common
+  footballinfo --> common
+
+classDef android_library fill:#292B2B,stroke:#fff,stroke-width:2px,color:#fff;
+classDef app_compose fill:#82AAFF,stroke:#fff,stroke-width:2px,color:#fff;
+classDef android_application fill:#3CD483,stroke:#fff,stroke-width:2px,color:#fff;
+class match-thread app_compose
+class webview-to-native-player android_library
+class common android_library
+class footballinfo android_library
+class design-system app_compose
+class reddit android_library
+class match-day app_compose
+class playground android_application
+class main android_application
+
+```
+
+> [!IMPORTANT]
+> Modules can only have one type. So we're using a hardcoded precedence order for identfying them. Read more below.
+>
+
+### Precedence
+
+The system determines the module type based on the hierarchy of applied plugins. For instance:
+
+- A module with both `React Native` and `Android Library` will be identified as `React Native`.
+- A module with both `Android Library` and `Kotlin` will be identified as `Android Library`.
 
 ## Contributing 🤝
 
