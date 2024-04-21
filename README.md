@@ -62,9 +62,10 @@ plugins {
 ### Configuring the plugin
 
 ```groovy
+import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.ModuleType
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
-import dev.iurysouza.modulegraph.LinkText
 
 moduleGraphConfig {
     readmePath = "./README.md"
@@ -72,7 +73,9 @@ moduleGraphConfig {
     showFullPath = false // optional
     orientation = Orientation.LEFT_TO_RIGHT // optional
     linkText = LinkText.NONE // optional
-    excludeConfigurationNames = ["testImplementation"] // optional
+    excludedConfigurationsRegex = ".*test.*" // optional
+    excludedModulesRegex = ".*moduleName.*" // optional
+    focusedModulesRegex = ".*(projectName).*" // optional
     theme = Theme.NEUTRAL // optional
     // Or you can fully customize it by using the BASE theme:
     // theme = new Theme.BASE(
@@ -86,6 +89,23 @@ moduleGraphConfig {
     //     ],
     //     focusColor = "#F5A622" // Color of the focused nodes if any
     // )
+    // theme.set(
+    //     new Theme.BASE(
+    //         themeVariables: [
+    //             "primaryTextColor": "#F6F8FAff", // All text colors
+    //             "primaryColor": "#5a4f7c", // Node color
+    //             "primaryBorderColor": "#5a4f7c", // Node border color
+    //             "tertiaryColor": "#40375c", // Container box background
+    //             "lineColor": "#f5a623",
+    //             "fontSize": "12px"
+    //         ],
+    //         focusColor: "#F5A622", // Color of the focused nodes if any
+    //         moduleTypes: [
+    //             new ModuleType.AndroidLibrary("#2C4162")
+    //         ]
+    //     )
+    // )
+
 }
 ```
 
@@ -128,9 +148,10 @@ apply(plugin = "dev.iurysouza:modulegraph")
 ### Configuring the plugin
 
 ```kotlin
+import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.ModuleType
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
-import dev.iurysouza.modulegraph.LinkText
 
 moduleGraphConfig {
     readmePath.set("./README.md")
@@ -138,21 +159,25 @@ moduleGraphConfig {
     showFullPath.set(false) // optional
     orientation.set(Orientation.LEFT_TO_RIGHT) //optional
     linkText.set(LinkText.NONE) // optional
-    excludeConfigurationNames.set(listOf("testImplementation")) // optional
-    // focusedNodesPattern.set(".*(projectName).*") // optional
+    excludedConfigurationsRegex.set(".*test.*") // optional
+    excludedModulesRegex.set(".*moduleName.*") // optional
+    focusedModulesRegex.set(".*(projectName).*") // optional
     theme.set(Theme.NEUTRAL) // optional
     // or you can fully customize it by using the BASE theme:
     // Theme.BASE(
     //     themeVariables = mapOf(
-    //         "primaryTextColor" to "#F6F8FAff", // All text colors
-    //         "primaryColor" to "#5a4f7c", // Node color
-    //         "primaryBorderColor" to "#5a4f7c", // Node border color
+    //         "primaryTextColor" to "#F6F8FAff", // Text
+    //         "primaryColor" to "#5a4f7c", // Node
+    //         "primaryBorderColor" to "#5a4f7c", // Node border
     //         "tertiaryColor" to "#40375c", // Container box background
     //         "lineColor" to "#f5a623",
-    //         "fontSize" to "12px"
+    //         "fontSize" to "12px",
     //     ),
-    //     focusColor = "#F5A622" // Color of the focused nodes if any
-    // )
+    //     focusColor = "#F5A622",
+    //     moduleTypes = listOf(
+    //         ModuleType.AndroidLibrary("#2C4162"),
+    //     )
+    // ),
     // )
 }
 ```
@@ -168,7 +193,7 @@ To configure the Gradle Module Dependency Graph Plugin, you can set the followin
 
 Optional settings:
 
-- **focusedNodesPattern**: The Pattern (Regex) to match nodes in the graph (project names) that should be focused. By default, no nodes are focused.
+- **focusedModulesRegex**: The Pattern (Regex) to match nodes in the graph (project names) that should be focused. By default, no nodes are focused.
 If set, the matching nodes will be highlighted. The color can be customized via the `focusColor` property from `Theme.BASE`. [Read more](#focusing-on-specific-nodes).
 - **showFullPath**: Whether to show the full path of the modules in the graph. Default is `false`. **Use this if you have
   **modules with the same name in different paths**. This will remove the subgraphs from the graph.
@@ -184,8 +209,10 @@ If set, the matching nodes will be highlighted. The color can be customized via 
     - `NONE`: No text added. (Default.)
     - `CONFIGURATION`: The name of the configuration which the dependency belongs to (e.g. "
       implementation", "compileOnly", "jsMain").
-- **excludeConfigurationNames**:
-  - List of configuration names which should be ignored. e.g. "implementation", "testImplementation". Default is emptyList().
+- **excludedConfigurationsRegex**:
+  - Regex matching the configurations which should be ignored. e.g. "implementation", "testImplementation".
+- **excludedModulesRegex**:
+  - Regex matching the modules which should be ignored.
 
 ## Usage
 
@@ -276,12 +303,12 @@ Too much information? We can fix that.
 
 ## Focusing on specific nodes
 
-If you want to focus on specific nodes in the graph, you can use the `focusedNodesPattern` property in the configuration.
+If you want to focus on specific nodes in the graph, you can use the `focusedModulesRegex` property in the configuration.
 
 ```kotlin
 moduleGraphConfig {
     //... keep previous configs
-    focusedNodesPattern.set(".*(reddit).*")
+    focusedModulesRegex.set(".*(reddit).*")
 }
 ```
 
@@ -320,7 +347,7 @@ When was the last time Regex made you happy? =)
 
 ```kotlin
 // This matches module names that contain "reddit" or "match-day"
-focusedNodesPattern.set(".*(reddit|match-day).*")
+focusedModulesRegex.set(".*(reddit|match-day).*")
 ```
 
 ```mermaid
@@ -476,8 +503,8 @@ class main android_application
 
 ```
 
-> [!IMPORTANT]
-> Modules can only have one type. So we're using a hardcoded precedence order for identfying them. Read more below.
+> [!NOTE]
+> Modules can only have one type. So we're using a hardcoded precedence order for identifying them.
 >
 
 ### Precedence
