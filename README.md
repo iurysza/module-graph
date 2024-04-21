@@ -345,7 +345,7 @@ graph LR
     match-day --> reddit
     match-thread --> reddit
     reddit --> common
-    classDef focus fill: #E04380, stroke: #fff, stroke-width: 2px, color: #fff;
+    classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
     class reddit focus
 ```
 
@@ -389,7 +389,7 @@ graph LR
     playground --> match-day
     reddit --> common
     main --> match-day
-    classDef focus fill: #E04380, stroke: #fff, stroke-width: 2px, color: #fff;
+    classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
     class match-day focus
     class reddit focus
 ```
