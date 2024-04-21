@@ -30,7 +30,7 @@ moduleGraphConfig {
             focusColor = "#F5A622",
             moduleTypes = listOf(
                 ModuleType.Kotlin("#2C4162"),
-            )
+            ),
         ),
     )
     excludedConfigurationsRegex.set(""".*test.*""")
