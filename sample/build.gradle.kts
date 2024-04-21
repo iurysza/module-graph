@@ -1,4 +1,5 @@
 import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.ModuleType
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
 
@@ -11,7 +12,7 @@ moduleGraphConfig {
     readmePath.set("./README.md")
 
     // optional configs
-    focusedNodesPattern.set(""".*gama.*""")
+    focusedModulesRegex.set(""".*gama.*""")
     showFullPath.set(false)
     orientation.set(Orientation.TOP_TO_BOTTOM)
     linkText.set(LinkText.NONE)
@@ -27,6 +28,9 @@ moduleGraphConfig {
                 "fontSize" to "12px",
             ),
             focusColor = "#F5A622",
+            moduleTypes = listOf(
+                ModuleType.Kotlin("#2C4162"),
+            )
         ),
     )
     excludedConfigurationsRegex.set(""".*test.*""")

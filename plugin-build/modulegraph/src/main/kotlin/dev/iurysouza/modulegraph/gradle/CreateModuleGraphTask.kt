@@ -24,9 +24,9 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val theme: Property<Theme>
 
     @get:Input
-    @get:Option(option = "focusedNodesPattern", description = "A Regex to match nodes that should be focused.")
+    @get:Option(option = "focusedModulesRegex", description = "A Regex to match nodes that should be focused.")
     @get:Optional
-    abstract val focusedNodesPattern: Property<String>
+    abstract val focusedModulesRegex: Property<String>
 
     @get:Input
     @get:Option(option = "orientation", description = "The flowchart orientation")
@@ -83,7 +83,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
             val graphOptions = GraphOptions(
                 theme = theme.getOrElse(Theme.NEUTRAL),
                 orientation = orientation.getOrElse(Orientation.LEFT_TO_RIGHT),
-                pattern = focusedNodesPattern.orNull?.let { Regex(it) },
+                pattern = focusedModulesRegex.orNull?.let { Regex(it) },
                 showFullPath = showFullPath.getOrElse(false),
                 linkText = linkText.getOrElse(LinkText.NONE),
                 setStyleByModuleType = setStyleByModuleType.getOrElse(false),

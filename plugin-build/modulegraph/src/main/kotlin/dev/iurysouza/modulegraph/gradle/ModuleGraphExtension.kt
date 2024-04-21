@@ -32,7 +32,7 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
      *
      * The Value needs to be a string in regex format.
      */
-    val focusedNodesPattern: Property<String> = objects.property(String::class.java)
+    val focusedModulesRegex: Property<String> = objects.property(String::class.java)
 
     /**
      * The path of the readme file where the graph will be appended.

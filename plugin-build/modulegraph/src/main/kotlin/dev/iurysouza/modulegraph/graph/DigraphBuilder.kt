@@ -66,7 +66,7 @@ internal object DigraphBuilder {
         require(modelList.isNotEmpty()) {
             """
                     |No modules match the specified pattern: $regex
-                    |This was set via the `focusedNodesPattern` property.
+                    |This was set via the `focusedModulesRegex` property.
             """.trimMargin()
         }
     }
