@@ -87,8 +87,7 @@ internal object DigraphBuilder {
         val groups = split(":")
         if (groups.size == 1) return ""
         return groups
-            .takeLast(2)
-            .take(1)
-            .joinToString("")
+            .dropLast(1)
+            .joinToString(":")
     }
 }

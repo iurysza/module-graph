@@ -16,7 +16,7 @@ class FocusNodeStyleWriterTest {
     @Test
     fun `code highlighter works as expected`() {
         val theme = Theme.BASE(focusColor = "#F5A622")
-        val focusedNode = "gama"
+        val focusedNode = ":sample:container:gama"
         val graphOptions = withGraphOptions(
             theme = theme,
             focusedModulesRegex = ".*$focusedNode.*",

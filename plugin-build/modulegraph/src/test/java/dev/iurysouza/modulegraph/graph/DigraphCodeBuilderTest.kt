@@ -19,8 +19,8 @@ class DigraphCodeBuilderTest {
         )
 
         val expectedMermaidCode = """
-        |  alpha --> gama
-        |  gama --> zeta
+        |  :sample:alpha --> :sample:container:gama
+        |  :sample:container:gama --> :sample:zeta
         """.trimMargin()
         assertEquals(expectedMermaidCode, mermaidCode.value)
     }
@@ -51,26 +51,26 @@ class DigraphCodeBuilderTest {
         )
 
         val expectedMermaidCode = """
-                |  footballinfo --> common
-                |  match-day --> common
-                |  match-day --> footballinfo
-                |  match-day --> design-system
-                |  match-day --> reddit
-                |  match-thread --> webview-to-native-player
-                |  match-thread --> common
-                |  match-thread --> footballinfo
-                |  match-thread --> design-system
-                |  match-thread --> reddit
-                |  playground --> webview-to-native-player
-                |  playground --> match-thread
-                |  playground --> design-system
-                |  playground --> match-day
-                |  reddit --> common
-                |  webview-to-native-player --> common
-                |  main --> match-thread
-                |  main --> match-day
-                |  main --> design-system
-                |  main --> common
+            |  :core:footballinfo --> :core:common
+            |  :features:match-day --> :core:common
+            |  :features:match-day --> :core:footballinfo
+            |  :features:match-day --> :core:design-system
+            |  :features:match-day --> :core:reddit
+            |  :features:match-thread --> :core:webview-to-native-player
+            |  :features:match-thread --> :core:common
+            |  :features:match-thread --> :core:footballinfo
+            |  :features:match-thread --> :core:design-system
+            |  :features:match-thread --> :core:reddit
+            |  :app:playground --> :core:webview-to-native-player
+            |  :app:playground --> :features:match-thread
+            |  :app:playground --> :core:design-system
+            |  :app:playground --> :features:match-day
+            |  :core:reddit --> :core:common
+            |  :core:webview-to-native-player --> :core:common
+            |  :app:main --> :features:match-thread
+            |  :app:main --> :features:match-day
+            |  :app:main --> :core:design-system
+            |  :app:main --> :core:common
         """.trimMargin()
         assertEquals(expectedMermaidCode, mermaidCode.value)
     }

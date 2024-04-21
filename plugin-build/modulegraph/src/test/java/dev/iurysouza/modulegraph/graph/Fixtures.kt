@@ -53,18 +53,18 @@ internal val expectedMermaidGraphCode = """
         |}%%
         |
         |graph TB
-        |  subgraph container
-        |    gama
+        |  subgraph :sample
+        |    :sample:alpha["alpha"]
+        |    :sample:zeta["zeta"]
         |  end
-        |  subgraph sample
-        |    alpha
-        |    zeta
+        |  subgraph :sample:container
+        |    :sample:container:gama["gama"]
         |  end
-        |  alpha --> gama
-        |  gama --> zeta
+        |  :sample:alpha --> :sample:container:gama
+        |  :sample:container:gama --> :sample:zeta
         |
         |classDef focus fill:#F5A622,stroke:#fff,stroke-width:2px,color:#fff;
-        |class gama focus
+        |class :sample:container:gama focus
         |```
 """.trimMargin()
 
@@ -191,41 +191,41 @@ internal val expectedLiveMatchGraph = """
     |}%%
 
     |graph LR
-    |  subgraph app
-    |    playground
-    |    main
+    |  subgraph :app
+    |    :app:playground["playground"]
+    |    :app:main["main"]
     |  end
-    |  subgraph core
-    |    footballinfo
-    |    common
-    |    design-system
-    |    reddit
-    |    webview-to-native-player
+    |  subgraph :core
+    |    :core:footballinfo["footballinfo"]
+    |    :core:common["common"]
+    |    :core:design-system["design-system"]
+    |    :core:reddit["reddit"]
+    |    :core:webview-to-native-player["webview-to-native-player"]
     |  end
-    |  subgraph features
-    |    match-day
-    |    match-thread
+    |  subgraph :features
+    |    :features:match-day["match-day"]
+    |    :features:match-thread["match-thread"]
     |  end
-    |  footballinfo --> common
-    |  match-day --> common
-    |  match-day --> footballinfo
-    |  match-day --> design-system
-    |  match-day --> reddit
-    |  match-thread --> webview-to-native-player
-    |  match-thread --> common
-    |  match-thread --> footballinfo
-    |  match-thread --> design-system
-    |  match-thread --> reddit
-    |  playground --> webview-to-native-player
-    |  playground --> match-thread
-    |  playground --> design-system
-    |  playground --> match-day
-    |  reddit --> common
-    |  webview-to-native-player --> common
-    |  main --> match-thread
-    |  main --> match-day
-    |  main --> design-system
-    |  main --> common
+    |  :core:footballinfo --> :core:common
+    |  :features:match-day --> :core:common
+    |  :features:match-day --> :core:footballinfo
+    |  :features:match-day --> :core:design-system
+    |  :features:match-day --> :core:reddit
+    |  :features:match-thread --> :core:webview-to-native-player
+    |  :features:match-thread --> :core:common
+    |  :features:match-thread --> :core:footballinfo
+    |  :features:match-thread --> :core:design-system
+    |  :features:match-thread --> :core:reddit
+    |  :app:playground --> :core:webview-to-native-player
+    |  :app:playground --> :features:match-thread
+    |  :app:playground --> :core:design-system
+    |  :app:playground --> :features:match-day
+    |  :core:reddit --> :core:common
+    |  :core:webview-to-native-player --> :core:common
+    |  :app:main --> :features:match-thread
+    |  :app:main --> :features:match-day
+    |  :app:main --> :core:design-system
+    |  :app:main --> :core:common
     |```
 """.trimMargin()
 
@@ -400,78 +400,78 @@ internal val fullLiveMatchGraph = mapOf(
     ),
 )
 internal val liveMatchMermaidGraphWithConfigurations = """
-            |  footballinfo -- debugAndroidTestCompileClasspath --> common
-            |  footballinfo -- debugUnitTestCompileClasspath --> common
-            |  footballinfo -- implementation --> common
-            |  footballinfo -- releaseUnitTestCompileClasspath --> common
-            |  match-day -- debugAndroidTestCompileClasspath --> common
-            |  match-day -- debugAndroidTestCompileClasspath --> footballinfo
-            |  match-day -- debugAndroidTestCompileClasspath --> design-system
-            |  match-day -- debugAndroidTestCompileClasspath --> reddit
-            |  match-day -- debugUnitTestCompileClasspath --> common
-            |  match-day -- debugUnitTestCompileClasspath --> footballinfo
-            |  match-day -- debugUnitTestCompileClasspath --> design-system
-            |  match-day -- debugUnitTestCompileClasspath --> reddit
-            |  match-day -- implementation --> common
-            |  match-day -- implementation --> footballinfo
-            |  match-day -- implementation --> design-system
-            |  match-day -- implementation --> reddit
-            |  match-day -- releaseUnitTestCompileClasspath --> common
-            |  match-day -- releaseUnitTestCompileClasspath --> footballinfo
-            |  match-day -- releaseUnitTestCompileClasspath --> design-system
-            |  match-day -- releaseUnitTestCompileClasspath --> reddit
-            |  match-thread -- debugAndroidTestCompileClasspath --> webview-to-native-player
-            |  match-thread -- debugAndroidTestCompileClasspath --> common
-            |  match-thread -- debugAndroidTestCompileClasspath --> footballinfo
-            |  match-thread -- debugAndroidTestCompileClasspath --> design-system
-            |  match-thread -- debugAndroidTestCompileClasspath --> reddit
-            |  match-thread -- debugUnitTestCompileClasspath --> webview-to-native-player
-            |  match-thread -- debugUnitTestCompileClasspath --> common
-            |  match-thread -- debugUnitTestCompileClasspath --> footballinfo
-            |  match-thread -- debugUnitTestCompileClasspath --> design-system
-            |  match-thread -- debugUnitTestCompileClasspath --> reddit
-            |  match-thread -- implementation --> webview-to-native-player
-            |  match-thread -- implementation --> common
-            |  match-thread -- implementation --> footballinfo
-            |  match-thread -- implementation --> design-system
-            |  match-thread -- implementation --> reddit
-            |  match-thread -- releaseUnitTestCompileClasspath --> webview-to-native-player
-            |  match-thread -- releaseUnitTestCompileClasspath --> common
-            |  match-thread -- releaseUnitTestCompileClasspath --> footballinfo
-            |  match-thread -- releaseUnitTestCompileClasspath --> design-system
-            |  match-thread -- releaseUnitTestCompileClasspath --> reddit
-            |  playground -- debugAndroidTestCompileClasspath --> webview-to-native-player
-            |  playground -- debugAndroidTestCompileClasspath --> match-thread
-            |  playground -- debugAndroidTestCompileClasspath --> design-system
-            |  playground -- debugUnitTestCompileClasspath --> webview-to-native-player
-            |  playground -- debugUnitTestCompileClasspath --> match-thread
-            |  playground -- debugUnitTestCompileClasspath --> design-system
-            |  playground -- implementation --> webview-to-native-player
-            |  playground -- implementation --> match-thread
-            |  playground -- implementation --> design-system
-            |  playground -- releaseUnitTestCompileClasspath --> webview-to-native-player
-            |  playground -- releaseUnitTestCompileClasspath --> match-thread
-            |  playground -- releaseUnitTestCompileClasspath --> design-system
-            |  playground -- testImplementation --> match-day
-            |  reddit -- debugAndroidTestCompileClasspath --> common
-            |  reddit -- debugUnitTestCompileClasspath --> common
-            |  reddit -- implementation --> common
-            |  reddit -- releaseUnitTestCompileClasspath --> common
-            |  webview-to-native-player -- implementation --> common
-            |  main -- debugAndroidTestCompileClasspath --> match-thread
-            |  main -- debugAndroidTestCompileClasspath --> match-day
-            |  main -- debugAndroidTestCompileClasspath --> design-system
-            |  main -- debugAndroidTestCompileClasspath --> common
-            |  main -- debugUnitTestCompileClasspath --> match-thread
-            |  main -- debugUnitTestCompileClasspath --> match-day
-            |  main -- debugUnitTestCompileClasspath --> design-system
-            |  main -- debugUnitTestCompileClasspath --> common
-            |  main -- implementation --> match-thread
-            |  main -- implementation --> match-day
-            |  main -- implementation --> design-system
-            |  main -- implementation --> common
-            |  main -- releaseUnitTestCompileClasspath --> match-thread
-            |  main -- releaseUnitTestCompileClasspath --> match-day
-            |  main -- releaseUnitTestCompileClasspath --> design-system
-            |  main -- releaseUnitTestCompileClasspath --> common
+|  :core:footballinfo -- debugAndroidTestCompileClasspath --> :core:common
+|  :core:footballinfo -- debugUnitTestCompileClasspath --> :core:common
+|  :core:footballinfo -- implementation --> :core:common
+|  :core:footballinfo -- releaseUnitTestCompileClasspath --> :core:common
+|  :features:match-day -- debugAndroidTestCompileClasspath --> :core:common
+|  :features:match-day -- debugAndroidTestCompileClasspath --> :core:footballinfo
+|  :features:match-day -- debugAndroidTestCompileClasspath --> :core:design-system
+|  :features:match-day -- debugAndroidTestCompileClasspath --> :core:reddit
+|  :features:match-day -- debugUnitTestCompileClasspath --> :core:common
+|  :features:match-day -- debugUnitTestCompileClasspath --> :core:footballinfo
+|  :features:match-day -- debugUnitTestCompileClasspath --> :core:design-system
+|  :features:match-day -- debugUnitTestCompileClasspath --> :core:reddit
+|  :features:match-day -- implementation --> :core:common
+|  :features:match-day -- implementation --> :core:footballinfo
+|  :features:match-day -- implementation --> :core:design-system
+|  :features:match-day -- implementation --> :core:reddit
+|  :features:match-day -- releaseUnitTestCompileClasspath --> :core:common
+|  :features:match-day -- releaseUnitTestCompileClasspath --> :core:footballinfo
+|  :features:match-day -- releaseUnitTestCompileClasspath --> :core:design-system
+|  :features:match-day -- releaseUnitTestCompileClasspath --> :core:reddit
+|  :features:match-thread -- debugAndroidTestCompileClasspath --> :core:webview-to-native-player
+|  :features:match-thread -- debugAndroidTestCompileClasspath --> :core:common
+|  :features:match-thread -- debugAndroidTestCompileClasspath --> :core:footballinfo
+|  :features:match-thread -- debugAndroidTestCompileClasspath --> :core:design-system
+|  :features:match-thread -- debugAndroidTestCompileClasspath --> :core:reddit
+|  :features:match-thread -- debugUnitTestCompileClasspath --> :core:webview-to-native-player
+|  :features:match-thread -- debugUnitTestCompileClasspath --> :core:common
+|  :features:match-thread -- debugUnitTestCompileClasspath --> :core:footballinfo
+|  :features:match-thread -- debugUnitTestCompileClasspath --> :core:design-system
+|  :features:match-thread -- debugUnitTestCompileClasspath --> :core:reddit
+|  :features:match-thread -- implementation --> :core:webview-to-native-player
+|  :features:match-thread -- implementation --> :core:common
+|  :features:match-thread -- implementation --> :core:footballinfo
+|  :features:match-thread -- implementation --> :core:design-system
+|  :features:match-thread -- implementation --> :core:reddit
+|  :features:match-thread -- releaseUnitTestCompileClasspath --> :core:webview-to-native-player
+|  :features:match-thread -- releaseUnitTestCompileClasspath --> :core:common
+|  :features:match-thread -- releaseUnitTestCompileClasspath --> :core:footballinfo
+|  :features:match-thread -- releaseUnitTestCompileClasspath --> :core:design-system
+|  :features:match-thread -- releaseUnitTestCompileClasspath --> :core:reddit
+|  :app:playground -- debugAndroidTestCompileClasspath --> :core:webview-to-native-player
+|  :app:playground -- debugAndroidTestCompileClasspath --> :features:match-thread
+|  :app:playground -- debugAndroidTestCompileClasspath --> :core:design-system
+|  :app:playground -- debugUnitTestCompileClasspath --> :core:webview-to-native-player
+|  :app:playground -- debugUnitTestCompileClasspath --> :features:match-thread
+|  :app:playground -- debugUnitTestCompileClasspath --> :core:design-system
+|  :app:playground -- implementation --> :core:webview-to-native-player
+|  :app:playground -- implementation --> :features:match-thread
+|  :app:playground -- implementation --> :core:design-system
+|  :app:playground -- releaseUnitTestCompileClasspath --> :core:webview-to-native-player
+|  :app:playground -- releaseUnitTestCompileClasspath --> :features:match-thread
+|  :app:playground -- releaseUnitTestCompileClasspath --> :core:design-system
+|  :app:playground -- testImplementation --> :features:match-day
+|  :core:reddit -- debugAndroidTestCompileClasspath --> :core:common
+|  :core:reddit -- debugUnitTestCompileClasspath --> :core:common
+|  :core:reddit -- implementation --> :core:common
+|  :core:reddit -- releaseUnitTestCompileClasspath --> :core:common
+|  :core:webview-to-native-player -- implementation --> :core:common
+|  :app:main -- debugAndroidTestCompileClasspath --> :features:match-thread
+|  :app:main -- debugAndroidTestCompileClasspath --> :features:match-day
+|  :app:main -- debugAndroidTestCompileClasspath --> :core:design-system
+|  :app:main -- debugAndroidTestCompileClasspath --> :core:common
+|  :app:main -- debugUnitTestCompileClasspath --> :features:match-thread
+|  :app:main -- debugUnitTestCompileClasspath --> :features:match-day
+|  :app:main -- debugUnitTestCompileClasspath --> :core:design-system
+|  :app:main -- debugUnitTestCompileClasspath --> :core:common
+|  :app:main -- implementation --> :features:match-thread
+|  :app:main -- implementation --> :features:match-day
+|  :app:main -- implementation --> :core:design-system
+|  :app:main -- implementation --> :core:common
+|  :app:main -- releaseUnitTestCompileClasspath --> :features:match-thread
+|  :app:main -- releaseUnitTestCompileClasspath --> :features:match-day
+|  :app:main -- releaseUnitTestCompileClasspath --> :core:design-system
+|  :app:main -- releaseUnitTestCompileClasspath --> :core:common
 """.trimMargin()

@@ -31,7 +31,7 @@ internal object SubgraphBuilder {
         subgraphModel: List<Pair<String, List<ModuleNode>>>,
     ): MermaidCode = MermaidCode(
         subgraphModel.joinToString("\n") { (parent, children) ->
-            val childrenNames = children.joinToString("\n") { "    ${it.name}" }
+            val childrenNames = children.joinToString("\n") { """    ${it.fullName}["${it.name}"]""" }
             """|  subgraph $parent
                |$childrenNames
                |  end
@@ -45,7 +45,7 @@ internal object SubgraphBuilder {
         .flatMap { listOf(it.source, it.target) }
         .filter { it.parent.isNotEmpty() }
         .groupBy { it.parent }
-        .map { (parent, children) -> parent to children.distinctBy { it.name } }
+        .map { (parent, children) -> parent to children.distinctBy { it.fullName } }
         .sortedBy { it.first }
         .toList()
 }
