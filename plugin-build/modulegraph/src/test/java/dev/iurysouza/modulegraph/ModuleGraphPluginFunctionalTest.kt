@@ -403,7 +403,7 @@ class ModuleGraphPluginFunctionalTest {
 
                 moduleGraphConfig {
                     showFullPath.set(true)
-                    focusedNodesPattern.set("$pattern")
+                    focusedModulesRegex.set("$pattern")
                     heading.set("### Dependency Diagram")
                     readmePath.set("${readmeFilePath()}")
                     theme.set($MODULEGRAPH_PACKAGE.Theme.BASE(focusColor = "$focusColor"))
@@ -518,7 +518,7 @@ class ModuleGraphPluginFunctionalTest {
 
             moduleGraphConfig {
                 showFullPath.set(true)
-                focusedNodesPattern.set("$invalidPattern")
+                focusedModulesRegex.set("$invalidPattern")
                 heading.set("### Dependency Diagram")
                 readmePath.set("${readmeFilePath()}")
                 theme.set($MODULEGRAPH_PACKAGE.Theme.BASE(focusColor = "#F5A622"))
