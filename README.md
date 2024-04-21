@@ -6,7 +6,8 @@
 
 ## Module Graph Plugin
 
-This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph of your project's module relationships, so you can see how your modules interact at a glance.
+This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph of your project's module relationships,
+so you can see how your modules interact at a glance.
 
 
 > A diagram about the current system is only useful if it's generated. If it is produced by hand it
@@ -23,8 +24,10 @@ plugin [here](https://iurysouza.dev/automating-project-architecture-graphs/).
 - Enables you to focus and highlight specific nodes in the graph
 - Exclude specific configurations from the graph.
 - Built in themes and customization options.
-- The raw code block automatically renders as a graph on both [GitHub](https://github.blog/2022-02-14-include-diagrams-markdown-files-mermaid/),
- [Gitlab](https://about.gitlab.com/handbook/tools-and-tips/mermaid/#mermaid-diagrams), [Jetbrains IDEs](https://plugins.jetbrains.com/plugin/20146-mermaid) and [VSCode ](https://marketplace.visualstudio.com/items?itemName=MermaidChart.vscode-mermaid-chart).
+- The raw code block automatically renders as a graph on
+  both [GitHub](https://github.blog/2022-02-14-include-diagrams-markdown-files-mermaid/),
+  [Gitlab](https://about.gitlab.com/handbook/tools-and-tips/mermaid/#mermaid-diagrams), [Jetbrains IDEs](https://plugins.jetbrains.com/plugin/20146-mermaid)
+  and [VSCode ](https://marketplace.visualstudio.com/items?itemName=MermaidChart.vscode-mermaid-chart).
 
 ## Getting Started
 
@@ -40,23 +43,25 @@ plugins {
     id "dev.iurysouza.modulegraph" version "0.7.0"
 }
 ```
+
 <details>
   <summary><b>Using Legacy Plugin application</b></summary>
 
 ```groovy
     buildscript {
-        repositories {
-            maven {
-                url "https://plugins.gradle.org/m2/"
-            }
-        }
-        dependencies {
-            classpath "dev.iurysouza:modulegraph:0.7.0"
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
         }
     }
+    dependencies {
+        classpath "dev.iurysouza:modulegraph:0.7.0"
+    }
+}
 
-    apply plugin: "dev.iurysouza.modulegraph"
+apply plugin: "dev.iurysouza.modulegraph"
 ```
+
 </details>
 
 ### Configuring the plugin
@@ -131,18 +136,19 @@ plugins {
 
 ```kotlin
     buildscript {
-        repositories {
-            maven {
-                url = uri("https://plugins.gradle.org/m2/")
-            }
-        }
-        dependencies {
-            classpath("dev.iurysouza:modulegraph:0.7.0")
+    repositories {
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
         }
     }
+    dependencies {
+        classpath("dev.iurysouza:modulegraph:0.7.0")
+    }
+}
 
 apply(plugin = "dev.iurysouza:modulegraph")
 ```
+
 </details>
 
 ### Configuring the plugin
@@ -184,23 +190,39 @@ moduleGraphConfig {
 
 </details>
 
-## Configuration
+## Usage
 
-To configure the Gradle Module Dependency Graph Plugin, you can set the following options:
+Make sure you have a heading in your `README` with the same format as the one you set in the
+configuration, if not, the plugin will append it with the graph to the end of the file.
 
-- **readmePath**: The path of the file where the dependency graph will be appended.
-- **heading**: The heading where the dependency graph will be appended.
+After that, just run the following command:
+
+```sh
+./gradlew createModuleGraph
+```
+
+Now, just look for the generated graph in your project's README file.
+
+## Configuration Docs
+
+Required settings:
+
+- **readmePath**: The path of the file where the dependency graph will be added.
+- **heading**: The heading where the dependency graph will be added.
 
 Optional settings:
 
-- **focusedModulesRegex**: The Pattern (Regex) to match nodes in the graph (project names) that should be focused. By default, no nodes are focused.
-If set, the matching nodes will be highlighted. The color can be customized via the `focusColor` property from `Theme.BASE`. [Read more](#focusing-on-specific-nodes).
-- **showFullPath**: Whether to show the full path of the modules in the graph. Default is `false`. **Use this if you have
+- **focusedModulesRegex**: The Pattern (Regex) to match nodes in the graph (project names) that should be focused. By
+  default, no nodes are focused.
+  If set, the matching nodes will be highlighted. The color can be customized via the `focusColor` property
+  from `Theme.BASE`. [Read more](#focusing-on-specific-nodes).
+- **showFullPath**: Whether to show the full path of the modules in the graph. Default is `false`. **Use this if you
+  have
   **modules with the same name in different paths**. This will remove the subgraphs from the graph.
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling
   the graph. Default is `NEUTRAL`.
-  - Further customization is possible by setting the `themeVariables` property on the `BASE` theme. Check the
-    [mermaid docs](https://mermaid-js.github.io/mermaid/#/theming) for more info.
+    - Further customization is possible by setting the `themeVariables` property on the `BASE` theme. Check the
+      [mermaid docs](https://mermaid-js.github.io/mermaid/#/theming) for more info.
 - **orientation**:
   The [orientation](https://mermaid.js.org/syntax/flowchart.html#flowchart-orientation) that the
   flowchart will have. Default is `LEFT_TO_RIGHT`.
@@ -210,23 +232,9 @@ If set, the matching nodes will be highlighted. The color can be customized via 
     - `CONFIGURATION`: The name of the configuration which the dependency belongs to (e.g. "
       implementation", "compileOnly", "jsMain").
 - **excludedConfigurationsRegex**:
-  - Regex matching the configurations which should be ignored. e.g. "implementation", "testImplementation".
+    - Regex matching the configurations which should be ignored. e.g. "implementation", "testImplementation".
 - **excludedModulesRegex**:
-  - Regex matching the modules which should be ignored.
-
-## Usage
-
-Make sure you have a heading in your `README` with the same format as the one you set in the
-configuration, if
-not, the plugin will append it with the graph to the end of the file.
-
-After that, just run the following command:
-
-```sh
-./gradlew createModuleGraph
-```
-
-Now, just look for the generated graph in your project's README file.
+    - Regex matching the modules which should be ignored.
 
 ### Show me that graph!
 
@@ -252,7 +260,9 @@ moduleGraphConfig {
     )
 }
 ```
+
 And we got this graph:
+
 ```mermaid
 %%{
   init: {
@@ -260,7 +270,6 @@ And we got this graph:
 	'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
   }
 }%%
-
 graph LR
     subgraph app
         main
@@ -303,7 +312,8 @@ Too much information? We can fix that.
 
 ## Focusing on specific nodes
 
-If you want to focus on specific nodes in the graph, you can use the `focusedModulesRegex` property in the configuration.
+If you want to focus on specific nodes in the graph, you can use the `focusedModulesRegex` property in the
+configuration.
 
 ```kotlin
 moduleGraphConfig {
@@ -312,7 +322,8 @@ moduleGraphConfig {
 }
 ```
 
-By doing this, the plugin will highlight the nodes that match the pattern, and will only show the other nodes that are connected to them.
+By doing this, the plugin will highlight the nodes that match the pattern, and will only show the other nodes that are
+connected to them.
 It will generate the following graph:
 
 ```mermaid
@@ -322,9 +333,7 @@ It will generate the following graph:
 	'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
   }
 }%%
-
 graph LR
-
     subgraph core
         common
         reddit
@@ -336,10 +345,10 @@ graph LR
     match-day --> reddit
     match-thread --> reddit
     reddit --> common
-
-    classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef focus fill: #E04380, stroke: #fff, stroke-width: 2px, color: #fff;
     class reddit focus
 ```
+
 Since it's just a regex pattern, you can, for example, match multiple nodes by using the `|` operator,
 or you can come up with whatever cryptic regex patterns you want if you're into that kind of thing.
 
@@ -357,38 +366,38 @@ focusedModulesRegex.set(".*(reddit|match-day).*")
 	'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
   }
 }%%
-
 graph LR
-subgraph app
-main
-playground
-end
-subgraph core
-common
-design-system
-footballinfo
-reddit
-end
-subgraph features
-match-day
-match-thread
-end
-match-day --> common
-match-day --> footballinfo
-match-day --> design-system
-match-day --> reddit
-match-thread --> reddit
-playground --> match-day
-reddit --> common
-main --> match-day
-
-classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
-class match-day focus
-class reddit focus
+    subgraph app
+        main
+        playground
+    end
+    subgraph core
+        common
+        design-system
+        footballinfo
+        reddit
+    end
+    subgraph features
+        match-day
+        match-thread
+    end
+    match-day --> common
+    match-day --> footballinfo
+    match-day --> design-system
+    match-day --> reddit
+    match-thread --> reddit
+    playground --> match-day
+    reddit --> common
+    main --> match-day
+    classDef focus fill: #E04380, stroke: #fff, stroke-width: 2px, color: #fff;
+    class match-day focus
+    class reddit focus
 ```
+
 ## Module type based styling
 
-This feature enables detecting and rendering modules based on their type, eg.: kotlin, java, android-library, kotlin-multiplatform, etc
+This feature enables detecting and rendering modules based on their type, eg.: kotlin, java, android-library,
+kotlin-multiplatform, etc
 
 ### Getting Started
 
@@ -415,13 +424,18 @@ We have default styling for these module types:
 - Java Library
 - Java
 
-These supported plugins are pre-configured with a default color pattern, but can be customized further if needed. **You can also add you own module type.**
+These supported plugins are pre-configured with a default color pattern, but can be customized further if needed. **You
+can also add you own module type.**
 
 ### Customization
 
-The **supported plugins already have a default color pattern** , but you can also customize them via the `Theme.BASE` object.
+The **supported plugins already have a default color pattern** , but you can also customize them via the `Theme.BASE`
+object.
 
-Additionally, you can detect and customize styling for **other plugins** by providing a `CustomPlugin` with an `id` and its color. The `ID` will be used to match a Gradle plugin applied to that module and will have higher precedence than all the others. For example, if you have a plugin defined with the `app.compose` id, you can pass it as `Custom("app.compose", "#0E0E0E")` and the graph will be generated accordingly.
+Additionally, you can detect and customize styling for **other plugins** by providing a `CustomPlugin` with an `id` and
+its color. The `ID` will be used to match a Gradle plugin applied to that module and will have higher precedence than
+all the others. For example, if you have a plugin defined with the `app.compose` id, you can pass it
+as `Custom("app.compose", "#0E0E0E")` and the graph will be generated accordingly.
 eg.:
 
 ```kotlin
@@ -429,15 +443,15 @@ import dev.iurysouza.modulegraph.ModuleType.*
 import dev.iurysouza.modulegraph.Theme
 
 moduleGraphConfig {
-  theme.set(
-    Theme.BASE(
-      moduleTypes = listOf(
-        Custom(id = "app.compose", color = "#0E0E0E"),
-        AndroidApp("#3CD483"),
-        AndroidLibrary("#292B2B"),
-      ),
-    ),
-  )
+    theme.set(
+        Theme.BASE(
+            moduleTypes = listOf(
+                Custom(id = "app.compose", color = "#0E0E0E"),
+                AndroidApp("#3CD483"),
+                AndroidLibrary("#292B2B"),
+            ),
+        ),
+    )
 }
 ```
 
@@ -450,56 +464,54 @@ Below is an example of how the module graph would show up:
     'themeVariables': {"lineColor":"#676767"},
   }
 }%%
-
 graph LR
-  subgraph app
-    playground
-    main
-  end
-  subgraph core
-    webview-to-native-player
-    common
-    footballinfo
-    design-system
-    reddit
-  end
-  subgraph features
-    match-thread
-    match-day
-  end
-  match-thread --> webview-to-native-player
-  match-thread --> common
-  match-thread --> footballinfo
-  match-thread --> design-system
-  match-thread --> reddit
-  match-day --> common
-  match-day --> footballinfo
-  match-day --> design-system
-  match-day --> reddit
-  playground --> webview-to-native-player
-  playground --> match-thread
-  playground --> design-system
-  playground --> match-day
-  main --> match-thread
-  main --> match-day
-  main --> design-system
-  main --> common
-  reddit --> common
-  webview-to-native-player --> common
-  footballinfo --> common
-
-classDef android_library fill:#292B2B,stroke:#fff,stroke-width:2px,color:#fff;
-classDef app_compose fill:#82AAFF,stroke:#fff,stroke-width:2px,color:#fff;
-classDef android_application fill:#3CD483,stroke:#fff,stroke-width:2px,color:#fff;
-class match-thread app_compose
-class webview-to-native-player android_library
-class common android_library
-class footballinfo android_library
-class design-system app_compose
-class reddit android_library
-class match-day app_compose
-class playground android_application
-class main android_application
+    subgraph app
+        playground
+        main
+    end
+    subgraph core
+        webview-to-native-player
+        common
+        footballinfo
+        design-system
+        reddit
+    end
+    subgraph features
+        match-thread
+        match-day
+    end
+    match-thread --> webview-to-native-player
+    match-thread --> common
+    match-thread --> footballinfo
+    match-thread --> design-system
+    match-thread --> reddit
+    match-day --> common
+    match-day --> footballinfo
+    match-day --> design-system
+    match-day --> reddit
+    playground --> webview-to-native-player
+    playground --> match-thread
+    playground --> design-system
+    playground --> match-day
+    main --> match-thread
+    main --> match-day
+    main --> design-system
+    main --> common
+    reddit --> common
+    webview-to-native-player --> common
+    footballinfo --> common
+    classDef android_library fill: #292B2B, stroke: #fff, stroke-width: 2px, color: #fff;
+    classDef app_compose fill: #82AAFF, stroke: #fff, stroke-width: 2px, color: #fff;
+    classDef android_application fill: #3CD483, stroke: #fff, stroke-width: 2px, color: #fff;
+    class match-thread app_compose
+    class webview-to-native-player android_library
+    class common android_library
+    class footballinfo android_library
+    class design-system app_compose
+    class reddit android_library
+    class match-day app_compose
+    class playground android_application
+    class main android_application
 
 ```
 
