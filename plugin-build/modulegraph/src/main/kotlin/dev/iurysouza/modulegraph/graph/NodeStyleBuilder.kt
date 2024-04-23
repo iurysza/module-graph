@@ -26,7 +26,7 @@ internal object NodeStyleBuilder {
     fun build(digraphModel: List<DigraphModel>, options: GraphOptions): MermaidCode {
         val distinctNodes = digraphModel
             .flatMap { listOf(it.source, it.target) }
-            .distinctBy { it.name }
+            .distinctBy { it.fullName }
         val focusedNodes = distinctNodes.filter { it.isFocused }
 
         val pluginTypeStyling = applyStylingByPluginType(options, distinctNodes)
@@ -57,7 +57,7 @@ internal object NodeStyleBuilder {
             }
             """.trimMargin() + """
                 |
-                |${nodeList.joinToString("\n") { "class ${it.name} ${it.pluginClass()}" }}
+                |${nodeList.joinToString("\n") { "class ${it.fullName} ${it.pluginClass()}" }}
             """.trimMargin()
         } else {
             ""
@@ -82,7 +82,7 @@ internal object NodeStyleBuilder {
             """
                |
                |${defineStyleClass(FOCUS_CLASS_NAME, theme.focusColor())}
-               |${nodeList.joinToString("\n") { "class ${it.name} $FOCUS_CLASS_NAME" }}
+               |${nodeList.joinToString("\n") { "class ${it.fullName} $FOCUS_CLASS_NAME" }}
             """.trimMargin()
         },
     )

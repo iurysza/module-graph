@@ -25,8 +25,8 @@ class SubgraphBuilderTest {
         ).value
 
         val expectedSubgraphSyntax = """
-            |  subgraph groupFolder
-            |    example2
+            |  subgraph :groupFolder
+            |    :groupFolder:example2["example2"]
             |  end
         """.trimMargin()
         assertEquals(expectedSubgraphSyntax, subgraph)
@@ -62,12 +62,12 @@ class SubgraphBuilderTest {
         )
 
         val expectedSubgraphSyntax = """
-            |  subgraph container
-            |    gama
+            |  subgraph :sample
+            |    :sample:alpha["alpha"]
+            |    :sample:zeta["zeta"]
             |  end
-            |  subgraph sample
-            |    alpha
-            |    zeta
+            |  subgraph :sample:container
+            |    :sample:container:gama["gama"]
             |  end
         """.trimMargin()
         assertEquals(expectedSubgraphSyntax, subgraph.value)

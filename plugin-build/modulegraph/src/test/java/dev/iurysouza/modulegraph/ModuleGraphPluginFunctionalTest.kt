@@ -83,10 +83,10 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph RL
-                  subgraph groupFolder
-                    example2
+                  subgraph :groupFolder
+                    :groupFolder:example2["example2"]
                   end
-                  example --> example2
+                  :example --> :groupFolder:example2
                 ```
             """.trimIndent()
         assertEquals(expectedOutput, readmeFile.readText())
@@ -151,10 +151,10 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph LR
-                  subgraph groupFolder
-                    example2
+                  subgraph :groupFolder
+                    :groupFolder:example2["example2"]
                   end
-                  example --> example2
+                  :example --> :groupFolder:example2
                 ```
             """.trimIndent()
         assertEquals(expectedOutput, readmeFile.readText())
@@ -267,12 +267,12 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph RL
-                  subgraph groupFolder
-                    example2
-                    example3
+                  subgraph :groupFolder
+                    :groupFolder:example2["example2"]
+                    :groupFolder:example3["example3"]
                   end
-                  example -- implementation --> example2
-                  example -- runtimeOnly --> example3
+                  :example -- implementation --> :groupFolder:example2
+                  :example -- runtimeOnly --> :groupFolder:example3
                 ```
             """.trimIndent()
         assertEquals(expectedOutput, readmeFile.readText())
@@ -372,10 +372,10 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph RL
-                  subgraph groupFolder
-                    example2
+                  subgraph :groupFolder
+                    :groupFolder:example2["example2"]
                   end
-                  example --> example2
+                  :example --> :groupFolder:example2
                 ```
             """.trimIndent()
         assertEquals(expectedOutput, readmeFile.readText())
