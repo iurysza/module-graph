@@ -102,9 +102,9 @@ internal fun Project.hasLibraryDependency(dependencyGroupAndName: String): Boole
 
 internal val pluginPrecedenceOrder = listOf(
     ModuleType.Custom::class,
+    ModuleType.AndroidApp::class,
     ModuleType.ReactNativeLibrary::class,
     ModuleType.KotlinMultiplatform::class,
-    ModuleType.AndroidApp::class,
     ModuleType.AndroidLibrary::class,
     ModuleType.Kotlin::class,
     ModuleType.JavaLibrary::class,

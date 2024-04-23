@@ -215,9 +215,9 @@ Required settings:
 Optional settings:
 
 - **setStyleByPluginType**: Whether to style the modules based on their type (KotlinMultiplatform, Android Library, etc). Default is `false`. [Read more](#module-type-based-styling).
-- **focusedModulesRegex**: The Pattern (Regex) to match nodes in the graph (project names) that should be focused. By
+- **focusedModulesRegex**: The regex to match nodes in the graph (project names) that should be focused. By
   default, no nodes are focused.
-  If set, the matching nodes will be highlighted. The color can be customized via the `focusColor` property
+  If set, the matching nodes will be highlighted and only related nodes will be shown. The color can be customized via the `focusColor` property
   from `Theme.BASE`. [Read more](#focusing-on-specific-nodes).
 - **showFullPath**: Whether to show the full path of the modules in the graph. Default is `false`. This removes subgraphs.
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling
@@ -417,9 +417,9 @@ That's it. Just run the task and you'll get a graph identifying modules by their
 
 We have default styling for these module types:
 
+- Android Application
 - React Native
 - Kotlin Multiplatform
-- Android Application
 - Android Library
 - Kotlin
 - Java Library
