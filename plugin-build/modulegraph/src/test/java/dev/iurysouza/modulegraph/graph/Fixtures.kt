@@ -68,7 +68,7 @@ internal val expectedMermaidGraphCode = """
         |```
 """.trimMargin()
 
-fun withGraphOptions(
+internal fun withGraphOptions(
     orientation: Orientation = Orientation.LEFT_TO_RIGHT,
     linkText: LinkText = LinkText.NONE,
     focusedModulesRegex: String? = null,

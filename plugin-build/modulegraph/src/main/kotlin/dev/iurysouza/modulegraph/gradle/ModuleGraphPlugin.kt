@@ -30,12 +30,14 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.excludedModulesRegex.set(extension.excludedModulesRegex)
             task.setStyleByModuleType.set(extension.setStyleByModuleType)
             task.outputFile.set(project.layout.projectDirectory.file(extension.readmePath))
-            val projectGraphModel = project.parseProjectStructure(
-                excludedConfigurations = extension.excludedConfigurationsRegex.orNull,
-                excludedModules = extension.excludedModulesRegex.orNull,
-                theme = extension.theme.getOrElse(Theme.NEUTRAL),
+
+            task.graphModel.set(
+                project.parseProjectStructure(
+                    excludedConfigurations = extension.excludedConfigurationsRegex.orNull,
+                    excludedModules = extension.excludedModulesRegex.orNull,
+                    theme = extension.theme.getOrElse(Theme.NEUTRAL),
+                ),
             )
-            task.graphModel.set(projectGraphModel)
         }
     }
 }

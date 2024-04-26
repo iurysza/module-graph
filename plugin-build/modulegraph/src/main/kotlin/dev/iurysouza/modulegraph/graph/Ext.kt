@@ -7,3 +7,6 @@ internal fun String.getProjectName(showFullPath: Boolean): String {
         this.split(":").last { it.isNotBlank() }
     }
 }
+internal fun StringBuilder.lineBreak() {
+    append("\n")
+}

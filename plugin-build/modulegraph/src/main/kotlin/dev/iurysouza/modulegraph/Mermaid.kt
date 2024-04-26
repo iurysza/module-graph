@@ -42,13 +42,9 @@ internal object Mermaid {
     private fun StringBuilder.appendCode(code: MermaidCode) {
         append(code.value)
     }
-
-    private fun StringBuilder.lineBreak() {
-        append("\n")
-    }
 }
 
-data class GraphOptions(
+internal data class GraphOptions(
     val linkText: LinkText,
     val theme: Theme,
     val orientation: Orientation,

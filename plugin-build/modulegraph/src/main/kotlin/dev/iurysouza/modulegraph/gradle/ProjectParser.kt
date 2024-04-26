@@ -10,7 +10,7 @@ internal fun Project.parseProjectStructure(
     excludedModules: String?,
     theme: Theme,
 ): HashMap<Module, List<Module>> {
-    val dependencies = hashMapOf<Module, List<Module>>()
+    val projectGraph = hashMapOf<Module, List<Module>>()
 
     val configExclusionPattern = excludedConfigurations?.let { ExclusionStrategy.Configuration(it) }
     val projectExclusionPattern = excludedModules?.let { ExclusionStrategy.Project(it) }
@@ -35,7 +35,7 @@ internal fun Project.parseProjectStructure(
                     .filterNot { configExclusionPattern.matches(config.name) }
                     .filterNot { projectExclusionPattern.matches(it.path) }
                     .forEach { targetProject ->
-                        dependencies[sourceModule] = dependencies.getOrDefault(sourceModule, emptyList())
+                        projectGraph[sourceModule] = projectGraph.getOrDefault(sourceModule, emptyList())
                             .plus(
                                 Module(
                                     path = targetProject.path,
@@ -46,5 +46,5 @@ internal fun Project.parseProjectStructure(
                     }
             }
         }
-    return dependencies
+    return projectGraph
 }

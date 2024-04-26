@@ -2,7 +2,6 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.GraphOptions
 import dev.iurysouza.modulegraph.ModuleType
-import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.focusColor
 
 internal object NodeStyleBuilder {
@@ -27,33 +26,35 @@ internal object NodeStyleBuilder {
         val distinctNodes = digraphModel
             .flatMap { listOf(it.source, it.target) }
             .distinctBy { it.fullName }
-        val focusedNodes = distinctNodes.filter { it.isFocused }
 
-        val pluginTypeStyling = applyStylingByPluginType(options, distinctNodes)
-        val focusedNodesStyling = highlightFocusedNodes(focusedNodes, options.theme)
+        val pluginTypeStyling = applyStylingByPluginType(distinctNodes, options)
+        val focusedNodesStyling = highlightFocusedNodes(distinctNodes, options)
         return MermaidCode(
             buildString {
                 if (pluginTypeStyling.isNotEmpty()) {
-                    append(pluginTypeStyling + "\n")
+                    append(pluginTypeStyling)
                 }
-                append(focusedNodesStyling.value)
+                if (focusedNodesStyling.value.isNotEmpty()) {
+                    lineBreak()
+                    append(focusedNodesStyling.value)
+                }
             },
         )
     }
 
     private fun applyStylingByPluginType(
-        options: GraphOptions,
         nodeList: List<ModuleNode>,
+        options: GraphOptions,
     ): String {
         return if (options.setStyleByModuleType) {
             """
                 |
                 |${
-            nodeList
-                .distinctBy { it.type }
-                .joinToString("\n") {
-                    defineStyleClass(it.pluginClass(), it.type.color)
-                }
+                nodeList
+                    .distinctBy { it.type }
+                    .joinToString("\n") {
+                        defineStyleClass(it.pluginClass(), it.type.color)
+                    }
             }
             """.trimMargin() + """
                 |
@@ -74,15 +75,15 @@ internal object NodeStyleBuilder {
 
     private fun highlightFocusedNodes(
         nodeList: List<ModuleNode>,
-        theme: Theme,
+        options: GraphOptions,
     ): MermaidCode = MermaidCode(
         if (nodeList.isEmpty()) {
             ""
         } else {
             """
                |
-               |${defineStyleClass(FOCUS_CLASS_NAME, theme.focusColor())}
-               |${nodeList.joinToString("\n") { "class ${it.fullName} $FOCUS_CLASS_NAME" }}
+               |${defineStyleClass(FOCUS_CLASS_NAME, options.theme.focusColor())}
+               |${nodeList.filter { it.isFocused }.joinToString("\n") { "class ${it.fullName} $FOCUS_CLASS_NAME" }}
             """.trimMargin()
         },
     )

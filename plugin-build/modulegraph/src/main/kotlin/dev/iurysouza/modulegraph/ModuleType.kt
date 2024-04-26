@@ -56,6 +56,16 @@ sealed class ModuleType(
     }
 }
 
+private val defaultPlugins = listOf(
+    ModuleType.ReactNativeLibrary(),
+    ModuleType.KotlinMultiplatform(),
+    ModuleType.AndroidApp(),
+    ModuleType.AndroidLibrary(),
+    ModuleType.Kotlin(),
+    ModuleType.JavaLibrary(),
+    ModuleType.Java(),
+)
+
 /**
  * Determines the primary plugin type applied to the project based on a precedence order.
  *
@@ -70,24 +80,12 @@ sealed class ModuleType(
  */
 internal fun Project.getModuleType(
     customPlugins: List<ModuleType>,
-): ModuleType {
-    val defaultPlugins = listOf(
-        ModuleType.ReactNativeLibrary(),
-        ModuleType.KotlinMultiplatform(),
-        ModuleType.AndroidApp(),
-        ModuleType.AndroidLibrary(),
-        ModuleType.Kotlin(),
-        ModuleType.JavaLibrary(),
-        ModuleType.Java(),
-    )
-
-    return (customPlugins + defaultPlugins)
-        .distinctBy { it.id }
-        .sortedWith(pluginTypeComparator)
-        .firstOrNull {
-            plugins.hasPlugin(it.id) || hasLibraryDependency(it.id)
-        } ?: ModuleType.Unknown()
-}
+): ModuleType = (customPlugins + defaultPlugins)
+    .distinctBy { it.id }
+    .sortedWith(pluginTypeComparator)
+    .firstOrNull {
+        plugins.hasPlugin(it.id) || hasLibraryDependency(it.id)
+    } ?: ModuleType.Unknown()
 
 internal fun Project.hasLibraryDependency(dependencyGroupAndName: String): Boolean = runCatching {
     configurations.flatMap { configuration ->
