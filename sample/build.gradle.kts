@@ -20,10 +20,14 @@ moduleGraphConfig {
     theme.set(
         Theme.BASE(
             themeVariables = mapOf(
-                "primaryTextColor" to "#F6F8FAff", // Text
-                "primaryColor" to "#5a4f7c", // Node
-                "primaryBorderColor" to "#5a4f7c", // Node border
-                "tertiaryColor" to "#40375c", // Container box background
+                // Text
+                "primaryTextColor" to "#F6F8FAff",
+                // Node
+                "primaryColor" to "#5a4f7c",
+                // Node border
+                "primaryBorderColor" to "#5a4f7c",
+                // Container box background
+                "tertiaryColor" to "#40375c",
                 "lineColor" to "#f5a623",
                 "fontSize" to "12px",
             ),
