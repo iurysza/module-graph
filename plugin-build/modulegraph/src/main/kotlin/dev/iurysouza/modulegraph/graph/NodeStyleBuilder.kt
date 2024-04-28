@@ -48,11 +48,11 @@ internal object NodeStyleBuilder {
             """
                 |
                 |${
-            nodeList
-                .distinctBy { it.type }
-                .joinToString("\n") {
-                    defineStyleClass(it.pluginClass(), it.type.color)
-                }
+                nodeList
+                    .distinctBy { it.type }
+                    .joinToString("\n") {
+                        defineStyleClass(it.pluginClass(), it.type.color)
+                    }
             }
             """.trimMargin() + """
                 |
