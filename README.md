@@ -75,14 +75,14 @@ import dev.iurysouza.modulegraph.Theme
 moduleGraphConfig {
     readmePath = "./README.md"
     heading = "### Module Graph"
-    showFullPath = false // optional
-    orientation = Orientation.LEFT_TO_RIGHT // optional
-    linkText = LinkText.NONE // optional
-    excludedConfigurationsRegex = ".*test.*" // optional
-    excludedModulesRegex = ".*moduleName.*" // optional
-    focusedModulesRegex = ".*(projectName).*" // optional
-    setStyleByPluginType = true // optional
-    theme = Theme.NEUTRAL // optional
+    // showFullPath = false // optional
+    // orientation = Orientation.LEFT_TO_RIGHT // optional
+    // linkText = LinkText.NONE // optional
+    // excludedConfigurationsRegex = ".*test.*" // optional
+    // excludedModulesRegex = ".*moduleName.*" // optional
+    // focusedModulesRegex = ".*(projectName).*" // optional
+    // setStyleByPluginType = true // optional
+    // theme = Theme.NEUTRAL // optional
     // Or you can fully customize it by using the BASE theme:
     // theme = new Theme.BASE(
     //     [
@@ -163,14 +163,14 @@ import dev.iurysouza.modulegraph.Theme
 moduleGraphConfig {
     readmePath.set("./README.md")
     heading = "### Module Graph"
-    showFullPath.set(false) // optional
-    orientation.set(Orientation.LEFT_TO_RIGHT) //optional
-    linkText.set(LinkText.NONE) // optional
-    setStyleByPluginType.set(true) // optional
-    excludedConfigurationsRegex.set(".*test.*") // optional
-    excludedModulesRegex.set(".*moduleName.*") // optional
-    focusedModulesRegex.set(".*(projectName).*") // optional
-    theme.set(Theme.NEUTRAL) // optional
+    // showFullPath.set(false) // optional
+    // orientation.set(Orientation.LEFT_TO_RIGHT) //optional
+    // linkText.set(LinkText.NONE) // optional
+    // setStyleByPluginType.set(true) // optional
+    // excludedConfigurationsRegex.set(".*test.*") // optional
+    // excludedModulesRegex.set(".*moduleName.*") // optional
+    // focusedModulesRegex.set(".*(projectName).*") // optional
+    // theme.set(Theme.NEUTRAL) // optional
     // or you can fully customize it by using the BASE theme:
     // Theme.BASE(
     //     themeVariables = mapOf(
