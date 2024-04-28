@@ -79,7 +79,7 @@ internal fun withGraphOptions(
     linkText = linkText,
     theme = theme,
     orientation = orientation,
-    pattern = focusedModulesRegex?.toRegex(),
+    focusedNodesRegex = focusedModulesRegex?.toRegex(),
     showFullPath = showFullPath,
     setStyleByModuleType = setStyleByModuleType,
 )

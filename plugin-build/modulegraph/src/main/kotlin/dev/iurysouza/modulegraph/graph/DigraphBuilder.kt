@@ -19,7 +19,7 @@ internal object DigraphBuilder {
                 buildModel(graphOptions, source, target)
             }
         }.also { result ->
-            throwIfNothingMatches(result, graphOptions.pattern)
+            throwIfNothingMatches(result, graphOptions.focusedNodesRegex)
         }
     }
 
@@ -28,7 +28,7 @@ internal object DigraphBuilder {
         source: Module,
         target: Module? = null,
     ): DigraphModel? {
-        val pattern = graphOptions.pattern
+        val pattern = graphOptions.focusedNodesRegex
         val showFullPath = graphOptions.showFullPath
         val targetFullName = target?.path
         val sourceFullName = source.path

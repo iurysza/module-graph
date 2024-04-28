@@ -83,7 +83,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
             val graphOptions = GraphOptions(
                 theme = theme.getOrElse(Theme.NEUTRAL),
                 orientation = orientation.getOrElse(Orientation.LEFT_TO_RIGHT),
-                pattern = focusedModulesRegex.orNull?.let { Regex(it) },
+                focusedNodesRegex = focusedModulesRegex.orNull?.let { Regex(it) },
                 showFullPath = showFullPath.getOrElse(false),
                 linkText = linkText.getOrElse(LinkText.NONE),
                 setStyleByModuleType = setStyleByModuleType.getOrElse(false),

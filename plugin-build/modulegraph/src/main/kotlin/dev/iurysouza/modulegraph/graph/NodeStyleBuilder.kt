@@ -31,13 +31,11 @@ internal object NodeStyleBuilder {
         val focusedNodesStyling = highlightFocusedNodes(distinctNodes, options)
         return MermaidCode(
             buildString {
-                if (pluginTypeStyling.isNotEmpty()) {
-                    append(pluginTypeStyling)
-                }
-                if (focusedNodesStyling.value.isNotEmpty()) {
+                append(pluginTypeStyling)
+                if (pluginTypeStyling.isNotBlank()) {
                     lineBreak()
-                    append(focusedNodesStyling.value)
                 }
+                append(focusedNodesStyling.value)
             },
         )
     }
@@ -77,7 +75,7 @@ internal object NodeStyleBuilder {
         nodeList: List<ModuleNode>,
         options: GraphOptions,
     ): MermaidCode = MermaidCode(
-        if (nodeList.isEmpty()) {
+        if (options.focusedNodesRegex == null) {
             ""
         } else {
             """

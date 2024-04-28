@@ -48,7 +48,7 @@ internal data class GraphOptions(
     val linkText: LinkText,
     val theme: Theme,
     val orientation: Orientation,
-    val pattern: Regex? = null,
+    val focusedNodesRegex: Regex? = null,
     val showFullPath: Boolean,
     val setStyleByModuleType: Boolean,
 )
