@@ -498,7 +498,7 @@ class ModuleGraphPluginFunctionalTest {
     }
 
     @Test
-    fun `plugin throws exception when invalid pattern is provided`() {
+    fun `plugin throws exception when invalid focusedModulesRegex is provided`() {
         settingsFile.writeText(
             """
             rootProject.name = "test"
@@ -522,6 +522,46 @@ class ModuleGraphPluginFunctionalTest {
                 heading.set("### Dependency Diagram")
                 readmePath.set("${readmeFilePath()}")
                 theme.set($MODULEGRAPH_PACKAGE.Theme.BASE(focusColor = "#F5A622"))
+            }
+            dependencies {
+                implementation(project(":groupFolder:example2"))
+                implementation(project(":groupFolder:example3"))
+            }
+            """.trimIndent(),
+        )
+        assertThrows(Exception::class.java) {
+            GradleRunner.create()
+                .withProjectDir(testProjectDir)
+                .withArguments("createModuleGraph")
+                .withPluginClasspath()
+                .build()
+        }
+    }
+
+    @Test
+    fun `plugin throws exception when excludedModuleMatch causes the graph to be empty`() {
+        settingsFile.writeText(
+            """
+            rootProject.name = "test"
+            include(":example")
+            include(":groupFolder:example2")
+            include(":groupFolder:example3")
+            """.trimIndent(),
+        )
+
+        val invalidPattern = ".*example.*"
+        exampleBuildFile.writeText(
+            """
+            plugins {
+                java
+                id("$MODULEGRAPH_PACKAGE")
+            }
+
+            moduleGraphConfig {
+                heading.set("### Dependency Diagram")
+                readmePath.set("${readmeFilePath()}")
+
+                excludedModulesRegex.set("$invalidPattern")
             }
             dependencies {
                 implementation(project(":groupFolder:example2"))
