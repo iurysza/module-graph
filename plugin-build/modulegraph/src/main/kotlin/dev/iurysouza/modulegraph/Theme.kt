@@ -12,22 +12,22 @@ sealed class Theme(val name: String) : JavaSerializable {
     /**
      * This theme goes well with dark-colored elements or dark-mode.
      */
-    object DARK : Theme("dark")
+    data object DARK : Theme("dark")
 
     /**
      * This is the default theme for all diagrams.
      */
-    object DEFAULT : Theme("default")
+    data object DEFAULT : Theme("default")
 
     /**
      * This theme contains shades of green.
      */
-    object FOREST : Theme("forest")
+    data object FOREST : Theme("forest")
 
     /**
      * This theme is great for black and white documents that will be printed.
      */
-    object NEUTRAL : Theme("neutral")
+    data object NEUTRAL : Theme("neutral")
 
     /**
      * The BASE theme can be used for customization. You just need to provide the themeVariables according to the specs.
