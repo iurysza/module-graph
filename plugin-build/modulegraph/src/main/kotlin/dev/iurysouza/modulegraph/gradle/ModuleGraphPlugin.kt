@@ -31,13 +31,13 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.excludedConfigurationsRegex.set(extension.excludedConfigurationsRegex)
             task.excludedModulesRegex.set(extension.excludedModulesRegex)
             task.setStyleByModuleType.set(extension.setStyleByModuleType)
-            task.rootModules.set(extension.rootModules)
+            task.rootModulesRegex.set(extension.rootModulesRegex)
             task.outputFile.set(project.layout.projectDirectory.file(extension.readmePath))
 
             val allProjects = project.allprojects.map { GradleProjectImpl(it) }
             val projectGraph = ProjectParser.parseProjectGraph(
                 allProjects = allProjects,
-                rootModulesRegex = extension.rootModules.orNull,
+                rootModulesRegex = extension.rootModulesRegex.orNull,
                 excludedConfigurations = extension.excludedConfigurationsRegex.orNull,
                 excludedModules = extension.excludedModulesRegex.orNull,
                 theme = extension.theme.getOrElse(Theme.NEUTRAL),

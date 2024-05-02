@@ -42,7 +42,7 @@ class ModuleGraphPluginTest {
             readmePath.set(aFilePath)
             excludedConfigurationsRegex.set("implementation")
             excludedModulesRegex.set("project")
-            rootModules.set(aRegexPattern)
+            rootModulesRegex.set(aRegexPattern)
         }
 
         val task = project.tasks.getByName("createModuleGraph") as CreateModuleGraphTask
@@ -56,6 +56,6 @@ class ModuleGraphPluginTest {
         assertEquals(aRegexPattern, task.focusedModulesRegex.get())
         assertEquals("implementation", task.excludedConfigurationsRegex.get())
         assertEquals("project", task.excludedModulesRegex.get())
-        assertEquals(aRegexPattern, task.rootModules.get())
+        assertEquals(aRegexPattern, task.rootModulesRegex.get())
     }
 }

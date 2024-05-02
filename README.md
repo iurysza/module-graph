@@ -81,6 +81,7 @@ moduleGraphConfig {
     // excludedConfigurationsRegex = ".*test.*" // optional
     // excludedModulesRegex = ".*moduleName.*" // optional
     // focusedModulesRegex = ".*(projectName).*" // optional
+    // rootModulesRegex = ".*moduleName.*" // optional
     // setStyleByPluginType = true // optional
     // theme = Theme.NEUTRAL // optional
     // Or you can fully customize it by using the BASE theme:
@@ -170,6 +171,7 @@ moduleGraphConfig {
     // excludedConfigurationsRegex.set(".*test.*") // optional
     // excludedModulesRegex.set(".*moduleName.*") // optional
     // focusedModulesRegex.set(".*(projectName).*") // optional
+    // rootModulesRegex.set(".*moduleName.*") // optional
     // theme.set(Theme.NEUTRAL) // optional
     // or you can fully customize it by using the BASE theme:
     // Theme.BASE(
@@ -236,6 +238,10 @@ Optional settings:
     - Regex matching the configurations which should be ignored. e.g. "implementation", "testImplementation".
 - **excludedModulesRegex**:
     - Regex matching the modules which should be ignored.
+- **rootModules**:
+    - Regex matching the modules that should be used as root modules.
+      If this value is supplied, the generated graph will only include dependencies (direct and transitive) of root modules.
+      In other words, the graph will only include modules that can be reached from a root module.
 
 ### Show me that graph!
 

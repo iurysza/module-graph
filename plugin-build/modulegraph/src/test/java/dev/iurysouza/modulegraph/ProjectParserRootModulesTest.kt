@@ -7,7 +7,7 @@ import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfigura
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-/** Tests the 'rootModules' configuration option */
+/** Tests the 'rootModulesRegex' configuration option */
 internal class ProjectParserRootModulesTest {
     private val theme = Theme.NEUTRAL
 

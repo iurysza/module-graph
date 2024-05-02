@@ -36,7 +36,7 @@ internal object ProjectParser {
             val rootModules =
                 allProjects.filter { rootModuleInclusionPattern.matches(it.path) }
             require(rootModules.isNotEmpty()) {
-                "The graph cannot be generated as no modules match the rootModules pattern: $rootModulesRegex"
+                "The graph cannot be generated as no modules match the rootModulesRegex pattern: $rootModulesRegex"
             }
             parseFromRoots(
                 rootModules = rootModules,

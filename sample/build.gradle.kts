@@ -43,7 +43,7 @@ moduleGraphConfig {
     // excludedModulesRegex.set(".*alpha.*")
 
     // You can choose to only include modules that are reachable from certain root modules
-    rootModules.set(".*gama.*")
+    // rootModulesRegex.set(".*gama.*")
 }
 
 task("check") {
