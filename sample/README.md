@@ -9,18 +9,19 @@
 }%%
 
 graph TB
-  subgraph container
-    gama
+  subgraph :sample
+    :sample:zeta["zeta"]
+    :sample:beta["beta"]
   end
-  subgraph sample
-    zeta
+  subgraph :sample:container
+    :sample:container:gama["gama"]
   end
-  gama --> zeta
+  :sample:container:gama --> :sample:zeta
+  :sample:zeta --> :sample:beta
 
-classDef java fill:#C3E88D,stroke:#fff,stroke-width:2px,color:#fff;
-class gama java
-class zeta java
+classDef java fill:#B5661C,stroke:#fff,stroke-width:2px,color:#fff;
+class :sample:container:gama java
+class :sample:zeta java
+class :sample:beta java
 
-classDef focus fill:#F5A622,stroke:#fff,stroke-width:2px,color:#fff;
-class gama focus
 ```

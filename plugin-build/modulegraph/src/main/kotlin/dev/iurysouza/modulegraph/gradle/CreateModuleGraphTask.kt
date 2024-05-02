@@ -61,6 +61,11 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val excludedModulesRegex: Property<String>
 
     @get:Input
+    @get:Option(option = "rootModules", description = "A Regex to match root nodes")
+    @get:Optional
+    abstract val rootModules: Property<String>
+
+    @get:Input
     @get:Option(option = "setStyleByModuleType", description = "Whether to customize the node by the plugin type")
     @get:Optional
     abstract val setStyleByModuleType: Property<Boolean>

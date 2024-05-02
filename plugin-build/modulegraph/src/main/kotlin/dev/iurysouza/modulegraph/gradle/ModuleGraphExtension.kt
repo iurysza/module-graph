@@ -73,4 +73,11 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
      * Note: when using this option, the graph generated won't use the subgraph feature mermaid provides.
      */
     val showFullPath: Property<Boolean> = objects.property(Boolean::class.java)
+
+    /**
+     * A Regex to match modules that should be used as root modules.
+     * If this value is supplied,
+     * the generated graph will only include dependencies (direct and transitive) of root modules.
+     */
+    val rootModules: Property<String> = objects.property(String::class.java)
 }

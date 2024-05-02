@@ -1,6 +1,8 @@
 package dev.iurysouza.modulegraph.gradle
 
 import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.gradle.graphparser.ProjectParser
+import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectImpl
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -29,15 +31,18 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.excludedConfigurationsRegex.set(extension.excludedConfigurationsRegex)
             task.excludedModulesRegex.set(extension.excludedModulesRegex)
             task.setStyleByModuleType.set(extension.setStyleByModuleType)
+            task.rootModules.set(extension.rootModules)
             task.outputFile.set(project.layout.projectDirectory.file(extension.readmePath))
 
-            task.graphModel.set(
-                project.parseProjectStructure(
-                    excludedConfigurations = extension.excludedConfigurationsRegex.orNull,
-                    excludedModules = extension.excludedModulesRegex.orNull,
-                    theme = extension.theme.getOrElse(Theme.NEUTRAL),
-                ),
+            val allProjects = project.allprojects.map { GradleProjectImpl(it) }
+            val projectGraph = ProjectParser.parseProjectGraph(
+                allProjects = allProjects,
+                rootModulesRegex = extension.rootModules.orNull,
+                excludedConfigurations = extension.excludedConfigurationsRegex.orNull,
+                excludedModules = extension.excludedModulesRegex.orNull,
+                theme = extension.theme.getOrElse(Theme.NEUTRAL),
             )
+            task.graphModel.set(projectGraph)
         }
     }
 }
