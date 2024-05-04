@@ -25,26 +25,18 @@ internal object ProjectParser {
             else -> emptyList()
         }
 
-        return if (rootModuleInclusionPattern == null) {
-            parseAllProjects(
-                allProjects = allProjects,
-                customModuleTypes = customModuleTypes,
-                configExclusionPattern = configExclusionPattern,
-                moduleExclusionPattern = moduleExclusionPattern,
-            )
-        } else {
-            val rootModules =
-                allProjects.filter { rootModuleInclusionPattern.matches(it.path) }
-            require(rootModules.isNotEmpty()) {
-                "The graph cannot be generated as no modules match the rootModulesRegex pattern: $rootModulesRegex"
-            }
-            parseFromRoots(
-                rootModules = rootModules,
-                customModuleTypes = customModuleTypes,
-                configExclusionPattern = configExclusionPattern,
-                moduleExclusionPattern = moduleExclusionPattern,
-            )
+        val rootModules = if (rootModuleInclusionPattern == null) allProjects else {
+            allProjects.filter { rootModuleInclusionPattern.matches(it.path) }
         }
+        require(rootModules.isNotEmpty()) {
+            "The graph cannot be generated as no rootModules were found"
+        }
+        return parseFromRoots(
+            rootModules = rootModules,
+            customModuleTypes = customModuleTypes,
+            configExclusionPattern = configExclusionPattern,
+            moduleExclusionPattern = moduleExclusionPattern,
+        )
     }
 
     /** @return the modules which are direct dependencies in [config] */
@@ -56,41 +48,15 @@ internal object ProjectParser {
         .filterNot { configExclusionPattern.matches(config.name) }
         .filterNot { moduleExclusionPattern.matches(it.path) }
 
-    /** The simple parse - just iterate over all modules */
-    private fun parseAllProjects(
-        allProjects: List<GradleProject>,
-        customModuleTypes: List<ModuleType>,
-        configExclusionPattern: RegexMatcher?,
-        moduleExclusionPattern: RegexMatcher?,
-    ): ProjectGraph {
-        val projectGraph = hashMapOf<Module, List<Module>>()
-        allProjects
-            .asSequence()
-            .filterNot { moduleExclusionPattern.matches(it.path) }
-            .forEach { sourceProject ->
-                sourceProject.configurations.forEach { config ->
-                    getDirectDependencies(
-                        config = config,
-                        configExclusionPattern = configExclusionPattern,
-                        moduleExclusionPattern = moduleExclusionPattern,
-                    ).forEach { targetProject ->
-                        registerDependency(
-                            sourceProject = sourceProject,
-                            targetProject = targetProject,
-                            projectGraph = projectGraph,
-                            config = config,
-                            customModuleTypes = customModuleTypes,
-                        )
-                    }
-                }
-            }
-        return projectGraph
-    }
-
     /**
      * To handle root modules we need to parse the dependency tree recursively,
      * starting at the root module nodes.
      * This ensures we only include module nodes that are reachable from the root.
+     *
+     * It can happen that projects have circular dependencies.
+     * Gradle will refuse to build such a project, but we can still render it in a graph -
+     * in fact, such a graph can be useful to catch circular dependencies.
+     * We need to handle these cases to avoid infinite recursion.
      */
     private fun parseFromRoots(
         rootModules: List<GradleProject>,
@@ -99,8 +65,14 @@ internal object ProjectParser {
         moduleExclusionPattern: RegexMatcher?,
     ): ProjectGraph {
         val projectGraph = hashMapOf<Module, List<Module>>()
+        val projectsParsed = mutableListOf<GradleProject>()
 
         fun parseModuleDeps(sourceProject: GradleProject) {
+            // Don't parse projects more than once -
+            // it's a waste of time, and it might lead to infinite recursion
+            if (sourceProject in projectsParsed) return
+            projectsParsed.add(sourceProject)
+
             sourceProject.configurations.forEach { config ->
                 val deps = getDirectDependencies(
                     config = config,

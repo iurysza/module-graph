@@ -12,4 +12,6 @@
 /.idea/gradle.xml
 /.idea/kotlinc.xml
 /.idea/misc.xml
+/.idea/vcs.xml
+/.idea/.name
 build

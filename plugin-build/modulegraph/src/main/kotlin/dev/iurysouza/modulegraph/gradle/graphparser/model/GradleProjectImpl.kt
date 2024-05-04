@@ -5,7 +5,7 @@ import dev.iurysouza.modulegraph.getModuleType
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
 
-internal class GradleProjectImpl(val project: Project) : GradleProject {
+internal data class GradleProjectImpl(val project: Project) : GradleProject {
     override val path = project.path
     override val configurations: List<GradleProjectConfiguration> =
         project.configurations.map { config ->
