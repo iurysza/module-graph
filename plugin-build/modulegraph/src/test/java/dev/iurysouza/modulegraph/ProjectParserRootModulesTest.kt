@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:property-naming")
+
 package dev.iurysouza.modulegraph
 
 import dev.iurysouza.modulegraph.gradle.Module
@@ -109,7 +111,7 @@ internal class ProjectParserRootModulesTest {
 
 private object Default {
     val moduleType = ModuleType.Java()
-    val configName = "prod"
+    const val configName = "prod"
 }
 
 private object ProjectName {
