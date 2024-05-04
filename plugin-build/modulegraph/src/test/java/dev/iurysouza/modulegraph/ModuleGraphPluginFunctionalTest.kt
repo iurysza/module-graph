@@ -431,6 +431,7 @@ class ModuleGraphPluginFunctionalTest {
                     java
                 }
                 dependencies {
+                    implementation(project(":example"))
                 }
             """.trimIndent(),
         )
@@ -457,7 +458,6 @@ class ModuleGraphPluginFunctionalTest {
 
                 graph LR
                   :example --> :groupFolder:example2
-                  :groupFolder:example2 --> :groupFolder:example3
 
                 classDef focus fill:$focusColor,stroke:#fff,stroke-width:2px,color:#fff;
                 class :groupFolder:example2 focus
