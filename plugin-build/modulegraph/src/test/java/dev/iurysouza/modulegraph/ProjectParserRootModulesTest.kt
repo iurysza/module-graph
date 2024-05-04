@@ -4,8 +4,9 @@ package dev.iurysouza.modulegraph
 
 import dev.iurysouza.modulegraph.gradle.Module
 import dev.iurysouza.modulegraph.gradle.graphparser.ProjectParser
-import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProject
 import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfiguration
+import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectPath
+import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.ProjectQuerier
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -23,15 +24,32 @@ internal class ProjectParserRootModulesTest {
         ModuleToDeps.coreNetworking,
     )
 
+    private val projectQuerier = object : ProjectQuerier {
+        override fun getProjectType(
+            projectPath: ProjectPath,
+            customModuleTypes: List<ModuleType>,
+        ): ModuleType = Default.moduleType
+
+        override fun getConfigurations(projectPath: ProjectPath): List<GradleProjectConfiguration> {
+            val projectAndDeps = Project.all.first { it.path == projectPath }
+            val config = GradleProjectConfiguration(
+                name = Default.configName,
+                projectPaths = projectAndDeps.deps,
+            )
+            return listOf(config)
+        }
+    }
+
     @Test
     fun `correct graph when root module is app`() {
         val expectedGraph = entireGraph
         val actualGraph = ProjectParser.parseProjectGraph(
-            allProjects = Project.all,
-            rootModulesRegex = ProjectName.app,
+            allProjectPaths = Project.allPaths,
+            rootModulesRegex = MockProjectPath.app,
             excludedConfigurations = null,
             excludedModules = null,
             theme = theme,
+            projectQuerier = projectQuerier,
         )
 
         Assertions.assertEquals(expectedGraph, actualGraph)
@@ -48,11 +66,12 @@ internal class ProjectParserRootModulesTest {
             ModuleToDeps.coreNetworking,
         )
         val actualGraph = ProjectParser.parseProjectGraph(
-            allProjects = Project.all,
-            rootModulesRegex = "(${ProjectName.featAUi})|(${ProjectName.featAData})",
+            allProjectPaths = Project.allPaths,
+            rootModulesRegex = "(${MockProjectPath.featAUi})|(${MockProjectPath.featAData})",
             excludedConfigurations = null,
             excludedModules = null,
             theme = theme,
+            projectQuerier = projectQuerier,
         )
 
         Assertions.assertEquals(expectedGraph, actualGraph)
@@ -66,11 +85,12 @@ internal class ProjectParserRootModulesTest {
             ModuleToDeps.coreUi,
         )
         val actualGraph = ProjectParser.parseProjectGraph(
-            allProjects = Project.all,
-            rootModulesRegex = ProjectName.featAUi,
+            allProjectPaths = Project.allPaths,
+            rootModulesRegex = MockProjectPath.featAUi,
             excludedConfigurations = null,
             excludedModules = null,
             theme = theme,
+            projectQuerier = projectQuerier,
         )
 
         Assertions.assertEquals(expectedGraph, actualGraph)
@@ -84,11 +104,12 @@ internal class ProjectParserRootModulesTest {
             ModuleToDeps.coreNetworking,
         )
         val actualGraph = ProjectParser.parseProjectGraph(
-            allProjects = Project.all,
-            rootModulesRegex = ProjectName.featAData,
+            allProjectPaths = Project.allPaths,
+            rootModulesRegex = MockProjectPath.featAData,
             excludedConfigurations = null,
             excludedModules = null,
             theme = theme,
+            projectQuerier = projectQuerier,
         )
 
         Assertions.assertEquals(expectedGraph, actualGraph)
@@ -98,11 +119,12 @@ internal class ProjectParserRootModulesTest {
     fun `correct graph when root modules not set`() {
         val expectedGraph = entireGraph
         val actualGraph = ProjectParser.parseProjectGraph(
-            allProjects = Project.all,
+            allProjectPaths = Project.allPaths,
             rootModulesRegex = null,
             excludedConfigurations = null,
             excludedModules = null,
             theme = theme,
+            projectQuerier = projectQuerier,
         )
 
         Assertions.assertEquals(expectedGraph, actualGraph)
@@ -114,7 +136,7 @@ private object Default {
     const val configName = "prod"
 }
 
-private object ProjectName {
+private object MockProjectPath {
     const val app = ":app"
     const val featAUi = ":feat1:ui"
     const val featAData = ":feat1:data"
@@ -125,40 +147,42 @@ private object ProjectName {
     const val coreNetworking = ":core:networking"
 }
 
+private data class ProjectAndDeps(val path: ProjectPath, val deps: List<ProjectPath>)
+
 private object Project {
-    val coreUtil = createMockProject(
-        ProjectName.coreUtil,
+    val coreUtil = ProjectAndDeps(
+        MockProjectPath.coreUtil,
         emptyList(),
     )
-    val coreNetworking = createMockProject(
-        ProjectName.coreNetworking,
-        listOf(coreUtil),
+    val coreNetworking = ProjectAndDeps(
+        MockProjectPath.coreNetworking,
+        listOf(MockProjectPath.coreUtil),
     )
-    val commonData = createMockProject(
-        ProjectName.commonData,
-        listOf(coreNetworking, coreUtil),
+    val commonData = ProjectAndDeps(
+        MockProjectPath.commonData,
+        listOf(MockProjectPath.coreNetworking, MockProjectPath.coreUtil),
     )
-    val coreUi = createMockProject(
-        ProjectName.coreUi,
-        listOf(coreUtil),
+    val coreUi = ProjectAndDeps(
+        MockProjectPath.coreUi,
+        listOf(MockProjectPath.coreUtil),
     )
-    val commonComponent = createMockProject(
-        ProjectName.commonComponent,
-        listOf(coreUi),
+    val commonComponent = ProjectAndDeps(
+        MockProjectPath.commonComponent,
+        listOf(MockProjectPath.coreUi),
     )
-    val featAUi = createMockProject(
-        ProjectName.featAUi,
-        listOf(commonComponent),
+    val featAUi = ProjectAndDeps(
+        MockProjectPath.featAUi,
+        listOf(MockProjectPath.commonComponent),
     )
-    val featAData = createMockProject(
-        ProjectName.featAData,
-        listOf(commonData),
+    val featAData = ProjectAndDeps(
+        MockProjectPath.featAData,
+        listOf(MockProjectPath.commonData),
     )
-    val app = createMockProject(
-        ProjectName.app,
+    val app = ProjectAndDeps(
+        MockProjectPath.app,
         listOf(
-            featAUi,
-            featAData,
+            MockProjectPath.featAUi,
+            MockProjectPath.featAData,
         ),
     )
 
@@ -173,44 +197,32 @@ private object Project {
         app,
     )
 
-    private fun createMockProject(name: String, dependencies: List<GradleProject>) =
-        object : GradleProject {
-            override val path = name
-
-            override val configurations: List<GradleProjectConfiguration> = listOf(
-                GradleProjectConfiguration(
-                    name = Default.configName,
-                    projects = dependencies,
-                ),
-            )
-
-            override fun getModuleType(customModuleTypes: List<ModuleType>) = Default.moduleType
-        }
+    val allPaths = all.map { it.path }
 }
 
 private object ModuleToDeps {
-    val app = createDefaultModuleSource(ProjectName.app) to listOf(
-        createDefaultModuleTarget(ProjectName.featAUi),
-        createDefaultModuleTarget(ProjectName.featAData),
+    val app = createDefaultModuleSource(MockProjectPath.app) to listOf(
+        createDefaultModuleTarget(MockProjectPath.featAUi),
+        createDefaultModuleTarget(MockProjectPath.featAData),
     )
-    val featAUi = createDefaultModuleSource(ProjectName.featAUi) to listOf(
-        createDefaultModuleTarget(ProjectName.commonComponent),
+    val featAUi = createDefaultModuleSource(MockProjectPath.featAUi) to listOf(
+        createDefaultModuleTarget(MockProjectPath.commonComponent),
     )
-    val commonComponent = createDefaultModuleSource(ProjectName.commonComponent) to listOf(
-        createDefaultModuleTarget(ProjectName.coreUi),
+    val commonComponent = createDefaultModuleSource(MockProjectPath.commonComponent) to listOf(
+        createDefaultModuleTarget(MockProjectPath.coreUi),
     )
-    val coreUi = createDefaultModuleSource(ProjectName.coreUi) to listOf(
-        createDefaultModuleTarget(ProjectName.coreUtil),
+    val coreUi = createDefaultModuleSource(MockProjectPath.coreUi) to listOf(
+        createDefaultModuleTarget(MockProjectPath.coreUtil),
     )
-    val featAData = createDefaultModuleSource(ProjectName.featAData) to listOf(
-        createDefaultModuleTarget(ProjectName.commonData),
+    val featAData = createDefaultModuleSource(MockProjectPath.featAData) to listOf(
+        createDefaultModuleTarget(MockProjectPath.commonData),
     )
-    val commonData = createDefaultModuleSource(ProjectName.commonData) to listOf(
-        createDefaultModuleTarget(ProjectName.coreNetworking),
-        createDefaultModuleTarget(ProjectName.coreUtil),
+    val commonData = createDefaultModuleSource(MockProjectPath.commonData) to listOf(
+        createDefaultModuleTarget(MockProjectPath.coreNetworking),
+        createDefaultModuleTarget(MockProjectPath.coreUtil),
     )
-    val coreNetworking = createDefaultModuleSource(ProjectName.coreNetworking) to listOf(
-        createDefaultModuleTarget(ProjectName.coreUtil),
+    val coreNetworking = createDefaultModuleSource(MockProjectPath.coreNetworking) to listOf(
+        createDefaultModuleTarget(MockProjectPath.coreUtil),
     )
 
     private fun createDefaultModuleSource(path: String) = Module(

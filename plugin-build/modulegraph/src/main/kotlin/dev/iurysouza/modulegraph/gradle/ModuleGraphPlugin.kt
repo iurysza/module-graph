@@ -2,7 +2,7 @@ package dev.iurysouza.modulegraph.gradle
 
 import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.gradle.graphparser.ProjectParser
-import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectImpl
+import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.GradleProjectQuerier
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -34,13 +34,17 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.rootModulesRegex.set(extension.rootModulesRegex)
             task.outputFile.set(project.layout.projectDirectory.file(extension.readmePath))
 
-            val allProjects = project.allprojects.map { GradleProjectImpl(it) }
+            val allProjects = project.allprojects
+            val allProjectPaths = allProjects.map { it.path }
+            val projectQuerier = GradleProjectQuerier(allProjects)
+
             val projectGraph = ProjectParser.parseProjectGraph(
-                allProjects = allProjects,
+                allProjectPaths = allProjectPaths,
                 rootModulesRegex = extension.rootModulesRegex.orNull,
                 excludedConfigurations = extension.excludedConfigurationsRegex.orNull,
                 excludedModules = extension.excludedModulesRegex.orNull,
                 theme = extension.theme.getOrElse(Theme.NEUTRAL),
+                projectQuerier = projectQuerier,
             )
             task.graphModel.set(projectGraph)
         }

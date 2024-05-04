@@ -4,17 +4,19 @@ import dev.iurysouza.modulegraph.ModuleType
 import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.gradle.Module
 import dev.iurysouza.modulegraph.gradle.RegexMatcher
-import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProject
 import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfiguration
+import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectPath
+import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.ProjectQuerier
 import dev.iurysouza.modulegraph.gradle.matches
 
 internal object ProjectParser {
     internal fun parseProjectGraph(
-        allProjects: List<GradleProject>,
+        allProjectPaths: List<ProjectPath>,
         rootModulesRegex: String?,
         excludedConfigurations: String?,
         excludedModules: String?,
         theme: Theme,
+        projectQuerier: ProjectQuerier,
     ): ProjectGraph {
         val configExclusionPattern = excludedConfigurations?.let { RegexMatcher(it) }
         val moduleExclusionPattern = excludedModules?.let { RegexMatcher(it) }
@@ -25,17 +27,18 @@ internal object ProjectParser {
             else -> emptyList()
         }
 
-        val rootModules = if (rootModuleInclusionPattern == null) allProjects else {
-            allProjects.filter { rootModuleInclusionPattern.matches(it.path) }
+        val rootModules = if (rootModuleInclusionPattern == null) allProjectPaths else {
+            allProjectPaths.filter { rootModuleInclusionPattern.matches(it) }
         }
         require(rootModules.isNotEmpty()) {
             "The graph cannot be generated as no rootModules were found"
         }
         return parseFromRoots(
-            rootModules = rootModules,
+            rootModulePaths = rootModules,
             customModuleTypes = customModuleTypes,
             configExclusionPattern = configExclusionPattern,
             moduleExclusionPattern = moduleExclusionPattern,
+            projectQuerier = projectQuerier,
         )
     }
 
@@ -44,9 +47,12 @@ internal object ProjectParser {
         config: GradleProjectConfiguration,
         configExclusionPattern: RegexMatcher?,
         moduleExclusionPattern: RegexMatcher?,
-    ) = config.projects
-        .filterNot { configExclusionPattern.matches(config.name) }
-        .filterNot { moduleExclusionPattern.matches(it.path) }
+    ): List<String> {
+        if (configExclusionPattern.matches(config.name)) {
+            return emptyList()
+        }
+        return config.projectPaths.filterNot { moduleExclusionPattern.matches(it) }
+    }
 
     /**
      * To handle root modules we need to parse the dependency tree recursively,
@@ -59,63 +65,66 @@ internal object ProjectParser {
      * We need to handle these cases to avoid infinite recursion.
      */
     private fun parseFromRoots(
-        rootModules: List<GradleProject>,
+        rootModulePaths: List<ProjectPath>,
         customModuleTypes: List<ModuleType>,
         configExclusionPattern: RegexMatcher?,
         moduleExclusionPattern: RegexMatcher?,
+        projectQuerier: ProjectQuerier,
     ): ProjectGraph {
         val projectGraph = hashMapOf<Module, List<Module>>()
-        val projectsParsed = mutableListOf<GradleProject>()
+        val projectPathsParsed = mutableListOf<ProjectPath>()
 
-        fun parseModuleDeps(sourceProject: GradleProject) {
+        fun parseModuleDeps(sourceProjectPath: ProjectPath) {
             // Don't parse projects more than once -
             // it's a waste of time, and it might lead to infinite recursion
-            if (sourceProject in projectsParsed) return
-            projectsParsed.add(sourceProject)
+            if (sourceProjectPath in projectPathsParsed) return
+            projectPathsParsed.add(sourceProjectPath)
 
-            sourceProject.configurations.forEach { config ->
-                val deps = getDirectDependencies(
+            projectQuerier.getConfigurations(sourceProjectPath).forEach { config ->
+                val directDependencyPaths = getDirectDependencies(
                     config = config,
                     configExclusionPattern = configExclusionPattern,
                     moduleExclusionPattern = moduleExclusionPattern,
                 )
-                deps.forEach { targetProject ->
+                directDependencyPaths.forEach { targetProject ->
                     registerDependency(
-                        sourceProject = sourceProject,
-                        targetProject = targetProject,
+                        sourceProjectPath = sourceProjectPath,
+                        targetProjectPath = targetProject,
                         projectGraph = projectGraph,
-                        config = config,
+                        configName = config.name,
                         customModuleTypes = customModuleTypes,
+                        projectQuerier = projectQuerier,
                     )
                     parseModuleDeps(targetProject)
                 }
             }
         }
 
-        rootModules.forEach { rootModule ->
+        rootModulePaths.forEach { rootModule ->
             parseModuleDeps(rootModule)
         }
         return projectGraph
     }
 
-    /** Registers the dependency from [sourceProject] to [targetProject] in [projectGraph] */
+    /** Registers the dependency from [sourceProjectPath] to [targetProjectPath] in [projectGraph] */
     private fun registerDependency(
-        sourceProject: GradleProject,
-        targetProject: GradleProject,
+        sourceProjectPath: ProjectPath,
+        targetProjectPath: ProjectPath,
         projectGraph: MutableMap<Module, List<Module>>,
-        config: GradleProjectConfiguration,
+        configName: String,
         customModuleTypes: List<ModuleType>,
+        projectQuerier: ProjectQuerier,
     ) {
         val sourceModule = Module(
-            path = sourceProject.path,
-            type = sourceProject.getModuleType(customModuleTypes),
+            path = sourceProjectPath,
+            type = projectQuerier.getProjectType(sourceProjectPath, customModuleTypes),
         )
         projectGraph[sourceModule] = projectGraph.getOrDefault(sourceModule, emptyList())
             .plus(
                 Module(
-                    path = targetProject.path,
-                    configName = config.name,
-                    type = targetProject.getModuleType(customModuleTypes),
+                    path = targetProjectPath,
+                    configName = configName,
+                    type = projectQuerier.getProjectType(targetProjectPath, customModuleTypes),
                 ),
             )
     }
