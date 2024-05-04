@@ -1,3 +1,8 @@
+This is the sample app, which can be used to manually check that the generated dependency graphs are correct.
+To generate these graphs, run:
+`./gradlew sample:createModuleGraph`
+The graph will be added under the heading below.
+
 # Module Graph
 
 ```mermaid
