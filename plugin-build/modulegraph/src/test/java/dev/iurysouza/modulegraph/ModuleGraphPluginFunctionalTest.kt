@@ -431,6 +431,7 @@ class ModuleGraphPluginFunctionalTest {
                     java
                 }
                 dependencies {
+                    // Cheeky circular dependency
                     implementation(project(":example"))
                 }
             """.trimIndent(),

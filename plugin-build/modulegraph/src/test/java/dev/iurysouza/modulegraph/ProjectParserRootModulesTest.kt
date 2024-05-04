@@ -22,6 +22,7 @@ internal class ProjectParserRootModulesTest {
         ModuleToDeps.featAData,
         ModuleToDeps.commonData,
         ModuleToDeps.coreNetworking,
+        ModuleToDeps.coreUtil,
     )
 
     private val projectQuerier = object : ProjectQuerier {
@@ -64,6 +65,7 @@ internal class ProjectParserRootModulesTest {
             ModuleToDeps.featAData,
             ModuleToDeps.commonData,
             ModuleToDeps.coreNetworking,
+            ModuleToDeps.coreUtil,
         )
         val actualGraph = ProjectParser.parseProjectGraph(
             allProjectPaths = Project.allPaths,
@@ -83,6 +85,8 @@ internal class ProjectParserRootModulesTest {
             ModuleToDeps.featAUi,
             ModuleToDeps.commonComponent,
             ModuleToDeps.coreUi,
+            ModuleToDeps.coreUtil,
+            ModuleToDeps.coreNetworking,
         )
         val actualGraph = ProjectParser.parseProjectGraph(
             allProjectPaths = Project.allPaths,
@@ -102,6 +106,7 @@ internal class ProjectParserRootModulesTest {
             ModuleToDeps.featAData,
             ModuleToDeps.commonData,
             ModuleToDeps.coreNetworking,
+            ModuleToDeps.coreUtil,
         )
         val actualGraph = ProjectParser.parseProjectGraph(
             allProjectPaths = Project.allPaths,
@@ -152,7 +157,9 @@ private data class ProjectAndDeps(val path: ProjectPath, val deps: List<ProjectP
 private object Project {
     val coreUtil = ProjectAndDeps(
         MockProjectPath.coreUtil,
-        emptyList(),
+        // We create a circular dependency between util and networking
+        // In a real Gradle project this is illegal, but we should still be able to render it.
+        listOf(MockProjectPath.coreNetworking),
     )
     val coreNetworking = ProjectAndDeps(
         MockProjectPath.coreNetworking,
@@ -223,6 +230,9 @@ private object ModuleToDeps {
     )
     val coreNetworking = createDefaultModuleSource(MockProjectPath.coreNetworking) to listOf(
         createDefaultModuleTarget(MockProjectPath.coreUtil),
+    )
+    val coreUtil = createDefaultModuleSource(MockProjectPath.coreUtil) to listOf(
+        createDefaultModuleTarget(MockProjectPath.coreNetworking),
     )
 
     private fun createDefaultModuleSource(path: String) = Module(
