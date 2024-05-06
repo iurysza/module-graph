@@ -27,7 +27,9 @@ internal object ProjectParser {
             else -> emptyList()
         }
 
-        val rootModules = if (rootModuleInclusionPattern == null) allProjectPaths else {
+        val rootModules = if (rootModuleInclusionPattern == null) {
+            allProjectPaths
+        } else {
             allProjectPaths.filter { rootModuleInclusionPattern.matches(it) }
         }
         require(rootModules.isNotEmpty()) {
@@ -42,16 +44,16 @@ internal object ProjectParser {
         )
     }
 
-    /** @return the modules which are direct dependencies in [config] */
-    private fun getDirectDependencies(
-        config: GradleProjectConfiguration,
+    /** @return the modules which are direct dependencies */
+    private fun GradleProjectConfiguration.getDirectDependencies(
         configExclusionPattern: RegexMatcher?,
         moduleExclusionPattern: RegexMatcher?,
     ): List<String> {
-        if (configExclusionPattern.matches(config.name)) {
-            return emptyList()
+        return if (configExclusionPattern.matches(name)) {
+            emptyList()
+        } else {
+            projectPaths.filterNot { moduleExclusionPattern.matches(it) }
         }
-        return config.projectPaths.filterNot { moduleExclusionPattern.matches(it) }
     }
 
     /**
@@ -72,7 +74,7 @@ internal object ProjectParser {
         projectQuerier: ProjectQuerier,
     ): ProjectGraph {
         val projectGraph = hashMapOf<Module, List<Module>>()
-        val projectPathsParsed = mutableListOf<ProjectPath>()
+        val projectPathsParsed = hashSetOf<ProjectPath>()
 
         fun parseModuleDeps(sourceProjectPath: ProjectPath) {
             // Don't parse projects more than once -
@@ -81,12 +83,10 @@ internal object ProjectParser {
             projectPathsParsed.add(sourceProjectPath)
 
             projectQuerier.getConfigurations(sourceProjectPath).forEach { config ->
-                val directDependencyPaths = getDirectDependencies(
-                    config = config,
+                config.getDirectDependencies(
                     configExclusionPattern = configExclusionPattern,
                     moduleExclusionPattern = moduleExclusionPattern,
-                )
-                directDependencyPaths.forEach { targetProject ->
+                ).forEach { targetProject ->
                     registerDependency(
                         sourceProjectPath = sourceProjectPath,
                         targetProjectPath = targetProject,
