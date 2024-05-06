@@ -12,7 +12,7 @@ moduleGraphConfig {
     readmePath.set("./README.md")
 
     // optional configs
-    focusedModulesRegex.set(""".*gama.*""")
+    // focusedModulesRegex.set(""".*gama.*""")
     showFullPath.set(false)
     orientation.set(Orientation.TOP_TO_BOTTOM)
     linkText.set(LinkText.NONE)
@@ -38,7 +38,12 @@ moduleGraphConfig {
         ),
     )
     excludedConfigurationsRegex.set(""".*test.*""")
-    excludedModulesRegex.set(".*alpha.*")
+
+    // You can choose to exclude certain modules
+    // excludedModulesRegex.set(".*alpha.*")
+
+    // You can choose to only include modules that are reachable from certain root modules
+    // rootModulesRegex.set(".*gama.*")
 }
 
 task("check") {

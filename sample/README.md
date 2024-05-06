@@ -1,3 +1,8 @@
+This is the sample app, which can be used to manually check that the generated dependency graphs are correct.
+To generate these graphs, run:
+`./gradlew sample:createModuleGraph`
+The graph will be added under the heading below.
+
 # Module Graph
 
 ```mermaid
@@ -9,18 +14,27 @@
 }%%
 
 graph TB
-  subgraph container
-    gama
+  subgraph :sample
+    :sample:zeta["zeta"]
+    :sample:beta["beta"]
+    :sample:alpha["alpha"]
   end
-  subgraph sample
-    zeta
+  subgraph :sample:container
+    :sample:container:gama["gama"]
+    :sample:container:delta["delta"]
   end
-  gama --> zeta
+  :sample:container:gama --> :sample:zeta
+  :sample:zeta --> :sample:beta
+  :sample:alpha --> :sample:zeta
+  :sample:alpha --> :sample:beta
+  :sample:alpha --> :sample:container:gama
+  :sample:alpha --> :sample:container:delta
 
-classDef java fill:#C3E88D,stroke:#fff,stroke-width:2px,color:#fff;
-class gama java
-class zeta java
+classDef java fill:#B5661C,stroke:#fff,stroke-width:2px,color:#fff;
+class :sample:container:gama java
+class :sample:zeta java
+class :sample:beta java
+class :sample:alpha java
+class :sample:container:delta java
 
-classDef focus fill:#F5A622,stroke:#fff,stroke-width:2px,color:#fff;
-class gama focus
 ```
