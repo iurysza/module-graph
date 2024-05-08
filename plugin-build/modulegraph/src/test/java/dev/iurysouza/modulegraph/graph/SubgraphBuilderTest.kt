@@ -2,6 +2,7 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.gradle.Module
+import dev.iurysouza.modulegraph.model.ProjectGraphResult
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -17,10 +18,11 @@ class SubgraphBuilderTest {
                 ),
             ),
         )
-        val graphOptions = withGraphOptions()
+        val config = getConfig()
+        val result = ProjectGraphResult(graphModel, config)
 
         val subgraph = SubgraphBuilder.build(
-            list = DigraphBuilder.build(graphModel, graphOptions),
+            list = DigraphBuilder.build(result),
             showFullPath = false,
         ).value
 
@@ -35,13 +37,14 @@ class SubgraphBuilderTest {
     @Test
     fun `when showFullPath is true, an empty graph is generated`() {
         val graphModel = aModuleGraph()
-        val graphOptions = withGraphOptions(
+        val config = getConfig(
             focusedModulesRegex = ".*gama.*",
             orientation = Orientation.TOP_TO_BOTTOM,
         )
+        val result = ProjectGraphResult(graphModel, config)
 
         val subgraph = SubgraphBuilder.build(
-            list = DigraphBuilder.build(graphModel, graphOptions),
+            list = DigraphBuilder.build(result),
             showFullPath = true,
         )
 
@@ -51,13 +54,14 @@ class SubgraphBuilderTest {
     @Test
     fun `Subgraph partitions correctly based on given module configuration`() {
         val graphModel = aModuleGraph()
-        val graphOptions = withGraphOptions(
+        val config = getConfig(
             focusedModulesRegex = ".*gama.*",
             orientation = Orientation.TOP_TO_BOTTOM,
         )
+        val result = ProjectGraphResult(graphModel, config)
 
         val subgraph = SubgraphBuilder.build(
-            list = DigraphBuilder.build(graphModel, graphOptions),
+            list = DigraphBuilder.build(result),
             showFullPath = false,
         )
 

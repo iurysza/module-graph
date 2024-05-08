@@ -8,20 +8,20 @@ import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfigura
 import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectPath
 import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.ProjectQuerier
 import dev.iurysouza.modulegraph.gradle.matches
+import dev.iurysouza.modulegraph.model.SingleGraphConfig
+import dev.iurysouza.modulegraph.model.alias.ProjectGraph
 
 internal object ProjectParser {
     internal fun parseProjectGraph(
         allProjectPaths: List<ProjectPath>,
-        rootModulesRegex: String?,
-        excludedConfigurations: String?,
-        excludedModules: String?,
-        theme: Theme,
+        config: SingleGraphConfig,
         projectQuerier: ProjectQuerier,
     ): ProjectGraph {
-        val configExclusionPattern = excludedConfigurations?.let { RegexMatcher(it) }
-        val moduleExclusionPattern = excludedModules?.let { RegexMatcher(it) }
-        val rootModuleInclusionPattern = rootModulesRegex?.let { RegexMatcher(it) }
+        val configExclusionPattern = config.excludedConfigurationsRegex?.let { RegexMatcher(it) }
+        val moduleExclusionPattern = config.excludedModulesRegex?.let { RegexMatcher(it) }
+        val rootModuleInclusionPattern = config.rootModulesRegex?.let { RegexMatcher(it) }
 
+        val theme = config.theme
         val customModuleTypes = when (theme) {
             is Theme.BASE -> theme.moduleTypes
             else -> emptyList()
@@ -129,5 +129,3 @@ internal object ProjectParser {
             )
     }
 }
-
-private typealias ProjectGraph = Map<Module, List<Module>>

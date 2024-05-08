@@ -2,6 +2,7 @@ import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.ModuleType
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.model.SingleGraphConfig
 
 plugins {
     id("dev.iurysouza.modulegraph")
@@ -44,6 +45,22 @@ moduleGraphConfig {
 
     // You can choose to only include modules that are reachable from certain root modules
     // rootModulesRegex.set(".*gama.*")
+
+    graphConfigs.set(
+        listOf(
+            // todo: I don't like this syntax - make a DSL
+            SingleGraphConfig.create(
+                readmePath = "./README.md",
+                heading = "# My second graph",
+                rootModulesRegex = ".*gama.*",
+            ),
+            SingleGraphConfig.create(
+                readmePath = "./otherReadme.md",
+                heading = "# Graph",
+                rootModulesRegex = ".*zeta.*",
+            ),
+        ),
+    )
 }
 
 task("check") {

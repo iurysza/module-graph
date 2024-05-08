@@ -1,10 +1,16 @@
 package dev.iurysouza.modulegraph.gradle
 
-import dev.iurysouza.modulegraph.*
+import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.Mermaid
+import dev.iurysouza.modulegraph.Orientation
+import dev.iurysouza.modulegraph.ReadmeWriter
+import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.model.ProjectGraphResult
+import dev.iurysouza.modulegraph.model.SingleGraphConfig
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
-import org.gradle.api.provider.MapProperty
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
@@ -24,7 +30,10 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val theme: Property<Theme>
 
     @get:Input
-    @get:Option(option = "focusedModulesRegex", description = "A Regex to match nodes that should be focused.")
+    @get:Option(
+        option = "focusedModulesRegex",
+        description = "A Regex to match modules that should be focused.",
+    )
     @get:Optional
     abstract val focusedModulesRegex: Property<String>
 
@@ -43,7 +52,10 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val heading: Property<String>
 
     @get:Input
-    @get:Option(option = "linkText", description = "Whether to add information as text on links in graph")
+    @get:Option(
+        option = "linkText",
+        description = "Whether to add information as text on links in graph",
+    )
     @get:Optional
     abstract val linkText: Property<LinkText>
 
@@ -56,7 +68,10 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val excludedConfigurationsRegex: Property<String>
 
     @get:Input
-    @get:Option(option = "excludedModulesRegex", description = "A Regex to match nodes that should removed")
+    @get:Option(
+        option = "excludedModulesRegex",
+        description = "A Regex to match modules that should removed",
+    )
     @get:Optional
     abstract val excludedModulesRegex: Property<String>
 
@@ -66,16 +81,28 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val rootModulesRegex: Property<String>
 
     @get:Input
-    @get:Option(option = "setStyleByModuleType", description = "Whether to customize the node by the plugin type")
+    @get:Option(
+        option = "graphConfigs",
+        description = "A list of configs, each of which will generate a separate graph",
+    )
+    @get:Optional
+    abstract val graphConfigs: ListProperty<SingleGraphConfig>
+
+    @get:Input
+    @get:Option(
+        option = "setStyleByModuleType",
+        description = "Whether to customize the module by the plugin type",
+    )
     @get:Optional
     abstract val setStyleByModuleType: Property<Boolean>
 
-    @get:OutputFile
-    abstract val outputFile: RegularFileProperty
+    // todo: do we need this?
+//    @get:OutputFile
+//    abstract val outputFile: RegularFileProperty
 
     @get:Input
-    @get:Option(option = "graphModel", description = "The project graph model")
-    internal abstract val graphModel: MapProperty<Module, List<Module>>
+    @get:Option(option = "graphModels", description = "The produced graph models")
+    internal abstract val graphModels: ListProperty<ProjectGraphResult>
 
     init {
         group = "Reporting"
@@ -85,21 +112,21 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @TaskAction
     fun execute() {
         runCatching {
-            val graphOptions = GraphOptions(
-                theme = theme.getOrElse(Theme.NEUTRAL),
-                orientation = orientation.getOrElse(Orientation.LEFT_TO_RIGHT),
-                focusedNodesRegex = focusedModulesRegex.orNull?.let { Regex(it) },
-                showFullPath = showFullPath.getOrElse(false),
-                linkText = linkText.getOrElse(LinkText.NONE),
-                setStyleByModuleType = setStyleByModuleType.getOrElse(false),
-            )
-            val mermaidGraph = Mermaid.generateGraph(graphModel.get(), graphOptions)
-            ReadmeWriter.appendOrOverwriteGraph(
-                mermaidGraph = mermaidGraph,
-                readMeSection = heading.get(),
-                readmeFile = outputFile.get().asFile,
-                logger = logger,
-            )
+            val results =
+                graphModels.orNull ?: error("Graph models have not been computed on time!")
+            results.forEach { result ->
+                val config = result.config
+                val mermaidGraph = Mermaid.generateGraph(result)
+
+                val readmeFile = project.layout.projectDirectory.file(config.readmePath)
+
+                ReadmeWriter.appendOrOverwriteGraph(
+                    mermaidGraph = mermaidGraph,
+                    readMeSection = config.heading,
+                    readmeFile = readmeFile.asFile,
+                    logger = logger,
+                )
+            }
         }.onFailure {
             logger.log(LogLevel.ERROR, it.message, it)
             throw it

@@ -1,7 +1,10 @@
 package dev.iurysouza.modulegraph.graph
 
-import dev.iurysouza.modulegraph.*
+import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.Orientation
+import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.gradle.Module
+import dev.iurysouza.modulegraph.model.SingleGraphConfig
 
 internal fun aModuleGraph() = mapOf(
     Module(
@@ -36,11 +39,11 @@ internal fun aModuleGraph() = mapOf(
         path = ":sample:container:gama",
     )
         to listOf(
-            Module(
-                path = ":sample:zeta",
-                configName = "implementation",
-            ),
+        Module(
+            path = ":sample:zeta",
+            configName = "implementation",
         ),
+    ),
 )
 
 internal val expectedMermaidGraphCode = """
@@ -68,20 +71,30 @@ internal val expectedMermaidGraphCode = """
         |```
 """.trimMargin()
 
-internal fun withGraphOptions(
-    orientation: Orientation = Orientation.LEFT_TO_RIGHT,
-    linkText: LinkText = LinkText.NONE,
+internal fun getConfig(
+    readmePath: String = "",
+    heading: String = "",
+    theme: Theme? = null,
+    rootModulesRegex: String? = null,
+    orientation: Orientation? = null,
     focusedModulesRegex: String? = null,
-    showFullPath: Boolean = false,
-    theme: Theme = Theme.NEUTRAL,
-    setStyleByModuleType: Boolean = false,
-) = GraphOptions(
-    linkText = linkText,
+    excludedConfigurationsRegex: String? = null,
+    excludedModulesRegex: String? = null,
+    linkText: LinkText? = null,
+    setStyleByModuleType: Boolean? = null,
+    showFullPath: Boolean? = null,
+) = SingleGraphConfig.create(
+    readmePath = readmePath,
+    heading = heading,
     theme = theme,
+    rootModulesRegex = rootModulesRegex,
     orientation = orientation,
-    focusedNodesRegex = focusedModulesRegex?.toRegex(),
-    showFullPath = showFullPath,
+    focusedModulesRegex = focusedModulesRegex,
+    excludedConfigurationsRegex = excludedConfigurationsRegex,
+    excludedModulesRegex = excludedModulesRegex,
+    linkText = linkText,
     setStyleByModuleType = setStyleByModuleType,
+    showFullPath = showFullPath,
 )
 
 internal val liveMatchReconstructedModel = mapOf(

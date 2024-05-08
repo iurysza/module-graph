@@ -3,8 +3,10 @@ package dev.iurysouza.modulegraph.gradle
 import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.model.SingleGraphConfig
 import javax.inject.Inject
 import org.gradle.api.Project
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 
 /**
@@ -80,4 +82,7 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
      * Note: when using this option, the graph generated won't use the subgraph feature mermaid provides.
      */
     val showFullPath: Property<Boolean> = objects.property(Boolean::class.java)
+
+    val graphConfigs: ListProperty<SingleGraphConfig> =
+        objects.listProperty(SingleGraphConfig::class.java)
 }

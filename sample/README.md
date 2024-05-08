@@ -1,8 +1,23 @@
-This is the sample app, which can be used to manually check that the generated dependency graphs are correct.
-To generate these graphs, run:
-`./gradlew sample:createModuleGraph`
-The graph will be added under the heading below.
+# My second graph
 
+```mermaid
+%%{
+  init: {
+    'theme': 'neutral'
+  }
+}%%
+
+graph LR
+  subgraph :sample
+    :sample:zeta["zeta"]
+    :sample:beta["beta"]
+  end
+  subgraph :sample:container
+    :sample:container:gama["gama"]
+  end
+  :sample:container:gama --> :sample:zeta
+  :sample:zeta --> :sample:beta
+```
 # Module Graph
 
 ```mermaid

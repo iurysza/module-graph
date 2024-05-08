@@ -1,8 +1,9 @@
 package dev.iurysouza.modulegraph.gradle
 
-import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.gradle.graphparser.ProjectParser
 import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.GradleProjectQuerier
+import dev.iurysouza.modulegraph.model.ProjectGraphResult
+import dev.iurysouza.modulegraph.model.SingleGraphConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -32,21 +33,38 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.excludedModulesRegex.set(extension.excludedModulesRegex)
             task.setStyleByModuleType.set(extension.setStyleByModuleType)
             task.rootModulesRegex.set(extension.rootModulesRegex)
-            task.outputFile.set(project.layout.projectDirectory.file(extension.readmePath))
+            task.graphConfigs.set(extension.graphConfigs)
+
+            val primaryGraphConfig = SingleGraphConfig.create(
+                readmePath = task.readmePath.orNull,
+                heading = task.heading.orNull,
+                theme = task.theme.orNull,
+                orientation = task.orientation.orNull,
+                focusedModulesRegex = task.focusedModulesRegex.orNull,
+                linkText = task.linkText.orNull,
+                setStyleByModuleType = task.setStyleByModuleType.orNull,
+                excludedConfigurationsRegex = task.excludedConfigurationsRegex.orNull,
+                excludedModulesRegex = task.excludedConfigurationsRegex.orNull,
+                rootModulesRegex = task.rootModulesRegex.orNull,
+                showFullPath = task.showFullPath.orNull,
+            )
+            val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
+            val allGraphConfigs = listOf(primaryGraphConfig) + additionalGraphConfigs
 
             val allProjects = project.allprojects
             val allProjectPaths = allProjects.map { it.path }
             val projectQuerier = GradleProjectQuerier(allProjects)
 
-            val projectGraph = ProjectParser.parseProjectGraph(
-                allProjectPaths = allProjectPaths,
-                rootModulesRegex = extension.rootModulesRegex.orNull,
-                excludedConfigurations = extension.excludedConfigurationsRegex.orNull,
-                excludedModules = extension.excludedModulesRegex.orNull,
-                theme = extension.theme.getOrElse(Theme.NEUTRAL),
-                projectQuerier = projectQuerier,
-            )
-            task.graphModel.set(projectGraph)
+            val results = allGraphConfigs.map { config ->
+                val projectGraph = ProjectParser.parseProjectGraph(
+                    allProjectPaths = allProjectPaths,
+                    config = config,
+                    projectQuerier = projectQuerier,
+                )
+                ProjectGraphResult(projectGraph, config)
+            }
+
+            task.graphModels.set(results)
         }
     }
 }

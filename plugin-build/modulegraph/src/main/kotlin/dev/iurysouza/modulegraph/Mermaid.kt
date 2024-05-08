@@ -1,21 +1,20 @@
 package dev.iurysouza.modulegraph
 
-import dev.iurysouza.modulegraph.gradle.Module
 import dev.iurysouza.modulegraph.graph.*
+import dev.iurysouza.modulegraph.model.ProjectGraphResult
 
 internal object Mermaid {
-
     fun generateGraph(
-        graphModel: Map<Module, List<Module>>,
-        graphOptions: GraphOptions,
+        result: ProjectGraphResult,
     ): String {
-        val (linkText, theme, orientation) = graphOptions
-        val digraph = DigraphBuilder.build(graphModel, graphOptions)
+        val config = result.config
+        val digraph = DigraphBuilder.build(result)
 
-        val configCode = ConfigCodeBuilder.build(theme)
-        val subgraphCode = SubgraphBuilder.build(digraph, graphOptions.showFullPath)
-        val digraphCode = DigraphCodeBuilder.build(digraph, linkText)
-        val highlightCode = NodeStyleBuilder.build(digraph, graphOptions)
+        val configCode = ConfigCodeBuilder.build(config.theme)
+        val subgraphCode = SubgraphBuilder.build(digraph, config.showFullPath)
+        val digraphCode = DigraphCodeBuilder.build(digraph, config.linkText)
+        val highlightCode = NodeStyleBuilder.build(digraph, config)
+        val orientationName = config.orientation.value
 
         return buildString {
             append("```mermaid")
@@ -23,7 +22,7 @@ internal object Mermaid {
             appendCode(configCode)
             lineBreak()
             lineBreak()
-            append("graph ${orientation.value}")
+            append("graph $orientationName")
             if (subgraphCode.isNotEmpty()) {
                 lineBreak()
                 appendCode(subgraphCode)
@@ -43,12 +42,3 @@ internal object Mermaid {
         append(code.value)
     }
 }
-
-internal data class GraphOptions(
-    val linkText: LinkText,
-    val theme: Theme,
-    val orientation: Orientation,
-    val focusedNodesRegex: Regex?,
-    val showFullPath: Boolean,
-    val setStyleByModuleType: Boolean,
-)
