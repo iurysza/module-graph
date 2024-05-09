@@ -2,13 +2,13 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.gradle.Module
-import dev.iurysouza.modulegraph.model.ProjectGraphResult
+import dev.iurysouza.modulegraph.model.GraphParseResult
 import dev.iurysouza.modulegraph.model.SingleGraphConfig
 import dev.iurysouza.modulegraph.model.alias.ProjectGraph
 
 internal object DigraphBuilder {
     fun build(
-        graphResult: ProjectGraphResult,
+        graphResult: GraphParseResult,
     ): List<DigraphModel> {
         val graphModel = graphResult.graph
         val config = graphResult.config

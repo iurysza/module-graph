@@ -1,7 +1,7 @@
 package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.LinkText
-import dev.iurysouza.modulegraph.model.ProjectGraphResult
+import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -13,7 +13,7 @@ class DigraphCodeBuilderTest {
         val config = getConfig(
             focusedModulesRegex = ".*gama.*",
         )
-        val result = ProjectGraphResult(graphModel, config)
+        val result = GraphParseResult(graphModel, config)
 
         val mermaidCode = DigraphCodeBuilder.build(
             digraphModel = DigraphBuilder.build(result),
@@ -33,7 +33,7 @@ class DigraphCodeBuilderTest {
         val config = getConfig(
             linkText = LinkText.CONFIGURATION,
         )
-        val result = ProjectGraphResult(graphModel, config)
+        val result = GraphParseResult(graphModel, config)
 
         val mermaidCode = DigraphCodeBuilder.build(
             digraphModel = DigraphBuilder.build(result),
@@ -47,7 +47,7 @@ class DigraphCodeBuilderTest {
     fun `Build digraph ignoring configurations when link text is none`() {
         val graphModel = fullLiveMatchGraph
         val config = getConfig()
-        val result = ProjectGraphResult(graphModel, config)
+        val result = GraphParseResult(graphModel, config)
 
         val mermaidCode = DigraphCodeBuilder.build(
             digraphModel = DigraphBuilder.build(result),

@@ -2,7 +2,7 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.*
 import dev.iurysouza.modulegraph.gradle.Module
-import dev.iurysouza.modulegraph.model.ProjectGraphResult
+import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -23,7 +23,7 @@ class MermaidGraphTest {
             theme = Theme.BASE(focusColor = focusColor),
             showFullPath = true,
         )
-        val result = ProjectGraphResult(reconstructedModel, config)
+        val result = GraphParseResult(reconstructedModel, config)
         val mermaidGraph = Mermaid.generateGraph(result)
 
         val expectedGraph = """
@@ -47,7 +47,7 @@ class MermaidGraphTest {
     @Test
     fun `Given a single module project, when generating graph, then it throws IllegalArgumentException`() {
         val graphModel = mapOf(Module(":example") to listOf<Module>())
-        val result = ProjectGraphResult(graphModel, getConfig())
+        val result = GraphParseResult(graphModel, getConfig())
 
         assertThrows<IllegalArgumentException> {
             Mermaid.generateGraph(result)
@@ -71,7 +71,7 @@ class MermaidGraphTest {
             orientation = Orientation.LEFT_TO_RIGHT,
         )
 
-        val result = ProjectGraphResult(graphModel, config)
+        val result = GraphParseResult(graphModel, config)
         val mermaidGraph = Mermaid.generateGraph(result)
 
         assertEquals(expectedLiveMatchGraph, mermaidGraph)
@@ -95,7 +95,7 @@ class MermaidGraphTest {
             orientation = Orientation.TOP_TO_BOTTOM,
             focusedModulesRegex = ".*gama.*",
         )
-        val result = ProjectGraphResult(graphModel, config)
+        val result = GraphParseResult(graphModel, config)
 
         val mermaidGraph = Mermaid.generateGraph(result)
 

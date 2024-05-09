@@ -2,7 +2,7 @@ package dev.iurysouza.modulegraph.gradle
 
 import dev.iurysouza.modulegraph.gradle.graphparser.ProjectParser
 import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.GradleProjectQuerier
-import dev.iurysouza.modulegraph.model.ProjectGraphResult
+import dev.iurysouza.modulegraph.model.GraphParseResult
 import dev.iurysouza.modulegraph.model.SingleGraphConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -61,7 +61,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
                     config = config,
                     projectQuerier = projectQuerier,
                 )
-                ProjectGraphResult(projectGraph, config)
+                GraphParseResult(projectGraph, config)
             }
 
             task.graphModels.set(results)

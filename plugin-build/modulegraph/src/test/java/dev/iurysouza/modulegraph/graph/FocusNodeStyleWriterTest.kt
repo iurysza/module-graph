@@ -2,7 +2,7 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.FocusColor
 import dev.iurysouza.modulegraph.Theme
-import dev.iurysouza.modulegraph.model.ProjectGraphResult
+import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -23,7 +23,7 @@ class FocusNodeStyleWriterTest {
             focusedModulesRegex = ".*$focusedNode.*",
         )
         val graphModel = aModuleGraph()
-        val result = ProjectGraphResult(graphModel, config)
+        val result = GraphParseResult(graphModel, config)
 
         val digraph = DigraphBuilder.build(result)
         val highlightSyntax = NodeStyleBuilder.build(digraph, config)

@@ -5,16 +5,14 @@ import dev.iurysouza.modulegraph.Mermaid
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.ReadmeWriter
 import dev.iurysouza.modulegraph.Theme
-import dev.iurysouza.modulegraph.model.ProjectGraphResult
+import dev.iurysouza.modulegraph.model.GraphParseResult
 import dev.iurysouza.modulegraph.model.SingleGraphConfig
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 
@@ -102,7 +100,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
 
     @get:Input
     @get:Option(option = "graphModels", description = "The produced graph models")
-    internal abstract val graphModels: ListProperty<ProjectGraphResult>
+    internal abstract val graphModels: ListProperty<GraphParseResult>
 
     init {
         group = "Reporting"

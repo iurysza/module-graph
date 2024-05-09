@@ -1,11 +1,11 @@
 package dev.iurysouza.modulegraph
 
 import dev.iurysouza.modulegraph.graph.*
-import dev.iurysouza.modulegraph.model.ProjectGraphResult
+import dev.iurysouza.modulegraph.model.GraphParseResult
 
 internal object Mermaid {
     fun generateGraph(
-        result: ProjectGraphResult,
+        result: GraphParseResult,
     ): String {
         val config = result.config
         val digraph = DigraphBuilder.build(result)
