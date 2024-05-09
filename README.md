@@ -82,7 +82,7 @@ moduleGraphConfig {
     // excludedModulesRegex = ".*moduleName.*" // optional
     // focusedModulesRegex = ".*(projectName).*" // optional
     // rootModulesRegex = ".*moduleName.*" // optional
-    // setStyleByPluginType = true // optional
+    // setStyleByModuleType = true // optional
     // theme = Theme.NEUTRAL // optional
     // Or you can fully customize it by using the BASE theme:
     // theme = new Theme.BASE(
@@ -167,7 +167,7 @@ moduleGraphConfig {
     // showFullPath.set(false) // optional
     // orientation.set(Orientation.LEFT_TO_RIGHT) //optional
     // linkText.set(LinkText.NONE) // optional
-    // setStyleByPluginType.set(true) // optional
+    // setStyleByModuleType.set(true) // optional
     // excludedConfigurationsRegex.set(".*test.*") // optional
     // excludedModulesRegex.set(".*moduleName.*") // optional
     // focusedModulesRegex.set(".*(projectName).*") // optional
@@ -216,7 +216,7 @@ Required settings:
 
 Optional settings:
 
-- **setStyleByPluginType**: Whether to style the modules based on their type (KotlinMultiplatform, Android Library, etc). Default is `false`. [Read more](#module-type-based-styling).
+- **setStyleByModuleType**: Whether to style the modules based on their type (KotlinMultiplatform, Android Library, etc). Default is `false`. [Read more](#module-type-based-styling).
 - **focusedModulesRegex**: The regex to match nodes in the graph (project names) that should be focused. By
   default, no nodes are focused.
   If set, the matching nodes will be highlighted and only related nodes will be shown. The color can be customized via the `focusColor` property
@@ -413,7 +413,7 @@ Just toggle this option on:
 ```kotlin
 moduleGraphConfig {
     //..
-    setStyleByPluginType.set(true)
+    setStyleByModuleType.set(true)
 }
 ```
 
