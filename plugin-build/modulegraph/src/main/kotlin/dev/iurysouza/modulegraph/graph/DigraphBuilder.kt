@@ -37,9 +37,10 @@ internal object DigraphBuilder {
         val sourceFullName = source.path
         val (sourceMatches, targetMatches) = when {
             focusedModulesRegex == null -> true to true
-            else -> sourceFullName.matches(focusedModulesRegex) to (targetFullName?.matches(
-                focusedModulesRegex,
-            ) ?: false)
+            else -> {
+                val match = targetFullName?.matches(focusedModulesRegex) ?: false
+                sourceFullName.matches(focusedModulesRegex) to match
+            }
         }
         val regexFilterSet = focusedModulesRegex != null
         val shouldNotAddToGraph =

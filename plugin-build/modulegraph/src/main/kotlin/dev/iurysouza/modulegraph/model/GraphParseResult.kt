@@ -1,7 +1,6 @@
 package dev.iurysouza.modulegraph.model
 
 import dev.iurysouza.modulegraph.model.alias.ProjectGraph
-import java.io.Serializable
 
 internal data class GraphParseResult(
     /** The output graph model after parsing */

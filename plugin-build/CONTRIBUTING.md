@@ -4,6 +4,10 @@ This is the source for the Module Graph Gradle plugin.
 The code style of this project is enforced with Detekt. Run it with:
 `./gradlew :plugin-build:modulegraph:detekt`
 
+Also check Ktlint:
+`./gradlew :plugin-build:modulegraph:ktlintMainSourceSetCheck`
+`./gradlew :plugin-build:modulegraph:ktlintTestSourceSetCheck`
+
 # Test
 This project has extensive unit tests. Run them locally with:
 `./gradlew :plugin:modulegraph:test`
