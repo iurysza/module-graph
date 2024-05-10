@@ -14,7 +14,7 @@ moduleGraphConfig {
     /* Setup primary graph */
 
     /* Primary graph - required config */
-    heading.set("# Module Graph")
+    heading.set("# Primary Graph")
     readmePath.set("./README.md")
 
     /* Primary graph - optional config */

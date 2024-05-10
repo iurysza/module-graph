@@ -2,10 +2,12 @@ package dev.iurysouza.modulegraph
 
 import dev.iurysouza.modulegraph.gradle.CreateModuleGraphTask
 import dev.iurysouza.modulegraph.gradle.ModuleGraphExtension
+import org.gradle.api.GradleException
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class ModuleGraphPluginTest {
 
@@ -13,17 +15,30 @@ class ModuleGraphPluginTest {
     private val pluginExtension = "moduleGraphConfig"
 
     @Test
-    fun `plugin is applied correctly to the project`() {
+    fun `error when plugin is applied to the project without valid graph config`() {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply(pluginId)
-        assert(project.tasks.getByName("createModuleGraph") is CreateModuleGraphTask)
+        assertThrows<GradleException> {
+            project.tasks.getByName("createModuleGraph")
+        }
     }
 
     @Test
     fun `extension moduleGraphConfig is created correctly`() {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply(pluginId)
-        assertNotNull(project.extensions.getByName("moduleGraphConfig"))
+        assertNotNull(project.extensions.getByName(pluginExtension))
+    }
+
+    @Test
+    fun `plugin is correctly applied to the project with minimal valid graph config`() {
+        val project = ProjectBuilder.builder().build()
+        project.pluginManager.apply(pluginId)
+        (project.extensions.getByName(pluginExtension) as ModuleGraphExtension).apply {
+            readmePath.set("README.md")
+            heading.set("# Heading")
+        }
+        assert(project.tasks.getByName("createModuleGraph") is CreateModuleGraphTask)
     }
 
     @Test
@@ -31,18 +46,17 @@ class ModuleGraphPluginTest {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply(pluginId)
         val aFilePath = "${project.projectDir}/README.md"
-        val aRegexPattern = ".*"
         (project.extensions.getByName(pluginExtension) as ModuleGraphExtension).apply {
             heading.set("### Dependency Diagram")
             theme.set(Theme.NEUTRAL)
             showFullPath.set(true)
             linkText.set(LinkText.CONFIGURATION)
-            focusedModulesRegex.set(aRegexPattern)
             orientation.set(Orientation.TOP_TO_BOTTOM)
             readmePath.set(aFilePath)
             excludedConfigurationsRegex.set("implementation")
             excludedModulesRegex.set("project")
-            rootModulesRegex.set(aRegexPattern)
+            focusedModulesRegex.set(".*test.*")
+            rootModulesRegex.set(".*main.*")
         }
 
         val task = project.tasks.getByName("createModuleGraph") as CreateModuleGraphTask
@@ -53,9 +67,9 @@ class ModuleGraphPluginTest {
         assertEquals(true, task.showFullPath.get())
         assertEquals(Theme.NEUTRAL, task.theme.get())
         assertEquals(Orientation.TOP_TO_BOTTOM, task.orientation.get())
-        assertEquals(aRegexPattern, task.focusedModulesRegex.get())
+        assertEquals(".*test.*", task.focusedModulesRegex.get())
         assertEquals("implementation", task.excludedConfigurationsRegex.get())
         assertEquals("project", task.excludedModulesRegex.get())
-        assertEquals(aRegexPattern, task.rootModulesRegex.get())
+        assertEquals(".*main.*", task.rootModulesRegex.get())
     }
 }

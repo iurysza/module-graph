@@ -83,10 +83,11 @@ internal object ProjectParser {
             projectPathsParsed.add(sourceProjectPath)
 
             projectQuerier.getConfigurations(sourceProjectPath).forEach { config ->
-                config.getDirectDependencies(
+                val deps = config.getDirectDependencies(
                     configExclusionPattern = configExclusionPattern,
                     moduleExclusionPattern = moduleExclusionPattern,
-                ).forEach { targetProject ->
+                )
+                deps.forEach { targetProject ->
                     registerDependency(
                         sourceProjectPath = sourceProjectPath,
                         targetProjectPath = targetProject,

@@ -83,19 +83,21 @@ internal fun getConfig(
     linkText: LinkText? = null,
     setStyleByModuleType: Boolean? = null,
     showFullPath: Boolean? = null,
-) = GraphConfig.create(
-    readmePath = readmePath,
-    heading = heading,
-    theme = theme,
-    rootModulesRegex = rootModulesRegex,
-    orientation = orientation,
-    focusedModulesRegex = focusedModulesRegex,
-    excludedConfigurationsRegex = excludedConfigurationsRegex,
-    excludedModulesRegex = excludedModulesRegex,
-    linkText = linkText,
-    setStyleByModuleType = setStyleByModuleType,
-    showFullPath = showFullPath,
-)
+) =
+    GraphConfig.Builder(
+        readmePath = readmePath,
+        heading = heading,
+    ).apply {
+        this.theme = theme
+        this.rootModulesRegex = rootModulesRegex
+        this.orientation = orientation
+        this.focusedModulesRegex = focusedModulesRegex
+        this.excludedConfigurationsRegex = excludedConfigurationsRegex
+        this.excludedModulesRegex = excludedModulesRegex
+        this.linkText = linkText
+        this.setStyleByModuleType = setStyleByModuleType
+        this.showFullPath = showFullPath
+    }.build()
 
 internal val liveMatchReconstructedModel = mapOf(
     Module(":core:footballinfo") to listOf(

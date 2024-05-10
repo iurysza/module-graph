@@ -99,10 +99,6 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @get:Optional
     abstract val setStyleByModuleType: Property<Boolean>
 
-    // todo: do we need this?
-//    @get:OutputFile
-//    abstract val outputFile: RegularFileProperty
-
     @get:Input
     @get:Option(option = "graphModels", description = "The produced graph models")
     internal abstract val graphModels: ListProperty<GraphParseResult>

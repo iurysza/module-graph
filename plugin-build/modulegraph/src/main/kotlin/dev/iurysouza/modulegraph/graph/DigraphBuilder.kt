@@ -2,9 +2,8 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.gradle.Module
-import dev.iurysouza.modulegraph.model.GraphParseResult
 import dev.iurysouza.modulegraph.model.GraphConfig
-import dev.iurysouza.modulegraph.model.alias.ProjectGraph
+import dev.iurysouza.modulegraph.model.GraphParseResult
 
 internal object DigraphBuilder {
     fun build(
@@ -12,7 +11,7 @@ internal object DigraphBuilder {
     ): List<DigraphModel> {
         val graphModel = graphResult.graph
         val config = graphResult.config
-        throwIfSingleProject(graphModel)
+        verifySufficientGraph(graphResult)
 
         return graphModel.flatMap { (source, targetList) ->
             when (config.linkText) {
@@ -38,10 +37,13 @@ internal object DigraphBuilder {
         val sourceFullName = source.path
         val (sourceMatches, targetMatches) = when {
             focusedModulesRegex == null -> true to true
-            else -> sourceFullName.matches(focusedModulesRegex) to (targetFullName?.matches(focusedModulesRegex) ?: false)
+            else -> sourceFullName.matches(focusedModulesRegex) to (targetFullName?.matches(
+                focusedModulesRegex,
+            ) ?: false)
         }
         val regexFilterSet = focusedModulesRegex != null
-        val shouldNotAddToGraph = sourceFullName == targetFullName || (!sourceMatches && !targetMatches)
+        val shouldNotAddToGraph =
+            sourceFullName == targetFullName || (!sourceMatches && !targetMatches)
 
         return when {
             shouldNotAddToGraph -> null
@@ -75,11 +77,28 @@ internal object DigraphBuilder {
         }
     }
 
-    private fun throwIfSingleProject(graphModel: ProjectGraph) {
+    private fun throwIfGraphEmpty(graphResult: GraphParseResult) {
+        val graphModel = graphResult.graph
+        val config = graphResult.config
+        if (graphModel.isEmpty()) {
+            error(
+                """
+                    |This graph is empty.
+                    |It may be that the config is too restrictive: $config
+            """.trimMargin(),
+            )
+        }
+    }
+
+    private fun verifySufficientGraph(graphResult: GraphParseResult) {
+        val graphModel = graphResult.graph
+        val config = graphResult.config
+
         val dependencies = graphModel.values.flatten().distinctBy { it.path }.size
         require(graphModel.keys.size > 1 || dependencies > 0) {
             """
                     |The project must have at least two modules to generate a graph.
+                    |It may be that the config is too restrictive: $config
             """.trimMargin()
         }
     }

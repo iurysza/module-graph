@@ -70,7 +70,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
         val linkText = task.linkText.orNull
         val setStyleByModuleType = task.setStyleByModuleType.orNull
         val excludedConfigurationsRegex = task.excludedConfigurationsRegex.orNull
-        val excludedModulesRegex = task.excludedConfigurationsRegex.orNull
+        val excludedModulesRegex = task.excludedModulesRegex.orNull
         val rootModulesRegex = task.rootModulesRegex.orNull
         val showFullPath = task.showFullPath.orNull
 
@@ -110,13 +110,13 @@ open class ModuleGraphPlugin : Plugin<Project> {
         ).apply {
             this.theme = theme
             this.orientation = orientation
-            this.focusedModulesRegex = focusedModulesRegex
             this.linkText = linkText
             this.setStyleByModuleType = setStyleByModuleType
-            this.excludedConfigurationsRegex = excludedConfigurationsRegex
-            this.excludedModulesRegex = excludedConfigurationsRegex
-            this.rootModulesRegex = rootModulesRegex
             this.showFullPath = showFullPath
+            this.excludedConfigurationsRegex = excludedConfigurationsRegex
+            this.excludedModulesRegex = excludedModulesRegex
+            this.rootModulesRegex = rootModulesRegex
+            this.focusedModulesRegex = focusedModulesRegex
         }.build()
     }
 }
