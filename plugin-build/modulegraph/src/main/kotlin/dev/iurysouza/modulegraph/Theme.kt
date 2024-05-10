@@ -4,6 +4,7 @@ import java.io.Serializable as JavaSerializable
 import kotlinx.serialization.Serializable
 
 /**
+ * The mermaid theme to be used for the generated graph.
  * More info at [mermaid docs](https://mermaid.js.org/config/theming.html#theme-configuration)
  */
 @Serializable

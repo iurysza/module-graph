@@ -5,8 +5,8 @@ import dev.iurysouza.modulegraph.Mermaid
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.ReadmeWriter
 import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.model.GraphConfig
 import dev.iurysouza.modulegraph.model.GraphParseResult
-import dev.iurysouza.modulegraph.model.SingleGraphConfig
 import org.gradle.api.DefaultTask
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
@@ -19,8 +19,17 @@ import org.gradle.api.tasks.options.Option
 abstract class CreateModuleGraphTask : DefaultTask() {
 
     @get:Input
-    @get:Option(option = "readmePath", description = "The readme file path")
+    @get:Option(option = "readmePath", description = "The readme file path, for the primary graph")
+    @get:Optional
     abstract val readmePath: Property<String>
+
+    @get:Input
+    @get:Option(
+        option = "heading",
+        description = "The heading where the graph will be appended, for the primary graph",
+    )
+    @get:Optional
+    abstract val heading: Property<String>
 
     @get:Input
     @get:Option(option = "theme", description = "The mermaid theme")
@@ -44,10 +53,6 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @get:Option(option = "showFullPath", description = "Whether to show the modules full path")
     @get:Optional
     abstract val showFullPath: Property<Boolean>
-
-    @get:Input
-    @get:Option(option = "heading", description = "The heading where the graph will be appended")
-    abstract val heading: Property<String>
 
     @get:Input
     @get:Option(
@@ -84,7 +89,7 @@ abstract class CreateModuleGraphTask : DefaultTask() {
         description = "A list of configs, each of which will generate a separate graph",
     )
     @get:Optional
-    abstract val graphConfigs: ListProperty<SingleGraphConfig>
+    abstract val graphConfigs: ListProperty<GraphConfig>
 
     @get:Input
     @get:Option(

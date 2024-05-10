@@ -2,12 +2,12 @@ import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.ModuleType
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
-import dev.iurysouza.modulegraph.model.SingleGraphConfig
 
 plugins {
     id("dev.iurysouza.modulegraph")
 }
 
+// Generate graphs for these configs with: `./gradlew createModuleGraph`
 moduleGraphConfig {
     heading.set("# Module Graph")
     readmePath.set("./README.md")
@@ -46,21 +46,21 @@ moduleGraphConfig {
     // You can choose to only include modules that are reachable from certain root modules
     // rootModulesRegex.set(".*gama.*")
 
-    graphConfigs.set(
-        listOf(
-            // todo: I don't like this syntax - make a DSL
-            SingleGraphConfig.create(
-                readmePath = "./README.md",
-                heading = "# My second graph",
-                rootModulesRegex = ".*gama.*",
-            ),
-            SingleGraphConfig.create(
-                readmePath = "./otherReadme.md",
-                heading = "# Graph",
-                rootModulesRegex = ".*zeta.*",
-            ),
-        ),
-    )
+    // Add other graph
+    graph(
+        readmePath = "./README.md",
+        heading = "# My second graph",
+    ) {
+        rootModulesRegex = ".*gama.*"
+    }
+
+    // Add other graph
+    graph(
+        readmePath = "./otherReadme.md",
+        heading = "# Graph",
+    ) {
+        rootModulesRegex = ".*zeta.*"
+    }
 }
 
 task("check") {

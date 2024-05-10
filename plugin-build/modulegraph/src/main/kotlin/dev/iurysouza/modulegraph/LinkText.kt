@@ -1,7 +1,8 @@
 package dev.iurysouza.modulegraph
 
 /**
- * What text (if any) to attach to the links.
+ * Whether to add information as text on links in the graph.
+ * Defines the text (if any) to attach to the links.
  */
 enum class LinkText {
     /**

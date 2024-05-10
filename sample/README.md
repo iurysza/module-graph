@@ -1,23 +1,3 @@
-# My second graph
-
-```mermaid
-%%{
-  init: {
-    'theme': 'neutral'
-  }
-}%%
-
-graph LR
-  subgraph :sample
-    :sample:zeta["zeta"]
-    :sample:beta["beta"]
-  end
-  subgraph :sample:container
-    :sample:container:gama["gama"]
-  end
-  :sample:container:gama --> :sample:zeta
-  :sample:zeta --> :sample:beta
-```
 # Module Graph
 
 ```mermaid
@@ -52,4 +32,24 @@ class :sample:beta java
 class :sample:alpha java
 class :sample:container:delta java
 
+```
+# My second graph
+
+```mermaid
+%%{
+  init: {
+    'theme': 'neutral'
+  }
+}%%
+
+graph LR
+  subgraph :sample
+    :sample:zeta["zeta"]
+    :sample:beta["beta"]
+  end
+  subgraph :sample:container
+    :sample:container:gama["gama"]
+  end
+  :sample:container:gama --> :sample:zeta
+  :sample:zeta --> :sample:beta
 ```

@@ -4,7 +4,7 @@ import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.gradle.Module
-import dev.iurysouza.modulegraph.model.SingleGraphConfig
+import dev.iurysouza.modulegraph.model.GraphConfig
 
 internal fun aModuleGraph() = mapOf(
     Module(
@@ -83,7 +83,7 @@ internal fun getConfig(
     linkText: LinkText? = null,
     setStyleByModuleType: Boolean? = null,
     showFullPath: Boolean? = null,
-) = SingleGraphConfig.create(
+) = GraphConfig.create(
     readmePath = readmePath,
     heading = heading,
     theme = theme,

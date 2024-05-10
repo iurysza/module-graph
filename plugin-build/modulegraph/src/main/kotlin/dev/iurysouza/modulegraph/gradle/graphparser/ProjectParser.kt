@@ -8,13 +8,13 @@ import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfigura
 import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectPath
 import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.ProjectQuerier
 import dev.iurysouza.modulegraph.gradle.matches
-import dev.iurysouza.modulegraph.model.SingleGraphConfig
+import dev.iurysouza.modulegraph.model.GraphConfig
 import dev.iurysouza.modulegraph.model.alias.ProjectGraph
 
 internal object ProjectParser {
     internal fun parseProjectGraph(
         allProjectPaths: List<ProjectPath>,
-        config: SingleGraphConfig,
+        config: GraphConfig,
         projectQuerier: ProjectQuerier,
     ): ProjectGraph {
         val configExclusionPattern = config.excludedConfigurationsRegex?.let { RegexMatcher(it) }

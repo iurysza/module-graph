@@ -3,7 +3,7 @@ package dev.iurysouza.modulegraph.graph
 import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.gradle.Module
 import dev.iurysouza.modulegraph.model.GraphParseResult
-import dev.iurysouza.modulegraph.model.SingleGraphConfig
+import dev.iurysouza.modulegraph.model.GraphConfig
 import dev.iurysouza.modulegraph.model.alias.ProjectGraph
 
 internal object DigraphBuilder {
@@ -27,7 +27,7 @@ internal object DigraphBuilder {
     }
 
     private fun buildModel(
-        config: SingleGraphConfig,
+        config: GraphConfig,
         source: Module,
         target: Module? = null,
     ): DigraphModel? {

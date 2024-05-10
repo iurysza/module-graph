@@ -1,6 +1,7 @@
 package dev.iurysouza.modulegraph
 
 /**
+ * The orientation of the flowchart in the generated graph.
  * More info at [mermaid docs](https://mermaid.js.org/syntax/flowchart.html#flowchart-orientation)
  */
 enum class Orientation(val value: String) {

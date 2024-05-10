@@ -2,7 +2,7 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.ModuleType
 import dev.iurysouza.modulegraph.focusColor
-import dev.iurysouza.modulegraph.model.SingleGraphConfig
+import dev.iurysouza.modulegraph.model.GraphConfig
 
 internal object NodeStyleBuilder {
     /**
@@ -22,7 +22,7 @@ internal object NodeStyleBuilder {
      * ```
      *Where "alpha" would be one of the focused nodes.
      */
-    fun build(digraphModel: List<DigraphModel>, config: SingleGraphConfig): MermaidCode {
+    fun build(digraphModel: List<DigraphModel>, config: GraphConfig): MermaidCode {
         val distinctNodes = digraphModel
             .flatMap { listOf(it.source, it.target) }
             .distinctBy { it.fullName }
@@ -42,7 +42,7 @@ internal object NodeStyleBuilder {
 
     private fun applyStylingByPluginType(
         nodeList: List<ModuleNode>,
-        config: SingleGraphConfig,
+        config: GraphConfig,
     ): String {
         return if (config.setStyleByModuleType) {
             """
@@ -73,7 +73,7 @@ internal object NodeStyleBuilder {
 
     private fun highlightFocusedNodes(
         nodeList: List<ModuleNode>,
-        config: SingleGraphConfig,
+        config: GraphConfig,
     ): MermaidCode = MermaidCode(
         if (config.focusedModulesRegex == null) {
             ""

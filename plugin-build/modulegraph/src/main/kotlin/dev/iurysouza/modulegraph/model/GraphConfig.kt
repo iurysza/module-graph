@@ -8,7 +8,9 @@ import java.io.Serializable
 /**
  * The config for a single graph to be made.
  */
-data class SingleGraphConfig(
+data class GraphConfig(
+    /* Output parameters */
+
     /**
      * The path of the readme file where the graph will be appended.
      */
@@ -19,15 +21,30 @@ data class SingleGraphConfig(
      */
     val heading: String,
 
-    /**
-     * The mermaid theme to be used for the generated graph.
-     */
+    /* Styling parameters */
+
+    /** @see Theme */
     val theme: Theme,
 
-    /**
-     * The orientation of the flowchart in the generated graph.
-     */
+    /** @see Orientation */
     val orientation: Orientation,
+
+    /** @see LinkText */
+    val linkText: LinkText,
+
+    /**
+     * Whether to use custom styling for module nodes based on the plugin type.
+     */
+    val setStyleByModuleType: Boolean,
+
+    /**
+     * Whether to show the full path of the module in the graph.
+     * Use this if you have modules with the same name in different folders.
+     * Note: when using this option, the graph generated won't use the subgraph feature mermaid provides.
+     */
+    val showFullPath: Boolean,
+
+    /* Content regex pattern parameters */
 
     /**
      * The Pattern (Regex) to match nodes in the graph (project names) that should be highlighted and focused.
@@ -36,16 +53,6 @@ data class SingleGraphConfig(
      * The Value needs to be a string in regex format.
      */
     val focusedModulesRegex: String?,
-
-    /**
-     * Whether to add information as text on links in the graph.
-     */
-    val linkText: LinkText,
-
-    /**
-     * Whether to use custom styling for module nodes based on the plugin type.
-     */
-    val setStyleByModuleType: Boolean,
 
     /**
      * A Regex to match configurations that should be ignored.
@@ -63,31 +70,46 @@ data class SingleGraphConfig(
      * the generated graph will only include dependencies (direct and transitive) of root modules.
      */
     val rootModulesRegex: String?,
-
-    /**
-     * Whether to show the full path of the module in the graph.
-     * Use this if you have modules with the same name in different folders.
-     * Note: when using this option, the graph generated won't use the subgraph feature mermaid provides.
-     */
-    val showFullPath: Boolean,
 ) : Serializable {
-    companion object {
+
+    class Builder(
+        /** @see [GraphConfig.readmePath] */
+        val readmePath: String,
+
+        /** @see [GraphConfig.heading] */
+        val heading: String,
+    ) {
+        /** @see [GraphConfig.theme] */
+        var theme: Theme? = null
+
+        /** @see [GraphConfig.orientation] */
+        var orientation: Orientation? = null
+
+        /** @see [GraphConfig.linkText] */
+        var linkText: LinkText? = null
+
+        /** @see [GraphConfig.setStyleByModuleType] */
+        var setStyleByModuleType: Boolean? = null
+
+        /** @see [GraphConfig.showFullPath] */
+        var showFullPath: Boolean? = null
+
+        /** @see [GraphConfig.excludedConfigurationsRegex] */
+        var excludedConfigurationsRegex: String? = null
+
+        /** @see [GraphConfig.excludedModulesRegex] */
+        var excludedModulesRegex: String? = null
+
+        /** @see [GraphConfig.rootModulesRegex] */
+        var rootModulesRegex: String? = null
+
+        /** @see [GraphConfig.focusedModulesRegex] */
+        var focusedModulesRegex: String? = null
+
         /** Handles default values */
-        fun create(
-            readmePath: String?,
-            heading: String?,
-            theme: Theme? = null,
-            orientation: Orientation? = null,
-            focusedModulesRegex: String? = null,
-            linkText: LinkText? = null,
-            setStyleByModuleType: Boolean? = null,
-            excludedConfigurationsRegex: String? = null,
-            excludedModulesRegex: String? = null,
-            rootModulesRegex: String? = null,
-            showFullPath: Boolean? = null,
-        ) = SingleGraphConfig(
-            readmePath = readmePath ?: error("readmePath is a required parameter!"),
-            heading = heading ?: error("heading is a required parameter!"),
+        fun build() = GraphConfig(
+            readmePath = readmePath,
+            heading = heading,
             theme = theme ?: Theme.NEUTRAL,
             orientation = orientation ?: Orientation.LEFT_TO_RIGHT,
             linkText = linkText ?: LinkText.NONE,

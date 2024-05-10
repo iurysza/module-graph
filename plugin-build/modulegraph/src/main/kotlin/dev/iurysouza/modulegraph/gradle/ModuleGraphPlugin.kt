@@ -2,8 +2,8 @@ package dev.iurysouza.modulegraph.gradle
 
 import dev.iurysouza.modulegraph.gradle.graphparser.ProjectParser
 import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.GradleProjectQuerier
+import dev.iurysouza.modulegraph.model.GraphConfig
 import dev.iurysouza.modulegraph.model.GraphParseResult
-import dev.iurysouza.modulegraph.model.SingleGraphConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -35,21 +35,12 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.rootModulesRegex.set(extension.rootModulesRegex)
             task.graphConfigs.set(extension.graphConfigs)
 
-            val primaryGraphConfig = SingleGraphConfig.create(
-                readmePath = task.readmePath.orNull,
-                heading = task.heading.orNull,
-                theme = task.theme.orNull,
-                orientation = task.orientation.orNull,
-                focusedModulesRegex = task.focusedModulesRegex.orNull,
-                linkText = task.linkText.orNull,
-                setStyleByModuleType = task.setStyleByModuleType.orNull,
-                excludedConfigurationsRegex = task.excludedConfigurationsRegex.orNull,
-                excludedModulesRegex = task.excludedConfigurationsRegex.orNull,
-                rootModulesRegex = task.rootModulesRegex.orNull,
-                showFullPath = task.showFullPath.orNull,
-            )
+            val primaryGraphConfig = getPrimaryConfig(task)
             val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
-            val allGraphConfigs = listOf(primaryGraphConfig) + additionalGraphConfigs
+            val allGraphConfigs = listOfNotNull(primaryGraphConfig) + additionalGraphConfigs
+            if (allGraphConfigs.isEmpty()) {
+                error("No valid graph configs were found! Make sure to set up either the primary graph, or add additional graphs")
+            }
 
             val allProjects = project.allprojects
             val allProjectPaths = allProjects.map { it.path }
@@ -66,5 +57,25 @@ open class ModuleGraphPlugin : Plugin<Project> {
 
             task.graphModels.set(results)
         }
+    }
+
+    /** @return the primary graph config, or null if the primary config is not setup correctly */
+    private fun getPrimaryConfig(task: CreateModuleGraphTask): GraphConfig? {
+        val readmePath = task.readmePath.orNull ?: return null
+        val heading = task.heading.orNull ?: return null
+        return GraphConfig.Builder(
+            readmePath = readmePath,
+            heading = heading,
+        ).apply {
+            theme = task.theme.orNull
+            orientation = task.orientation.orNull
+            focusedModulesRegex = task.focusedModulesRegex.orNull
+            linkText = task.linkText.orNull
+            setStyleByModuleType = task.setStyleByModuleType.orNull
+            excludedConfigurationsRegex = task.excludedConfigurationsRegex.orNull
+            excludedModulesRegex = task.excludedConfigurationsRegex.orNull
+            rootModulesRegex = task.rootModulesRegex.orNull
+            showFullPath = task.showFullPath.orNull
+        }.build()
     }
 }
