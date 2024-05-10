@@ -77,19 +77,6 @@ internal object DigraphBuilder {
         }
     }
 
-    private fun throwIfGraphEmpty(graphResult: GraphParseResult) {
-        val graphModel = graphResult.graph
-        val config = graphResult.config
-        if (graphModel.isEmpty()) {
-            error(
-                """
-                    |This graph is empty.
-                    |It may be that the config is too restrictive: $config
-            """.trimMargin(),
-            )
-        }
-    }
-
     private fun verifySufficientGraph(graphResult: GraphParseResult) {
         val graphModel = graphResult.graph
         val config = graphResult.config
