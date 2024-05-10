@@ -71,6 +71,7 @@ internal val expectedMermaidGraphCode = """
         |```
 """.trimMargin()
 
+@Suppress("LongParameterList")
 internal fun getConfig(
     readmePath: String = "",
     heading: String = "",

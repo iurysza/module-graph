@@ -3,7 +3,6 @@ package dev.iurysouza.modulegraph.model
 import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
-import java.io.Serializable
 
 /**
  * The config for a single graph to be made.
@@ -70,7 +69,7 @@ data class GraphConfig(
      * the generated graph will only include dependencies (direct and transitive) of root modules.
      */
     val rootModulesRegex: String?,
-) : Serializable {
+) {
 
     class Builder(
         /** @see [GraphConfig.readmePath] */

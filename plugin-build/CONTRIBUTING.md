@@ -1,8 +1,8 @@
 This is the source for the Module Graph Gradle plugin.
 
 # Formatting
-The code style of this project is enforced with Ktlint. Run it with:
-`./gradlew :plugin-build:modulegraph:ktlintTestSourceSetCheck`
+The code style of this project is enforced with Detekt. Run it with:
+`./gradlew :plugin-build:modulegraph:detekt`
 
 # Test
 This project has extensive unit tests. Run them locally with:

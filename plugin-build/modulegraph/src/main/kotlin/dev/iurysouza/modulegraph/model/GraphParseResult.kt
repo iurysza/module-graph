@@ -8,4 +8,4 @@ internal data class GraphParseResult(
     val graph: ProjectGraph,
     /** The original config provided used to produce [graph] */
     val config: GraphConfig,
-) : Serializable
+)

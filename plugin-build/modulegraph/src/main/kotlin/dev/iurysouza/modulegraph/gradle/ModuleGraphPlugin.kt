@@ -39,7 +39,12 @@ open class ModuleGraphPlugin : Plugin<Project> {
             val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
             val allGraphConfigs = listOfNotNull(primaryGraphConfig) + additionalGraphConfigs
             if (allGraphConfigs.isEmpty()) {
-                error("No valid graph configs were found! Make sure to set up either the primary graph, or add additional graphs")
+                error(
+                    """
+                    No valid graph configs were found!
+                    Make sure to set up either the primary graph, or add additional graphs.
+                    """.trimIndent(),
+                )
             }
 
             val allProjects = project.allprojects
