@@ -37,13 +37,13 @@ internal fun aModuleGraph() = mapOf(
     ),
     Module(
         path = ":sample:container:gama",
-    )
-        to listOf(
-        Module(
-            path = ":sample:zeta",
-            configName = "implementation",
+    ) to
+        listOf(
+            Module(
+                path = ":sample:zeta",
+                configName = "implementation",
+            ),
         ),
-    ),
 )
 
 internal val expectedMermaidGraphCode = """
