@@ -105,6 +105,8 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
      * Creates a new [GraphConfig] based on the configuration block,
      * and adds it to [graphConfigs].
      * This function provides a DSL for adding graphs.
+     * The parameters of this function are the required parameters for every graph,
+     * and in the [setupConfig] block optional parameters can be set up.
      */
     fun graph(
         readmePath: String,

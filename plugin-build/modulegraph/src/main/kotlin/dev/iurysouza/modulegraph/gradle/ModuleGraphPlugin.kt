@@ -35,7 +35,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.rootModulesRegex.set(extension.rootModulesRegex)
             task.graphConfigs.set(extension.graphConfigs)
 
-            val primaryGraphConfig = getPrimaryConfig(task)
+            val primaryGraphConfig = getPrimaryGraphConfig(task)
             val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
             val allGraphConfigs = listOfNotNull(primaryGraphConfig) + additionalGraphConfigs
             if (allGraphConfigs.isEmpty()) {
@@ -59,23 +59,64 @@ open class ModuleGraphPlugin : Plugin<Project> {
         }
     }
 
-    /** @return the primary graph config, or null if the primary config is not setup correctly */
-    private fun getPrimaryConfig(task: CreateModuleGraphTask): GraphConfig? {
-        val readmePath = task.readmePath.orNull ?: return null
-        val heading = task.heading.orNull ?: return null
+    /** @return the primary graph config, or null if the primary config is not provided */
+    private fun getPrimaryGraphConfig(task: CreateModuleGraphTask): GraphConfig? {
+        val readmePath = task.readmePath.orNull
+        val heading = task.heading.orNull
+
+        val theme = task.theme.orNull
+        val orientation = task.orientation.orNull
+        val focusedModulesRegex = task.focusedModulesRegex.orNull
+        val linkText = task.linkText.orNull
+        val setStyleByModuleType = task.setStyleByModuleType.orNull
+        val excludedConfigurationsRegex = task.excludedConfigurationsRegex.orNull
+        val excludedModulesRegex = task.excludedConfigurationsRegex.orNull
+        val rootModulesRegex = task.rootModulesRegex.orNull
+        val showFullPath = task.showFullPath.orNull
+
+        val params: List<Any?> = listOf(
+            readmePath,
+            heading,
+            theme,
+            orientation,
+            focusedModulesRegex,
+            linkText,
+            setStyleByModuleType,
+            excludedConfigurationsRegex,
+            excludedModulesRegex,
+            rootModulesRegex,
+            showFullPath,
+        )
+
+        /**
+         * This is true if any primary config parameter is provided,
+         * which would indicate that the consumer is trying to setup a primary config
+         */
+        val hasPrimaryConfig = params.any { it != null }
+        // If the user is not trying to setup the primary config,
+        // then there is no primary config - simple as
+        if (!hasPrimaryConfig) return null
+
+        /**
+         * Crash to alert the user that a required parameter for the primary config is missing,
+         * so the config they've set up is invalid.
+         */
+        fun missingRequiredParameter(name: String): Nothing =
+            error("Primary graph config is invalid! Missing required parameter: $name")
+
         return GraphConfig.Builder(
-            readmePath = readmePath,
-            heading = heading,
+            readmePath = readmePath ?: missingRequiredParameter("readmePath"),
+            heading = heading ?: missingRequiredParameter("heading"),
         ).apply {
-            theme = task.theme.orNull
-            orientation = task.orientation.orNull
-            focusedModulesRegex = task.focusedModulesRegex.orNull
-            linkText = task.linkText.orNull
-            setStyleByModuleType = task.setStyleByModuleType.orNull
-            excludedConfigurationsRegex = task.excludedConfigurationsRegex.orNull
-            excludedModulesRegex = task.excludedConfigurationsRegex.orNull
-            rootModulesRegex = task.rootModulesRegex.orNull
-            showFullPath = task.showFullPath.orNull
+            this.theme = theme
+            this.orientation = orientation
+            this.focusedModulesRegex = focusedModulesRegex
+            this.linkText = linkText
+            this.setStyleByModuleType = setStyleByModuleType
+            this.excludedConfigurationsRegex = excludedConfigurationsRegex
+            this.excludedModulesRegex = excludedConfigurationsRegex
+            this.rootModulesRegex = rootModulesRegex
+            this.showFullPath = showFullPath
         }.build()
     }
 }

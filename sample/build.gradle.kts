@@ -7,13 +7,17 @@ plugins {
     id("dev.iurysouza.modulegraph")
 }
 
+// Sample showing usage of `moduleGraphConfig` from Kotlin
+// Enable this file by removing the `.x` extension, if present.
 // Generate graphs for these configs with: `./gradlew createModuleGraph`
 moduleGraphConfig {
+    /* Setup primary graph */
+
+    /* Primary graph - required config */
     heading.set("# Module Graph")
     readmePath.set("./README.md")
 
-    // optional configs
-    // focusedModulesRegex.set(""".*gama.*""")
+    /* Primary graph - optional config */
     showFullPath.set(false)
     orientation.set(Orientation.TOP_TO_BOTTOM)
     linkText.set(LinkText.NONE)
@@ -39,24 +43,19 @@ moduleGraphConfig {
         ),
     )
     excludedConfigurationsRegex.set(""".*test.*""")
-
-    // You can choose to exclude certain modules
+    // focusedModulesRegex.set(""".*gama.*""")
     // excludedModulesRegex.set(".*alpha.*")
-
-    // You can choose to only include modules that are reachable from certain root modules
     // rootModulesRegex.set(".*gama.*")
 
-    // Add other graph
+    /* Setup additional graphs */
     graph(
         readmePath = "./README.md",
-        heading = "# My second graph",
+        heading = "# Graph with root: gama",
     ) {
         rootModulesRegex = ".*gama.*"
     }
-
-    // Add other graph
     graph(
-        readmePath = "./otherReadme.md",
+        readmePath = "./SomeOtherReadme.md",
         heading = "# Graph",
     ) {
         rootModulesRegex = ".*zeta.*"
