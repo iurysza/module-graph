@@ -8,7 +8,6 @@ import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.model.GraphConfig
 import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty

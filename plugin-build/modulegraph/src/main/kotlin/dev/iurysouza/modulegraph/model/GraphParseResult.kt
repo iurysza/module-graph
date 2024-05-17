@@ -1,8 +1,8 @@
 package dev.iurysouza.modulegraph.model
 
 import dev.iurysouza.modulegraph.model.alias.ProjectGraph
-import kotlinx.serialization.Serializable
 import java.io.Serializable as JavaSerializable
+import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class GraphParseResult(
