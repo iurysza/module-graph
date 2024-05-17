@@ -30,8 +30,7 @@ internal object DigraphBuilder {
         source: Module,
         target: Module? = null,
     ): DigraphModel? {
-        val focusedModulesPattern = config.focusedModulesRegex
-        val focusedModulesRegex = focusedModulesPattern?.let { Regex(it) }
+        val focusedModulesRegex = config.focusedModulesRegex?.let { Regex(it) }
         val showFullPath = config.showFullPath
         val targetFullName = target?.path
         val sourceFullName = source.path
@@ -42,7 +41,7 @@ internal object DigraphBuilder {
                 sourceFullName.matches(focusedModulesRegex) to match
             }
         }
-        val regexFilterSet = focusedModulesRegex != null
+        val isFocusedModulesRegexSet = focusedModulesRegex != null
         val shouldNotAddToGraph =
             sourceFullName == targetFullName || (!sourceMatches && !targetMatches)
 
@@ -52,7 +51,7 @@ internal object DigraphBuilder {
                 source = ModuleNode(
                     name = sourceFullName.getProjectName(showFullPath),
                     fullName = sourceFullName,
-                    isFocused = sourceMatches && regexFilterSet,
+                    isFocused = sourceMatches && isFocusedModulesRegexSet,
                     config = ModuleConfig.none(),
                     type = source.type,
                     parent = sourceFullName.getParent(),
@@ -60,7 +59,7 @@ internal object DigraphBuilder {
                 target = ModuleNode(
                     name = targetFullName!!.getProjectName(showFullPath),
                     fullName = targetFullName,
-                    isFocused = targetMatches && regexFilterSet,
+                    isFocused = targetMatches && isFocusedModulesRegexSet,
                     config = target.configName?.let { ModuleConfig(it) } ?: ModuleConfig.none(),
                     type = target.type,
                     parent = targetFullName.getParent(),
