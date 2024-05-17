@@ -109,7 +109,7 @@ data class GraphConfig(
         var focusedModulesRegex: String? = null
 
         /** Handles default values */
-        fun build() = GraphConfig(
+        internal fun build() = GraphConfig(
             readmePath = readmePath,
             heading = heading,
             theme = theme ?: Theme.NEUTRAL,

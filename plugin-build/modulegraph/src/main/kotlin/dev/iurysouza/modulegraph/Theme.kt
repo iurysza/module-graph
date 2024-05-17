@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * More info at [mermaid docs](https://mermaid.js.org/config/theming.html#theme-configuration)
  */
 @Serializable
-sealed class Theme(val name: String) : JavaSerializable {
+sealed class Theme(internal val name: String) : JavaSerializable {
 
     /**
      * This theme goes well with dark-colored elements or dark-mode.
