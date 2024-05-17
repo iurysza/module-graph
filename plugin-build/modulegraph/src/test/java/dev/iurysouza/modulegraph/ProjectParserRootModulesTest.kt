@@ -7,6 +7,8 @@ import dev.iurysouza.modulegraph.gradle.graphparser.ProjectParser
 import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfiguration
 import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectPath
 import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.ProjectQuerier
+import dev.iurysouza.modulegraph.graph.getConfig
+import dev.iurysouza.modulegraph.model.alias.ProjectGraph
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -14,7 +16,7 @@ import org.junit.jupiter.api.Test
 internal class ProjectParserRootModulesTest {
     private val theme = Theme.NEUTRAL
 
-    private val entireGraph: Map<Module, List<Module>> = mapOf(
+    private val entireGraph: ProjectGraph = mapOf(
         ModuleToDeps.app,
         ModuleToDeps.featAUi,
         ModuleToDeps.commonComponent,
@@ -46,10 +48,7 @@ internal class ProjectParserRootModulesTest {
         val expectedGraph = entireGraph
         val actualGraph = ProjectParser.parseProjectGraph(
             allProjectPaths = Project.allPaths,
-            rootModulesRegex = MockProjectPath.app,
-            excludedConfigurations = null,
-            excludedModules = null,
-            theme = theme,
+            config = getConfig(rootModulesRegex = MockProjectPath.app, theme = theme),
             projectQuerier = projectQuerier,
         )
 
@@ -67,12 +66,10 @@ internal class ProjectParserRootModulesTest {
             ModuleToDeps.coreNetworking,
             ModuleToDeps.coreUtil,
         )
+        val rootModules = "(${MockProjectPath.featAUi})|(${MockProjectPath.featAData})"
         val actualGraph = ProjectParser.parseProjectGraph(
             allProjectPaths = Project.allPaths,
-            rootModulesRegex = "(${MockProjectPath.featAUi})|(${MockProjectPath.featAData})",
-            excludedConfigurations = null,
-            excludedModules = null,
-            theme = theme,
+            config = getConfig(rootModulesRegex = rootModules, theme = theme),
             projectQuerier = projectQuerier,
         )
 
@@ -90,10 +87,7 @@ internal class ProjectParserRootModulesTest {
         )
         val actualGraph = ProjectParser.parseProjectGraph(
             allProjectPaths = Project.allPaths,
-            rootModulesRegex = MockProjectPath.featAUi,
-            excludedConfigurations = null,
-            excludedModules = null,
-            theme = theme,
+            config = getConfig(rootModulesRegex = MockProjectPath.featAUi, theme = theme),
             projectQuerier = projectQuerier,
         )
 
@@ -110,10 +104,7 @@ internal class ProjectParserRootModulesTest {
         )
         val actualGraph = ProjectParser.parseProjectGraph(
             allProjectPaths = Project.allPaths,
-            rootModulesRegex = MockProjectPath.featAData,
-            excludedConfigurations = null,
-            excludedModules = null,
-            theme = theme,
+            config = getConfig(rootModulesRegex = MockProjectPath.featAData, theme = theme),
             projectQuerier = projectQuerier,
         )
 
@@ -125,10 +116,7 @@ internal class ProjectParserRootModulesTest {
         val expectedGraph = entireGraph
         val actualGraph = ProjectParser.parseProjectGraph(
             allProjectPaths = Project.allPaths,
-            rootModulesRegex = null,
-            excludedConfigurations = null,
-            excludedModules = null,
-            theme = theme,
+            config = getConfig(rootModulesRegex = null, theme = theme),
             projectQuerier = projectQuerier,
         )
 

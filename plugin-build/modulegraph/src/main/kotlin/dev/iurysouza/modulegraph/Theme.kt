@@ -4,10 +4,11 @@ import java.io.Serializable as JavaSerializable
 import kotlinx.serialization.Serializable
 
 /**
+ * The mermaid theme to be used for the generated graph.
  * More info at [mermaid docs](https://mermaid.js.org/config/theming.html#theme-configuration)
  */
 @Serializable
-sealed class Theme(val name: String) : JavaSerializable {
+sealed class Theme(internal val name: String) : JavaSerializable {
 
     /**
      * This theme goes well with dark-colored elements or dark-mode.

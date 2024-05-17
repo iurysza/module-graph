@@ -3,12 +3,26 @@ package dev.iurysouza.modulegraph.gradle
 import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.model.GraphConfig
 import javax.inject.Inject
 import org.gradle.api.Project
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 
 /**
  * The ModuleGraphExtension is used for configuring the module graph generation in a project.
+ *
+ * There are 2 ways to specify the config for a graph:
+ * - The primary graph, where the config is applied directly to the properties in this extension.
+ *   This is needed for convenience when only a single graph is needed,
+ *   and for backwards compatibility.
+ *
+ * - Additional graphs, stored in [graphConfigs].
+ *   Consumers can add a [graph] block for every graph required,
+ *   which will add a config to [graphConfigs].
+ *   There is no limit on how many additional graphs can be added.
+ *   It is possible to use this plugin without setting up the primary graph -
+ *   all configs can be set up as Additional graphs.
  */
 open class ModuleGraphExtension @Inject constructor(project: Project) {
 
@@ -80,4 +94,30 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
      * Note: when using this option, the graph generated won't use the subgraph feature mermaid provides.
      */
     val showFullPath: Property<Boolean> = objects.property(Boolean::class.java)
+
+    /**
+     * A list of additional graph configs to generate graphs for.
+     */
+    val graphConfigs: ListProperty<GraphConfig> =
+        objects.listProperty(GraphConfig::class.java)
+
+    /**
+     * Creates a new [GraphConfig] based on the configuration block,
+     * and adds it to [graphConfigs].
+     * This function provides a DSL for adding graphs.
+     * The parameters of this function are the required parameters for every graph,
+     * and in the [setupConfig] block optional parameters can be set up.
+     */
+    fun graph(
+        readmePath: String,
+        heading: String,
+        setupConfig: GraphConfig.Builder.() -> Unit = {},
+    ) {
+        val configBuilder = GraphConfig.Builder(readmePath, heading)
+        configBuilder.setupConfig()
+        val newConfig = configBuilder.build()
+        val existingList = graphConfigs.get()
+        val newList = existingList + newConfig
+        graphConfigs.set(newList)
+    }
 }

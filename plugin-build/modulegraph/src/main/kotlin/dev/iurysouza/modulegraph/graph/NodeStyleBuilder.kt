@@ -1,8 +1,8 @@
 package dev.iurysouza.modulegraph.graph
 
-import dev.iurysouza.modulegraph.GraphOptions
 import dev.iurysouza.modulegraph.ModuleType
 import dev.iurysouza.modulegraph.focusColor
+import dev.iurysouza.modulegraph.model.GraphConfig
 
 internal object NodeStyleBuilder {
     /**
@@ -22,13 +22,13 @@ internal object NodeStyleBuilder {
      * ```
      *Where "alpha" would be one of the focused nodes.
      */
-    fun build(digraphModel: List<DigraphModel>, options: GraphOptions): MermaidCode {
+    fun build(digraphModel: List<DigraphModel>, config: GraphConfig): MermaidCode {
         val distinctNodes = digraphModel
             .flatMap { listOf(it.source, it.target) }
             .distinctBy { it.fullName }
 
-        val pluginTypeStyling = applyStylingByPluginType(distinctNodes, options)
-        val focusedNodesStyling = highlightFocusedNodes(distinctNodes, options)
+        val pluginTypeStyling = applyStylingByPluginType(distinctNodes, config)
+        val focusedNodesStyling = highlightFocusedNodes(distinctNodes, config)
         return MermaidCode(
             buildString {
                 append(pluginTypeStyling)
@@ -42,9 +42,9 @@ internal object NodeStyleBuilder {
 
     private fun applyStylingByPluginType(
         nodeList: List<ModuleNode>,
-        options: GraphOptions,
+        config: GraphConfig,
     ): String {
-        return if (options.setStyleByModuleType) {
+        return if (config.setStyleByModuleType) {
             """
                 |
                 |${
@@ -73,14 +73,14 @@ internal object NodeStyleBuilder {
 
     private fun highlightFocusedNodes(
         nodeList: List<ModuleNode>,
-        options: GraphOptions,
+        config: GraphConfig,
     ): MermaidCode = MermaidCode(
-        if (options.focusedNodesRegex == null) {
+        if (config.focusedModulesRegex == null) {
             ""
         } else {
             """
                |
-               |${defineStyleClass(FOCUS_CLASS_NAME, options.theme.focusColor())}
+               |${defineStyleClass(FOCUS_CLASS_NAME, config.theme.focusColor())}
                |${nodeList.filter { it.isFocused }.joinToString("\n") { "class ${it.fullName} $FOCUS_CLASS_NAME" }}
             """.trimMargin()
         },

@@ -2,6 +2,7 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.*
 import dev.iurysouza.modulegraph.gradle.Module
+import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -17,12 +18,13 @@ class MermaidGraphTest {
             ),
         )
         val focusColor = "#F5A622"
-        val graphOptions = withGraphOptions(
+        val config = getConfig(
             focusedModulesRegex = ".*example2.*",
             theme = Theme.BASE(focusColor = focusColor),
             showFullPath = true,
         )
-        val mermaidGraph = Mermaid.generateGraph(reconstructedModel, graphOptions)
+        val result = GraphParseResult(reconstructedModel, config)
+        val mermaidGraph = Mermaid.generateGraph(result)
 
         val expectedGraph = """
             ```mermaid
@@ -45,16 +47,17 @@ class MermaidGraphTest {
     @Test
     fun `Given a single module project, when generating graph, then it throws IllegalArgumentException`() {
         val graphModel = mapOf(Module(":example") to listOf<Module>())
+        val result = GraphParseResult(graphModel, getConfig())
 
         assertThrows<IllegalArgumentException> {
-            Mermaid.generateGraph(graphModel, withGraphOptions())
+            Mermaid.generateGraph(result)
         }
     }
 
     @Test
     fun `Given the LiveMatch App graph model, when generating graph, then it returns expected mermaid code`() {
         val graphModel = liveMatchReconstructedModel
-        val graphOptions = withGraphOptions(
+        val config = getConfig(
             theme = Theme.BASE(
                 mapOf(
                     "primaryTextColor" to "#fff",
@@ -68,7 +71,8 @@ class MermaidGraphTest {
             orientation = Orientation.LEFT_TO_RIGHT,
         )
 
-        val mermaidGraph = Mermaid.generateGraph(graphModel, graphOptions)
+        val result = GraphParseResult(graphModel, config)
+        val mermaidGraph = Mermaid.generateGraph(result)
 
         assertEquals(expectedLiveMatchGraph, mermaidGraph)
     }
@@ -76,7 +80,7 @@ class MermaidGraphTest {
     @Test
     fun `Given a module graph with theme settings, when generating graph, proper mermaid code is created`() {
         val graphModel = aModuleGraph()
-        val graphOptions = withGraphOptions(
+        val config = getConfig(
             theme = Theme.BASE(
                 focusColor = "#F5A622",
                 themeVariables = mapOf(
@@ -91,8 +95,9 @@ class MermaidGraphTest {
             orientation = Orientation.TOP_TO_BOTTOM,
             focusedModulesRegex = ".*gama.*",
         )
+        val result = GraphParseResult(graphModel, config)
 
-        val mermaidGraph = Mermaid.generateGraph(graphModel, graphOptions)
+        val mermaidGraph = Mermaid.generateGraph(result)
 
         assertEquals(expectedMermaidGraphCode, mermaidGraph)
     }

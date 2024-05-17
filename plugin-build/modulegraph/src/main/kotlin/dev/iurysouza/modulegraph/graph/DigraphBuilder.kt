@@ -1,43 +1,49 @@
 package dev.iurysouza.modulegraph.graph
 
-import dev.iurysouza.modulegraph.GraphOptions
 import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.gradle.Module
+import dev.iurysouza.modulegraph.model.GraphConfig
+import dev.iurysouza.modulegraph.model.GraphParseResult
 
 internal object DigraphBuilder {
     fun build(
-        graphModel: Map<Module, List<Module>>,
-        graphOptions: GraphOptions,
+        graphResult: GraphParseResult,
     ): List<DigraphModel> {
-        throwIfSingleProject(graphModel)
+        val graphModel = graphResult.graph
+        val config = graphResult.config
+        verifySufficientGraph(graphResult)
 
         return graphModel.flatMap { (source, targetList) ->
-            when (graphOptions.linkText) {
+            when (config.linkText) {
                 LinkText.NONE -> targetList.distinctBy { it.path }
                 else -> targetList
             }.mapNotNull { target ->
-                buildModel(graphOptions, source, target)
+                buildModel(config, source, target)
             }
         }.also { result ->
-            throwIfNothingMatches(result, graphOptions.focusedNodesRegex)
+            throwIfNothingMatches(result, config.focusedModulesRegex)
         }
     }
 
     private fun buildModel(
-        graphOptions: GraphOptions,
+        config: GraphConfig,
         source: Module,
         target: Module? = null,
     ): DigraphModel? {
-        val pattern = graphOptions.focusedNodesRegex
-        val showFullPath = graphOptions.showFullPath
+        val focusedModulesRegex = config.focusedModulesRegex?.let { Regex(it) }
+        val showFullPath = config.showFullPath
         val targetFullName = target?.path
         val sourceFullName = source.path
         val (sourceMatches, targetMatches) = when {
-            pattern == null -> true to true
-            else -> sourceFullName.matches(pattern) to (targetFullName?.matches(pattern) ?: false)
+            focusedModulesRegex == null -> true to true
+            else -> {
+                val match = targetFullName?.matches(focusedModulesRegex) ?: false
+                sourceFullName.matches(focusedModulesRegex) to match
+            }
         }
-        val regexFilterSet = pattern != null
-        val shouldNotAddToGraph = sourceFullName == targetFullName || (!sourceMatches && !targetMatches)
+        val isFocusedModulesRegexSet = focusedModulesRegex != null
+        val shouldNotAddToGraph =
+            sourceFullName == targetFullName || (!sourceMatches && !targetMatches)
 
         return when {
             shouldNotAddToGraph -> null
@@ -45,7 +51,7 @@ internal object DigraphBuilder {
                 source = ModuleNode(
                     name = sourceFullName.getProjectName(showFullPath),
                     fullName = sourceFullName,
-                    isFocused = sourceMatches && regexFilterSet,
+                    isFocused = sourceMatches && isFocusedModulesRegexSet,
                     config = ModuleConfig.none(),
                     type = source.type,
                     parent = sourceFullName.getParent(),
@@ -53,7 +59,7 @@ internal object DigraphBuilder {
                 target = ModuleNode(
                     name = targetFullName!!.getProjectName(showFullPath),
                     fullName = targetFullName,
-                    isFocused = targetMatches && regexFilterSet,
+                    isFocused = targetMatches && isFocusedModulesRegexSet,
                     config = target.configName?.let { ModuleConfig(it) } ?: ModuleConfig.none(),
                     type = target.type,
                     parent = targetFullName.getParent(),
@@ -62,7 +68,7 @@ internal object DigraphBuilder {
         }
     }
 
-    private fun throwIfNothingMatches(modelList: List<DigraphModel>, regex: Regex?) {
+    private fun throwIfNothingMatches(modelList: List<DigraphModel>, regex: String?) {
         require(modelList.isNotEmpty()) {
             """
                     |No modules match the specified pattern: $regex
@@ -71,11 +77,15 @@ internal object DigraphBuilder {
         }
     }
 
-    private fun throwIfSingleProject(graphModel: Map<Module, List<Module>>) {
+    private fun verifySufficientGraph(graphResult: GraphParseResult) {
+        val graphModel = graphResult.graph
+        val config = graphResult.config
+
         val dependencies = graphModel.values.flatten().distinctBy { it.path }.size
         require(graphModel.keys.size > 1 || dependencies > 0) {
             """
                     |The project must have at least two modules to generate a graph.
+                    |It may be that the config is too restrictive: $config
             """.trimMargin()
         }
     }

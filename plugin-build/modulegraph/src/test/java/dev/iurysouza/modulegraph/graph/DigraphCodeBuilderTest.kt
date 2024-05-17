@@ -1,6 +1,7 @@
 package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -9,13 +10,14 @@ class DigraphCodeBuilderTest {
     @Test
     fun `Build digraph with default options returns correct mermaid syntax`() {
         val graphModel = aModuleGraph()
-        val graphOptions = withGraphOptions(
+        val config = getConfig(
             focusedModulesRegex = ".*gama.*",
         )
+        val result = GraphParseResult(graphModel, config)
 
         val mermaidCode = DigraphCodeBuilder.build(
-            digraphModel = DigraphBuilder.build(graphModel, graphOptions),
-            linkText = graphOptions.linkText,
+            digraphModel = DigraphBuilder.build(result),
+            linkText = config.linkText,
         )
 
         val expectedMermaidCode = """
@@ -28,13 +30,14 @@ class DigraphCodeBuilderTest {
     @Test
     fun `Build digraph with configuration link text includes configuration details`() {
         val graphModel = fullLiveMatchGraph
-        val graphOptions = withGraphOptions(
+        val config = getConfig(
             linkText = LinkText.CONFIGURATION,
         )
+        val result = GraphParseResult(graphModel, config)
 
         val mermaidCode = DigraphCodeBuilder.build(
-            digraphModel = DigraphBuilder.build(graphModel, graphOptions),
-            linkText = graphOptions.linkText,
+            digraphModel = DigraphBuilder.build(result),
+            linkText = config.linkText,
         )
 
         assertEquals(liveMatchMermaidGraphWithConfigurations, mermaidCode.value)
@@ -43,11 +46,12 @@ class DigraphCodeBuilderTest {
     @Test
     fun `Build digraph ignoring configurations when link text is none`() {
         val graphModel = fullLiveMatchGraph
-        val graphOptions = withGraphOptions()
+        val config = getConfig()
+        val result = GraphParseResult(graphModel, config)
 
         val mermaidCode = DigraphCodeBuilder.build(
-            digraphModel = DigraphBuilder.build(graphModel, graphOptions),
-            linkText = graphOptions.linkText,
+            digraphModel = DigraphBuilder.build(result),
+            linkText = config.linkText,
         )
 
         val expectedMermaidCode = """

@@ -113,6 +113,21 @@ moduleGraphConfig {
     //     )
     // )
 
+    // You can add additional graphs.
+    // A separate graph will be generated for each config below.
+    // graph(
+    //     "./README.md",
+    //     "# Graph with root: gama",
+    // ) {
+    //     it.rootModulesRegex = ".*gama.*"
+    // }
+    // graph(
+    //     "./SomeOtherReadme.md",
+    //     "# Graph",
+    // ) {
+    //     it.rootModulesRegex = ".*zeta.*"
+    // }
+
 }
 ```
 
@@ -189,6 +204,21 @@ moduleGraphConfig {
     //     )
     // ),
     // )
+
+    // You can add additional graphs.
+    // A separate graph will be generated for each config below.
+    // graph(
+    //     readmePath = "./README.md",
+    //     heading = "# Graph with root: gama",
+    // ) {
+    //     rootModulesRegex = ".*gama.*"
+    // }
+    // graph(
+    //     readmePath = "./SomeOtherReadme.md",
+    //     heading = "# Graph",
+    // ) {
+    //     rootModulesRegex = ".*zeta.*"
+    // }
 }
 ```
 
@@ -208,6 +238,8 @@ After that, just run the following command:
 Now, just look for the generated graph in your project's README file.
 
 ## Configuration Docs
+
+Each Graph has the following configuration parameters.
 
 Required settings:
 
@@ -242,6 +274,64 @@ Optional settings:
     - Regex matching the modules that should be used as root modules.
       If this value is supplied, the generated graph will only include dependencies (direct and transitive) of root modules.
       In other words, the graph will only include modules that can be reached from a root module.
+
+### Multiple graphs
+
+You can apply configuration options directly in the root of the `moduleGraphConfig` block like so:
+
+```kotlin
+moduleGraphConfig {
+    readmePath.set("${rootDir}/README.md")
+    heading.set("### Module Graph")
+    showFullPath.set(false)
+}
+```
+
+When you do this, you are configuring the 'Primary Graph'.
+This is useful if you only need one graph to be generated.
+
+But sometimes you want multiple graphs to be generated.
+To achieve this you can add additional graph configs using `graph`.
+Each additional graph has exactly the same configuration parameters as the primary graph:
+
+```kotlin
+moduleGraphConfig {
+    graph(
+        readmePath = "${rootDir}/README.md",
+        heading = "### Module Graph",
+    ) {
+        showFullPath = false
+    }
+}
+```
+
+Note that `graph` requires the required parameters to be provided in the function call,
+while the optional parameters can be provided in the configuration block.
+
+You can add as many `graph` calls as you like: each one will generate a separate graph:
+
+```kotlin
+moduleGraphConfig {
+    graph(
+        readmePath = "${rootDir}/README.md",
+        heading = "### Module Graph",
+    ) {
+        showFullPath = false
+    }
+    graph(
+        readmePath = "${rootDir}/README.md",
+        heading = "### Another Module Graph",
+    ) {
+        showFullPath = true
+    }
+}
+```
+
+For this plugin to work, you need to configure at least one graph.
+This can be via the Primary Graph, or via a `graph` call.
+
+If using only `graph` calls, then the Primary Graph doesn't need to be setup at all!
+You can see this in the samples above.
 
 ### Show me that graph!
 

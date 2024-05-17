@@ -1,7 +1,10 @@
 package dev.iurysouza.modulegraph.graph
 
-import dev.iurysouza.modulegraph.*
+import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.Orientation
+import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.gradle.Module
+import dev.iurysouza.modulegraph.model.GraphConfig
 
 internal fun aModuleGraph() = mapOf(
     Module(
@@ -34,8 +37,8 @@ internal fun aModuleGraph() = mapOf(
     ),
     Module(
         path = ":sample:container:gama",
-    )
-        to listOf(
+    ) to
+        listOf(
             Module(
                 path = ":sample:zeta",
                 configName = "implementation",
@@ -68,21 +71,34 @@ internal val expectedMermaidGraphCode = """
         |```
 """.trimMargin()
 
-internal fun withGraphOptions(
-    orientation: Orientation = Orientation.LEFT_TO_RIGHT,
-    linkText: LinkText = LinkText.NONE,
+@Suppress("LongParameterList")
+internal fun getConfig(
+    readmePath: String = "",
+    heading: String = "",
+    theme: Theme? = null,
+    rootModulesRegex: String? = null,
+    orientation: Orientation? = null,
     focusedModulesRegex: String? = null,
-    showFullPath: Boolean = false,
-    theme: Theme = Theme.NEUTRAL,
-    setStyleByModuleType: Boolean = false,
-) = GraphOptions(
-    linkText = linkText,
-    theme = theme,
-    orientation = orientation,
-    focusedNodesRegex = focusedModulesRegex?.toRegex(),
-    showFullPath = showFullPath,
-    setStyleByModuleType = setStyleByModuleType,
-)
+    excludedConfigurationsRegex: String? = null,
+    excludedModulesRegex: String? = null,
+    linkText: LinkText? = null,
+    setStyleByModuleType: Boolean? = null,
+    showFullPath: Boolean? = null,
+) =
+    GraphConfig.Builder(
+        readmePath = readmePath,
+        heading = heading,
+    ).apply {
+        this.theme = theme
+        this.rootModulesRegex = rootModulesRegex
+        this.orientation = orientation
+        this.focusedModulesRegex = focusedModulesRegex
+        this.excludedConfigurationsRegex = excludedConfigurationsRegex
+        this.excludedModulesRegex = excludedModulesRegex
+        this.linkText = linkText
+        this.setStyleByModuleType = setStyleByModuleType
+        this.showFullPath = showFullPath
+    }.build()
 
 internal val liveMatchReconstructedModel = mapOf(
     Module(":core:footballinfo") to listOf(
