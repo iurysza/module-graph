@@ -1,14 +1,16 @@
 package dev.iurysouza.modulegraph
 
-import java.io.Serializable
+import java.io.Serializable as JavaSerializable
+import kotlinx.serialization.Serializable
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
 
 @Suppress("UnusedPrivateMember")
+@Serializable
 sealed class ModuleType(
     open val id: String,
     open val color: String,
-) : Serializable {
+) : JavaSerializable {
     data class Unknown(override val color: String = "#676767") : ModuleType("unknown", color)
 
     data class Custom(

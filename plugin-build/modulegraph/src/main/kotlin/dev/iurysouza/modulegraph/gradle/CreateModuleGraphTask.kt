@@ -8,14 +8,24 @@ import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.model.GraphConfig
 import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.Directory
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 
+/**
+ * The gradle task for this plugin,
+ * which holds all the configuration data that needs to be provided for the work to happen.
+ *
+ * All the properties defined in this task need to be Serializable -
+ * this is a requirement for the Gradle Configuration Cache to work.
+ */
 abstract class CreateModuleGraphTask : DefaultTask() {
 
     @get:Input
@@ -103,6 +113,10 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @get:Option(option = "graphModels", description = "The produced graph models")
     internal abstract val graphModels: ListProperty<GraphParseResult>
 
+    @get:OutputDirectory
+    @get:Option(option = "projectDirectory", description = "The root project directory")
+    internal abstract val projectDirectory: DirectoryProperty
+
     init {
         group = "Reporting"
         description = "Creates a mermaid dependency graph for the project"
@@ -118,7 +132,8 @@ abstract class CreateModuleGraphTask : DefaultTask() {
                 val config = result.config
                 val mermaidGraph = Mermaid.generateGraph(result)
 
-                val readmeFile = project.layout.projectDirectory.file(config.readmePath)
+                val root = projectDirectory.orNull ?: error("projectDirectory is not set")
+                val readmeFile = root.file(config.readmePath)
 
                 ReadmeWriter.appendOrOverwriteGraph(
                     mermaidGraph = mermaidGraph,

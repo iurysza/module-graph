@@ -3,10 +3,13 @@ package dev.iurysouza.modulegraph.model
 import dev.iurysouza.modulegraph.LinkText
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
+import java.io.Serializable as JavaSerializable
+import kotlinx.serialization.Serializable
 
 /**
  * The config for a single graph to be made.
  */
+@Serializable
 data class GraphConfig(
     /* Output parameters */
 
@@ -69,7 +72,7 @@ data class GraphConfig(
      * the generated graph will only include dependencies (direct and transitive) of root modules.
      */
     val rootModulesRegex: String?,
-) {
+) : JavaSerializable {
 
     class Builder(
         /** @see [GraphConfig.readmePath] */

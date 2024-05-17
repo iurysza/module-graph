@@ -34,6 +34,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.setStyleByModuleType.set(extension.setStyleByModuleType)
             task.rootModulesRegex.set(extension.rootModulesRegex)
             task.graphConfigs.set(extension.graphConfigs)
+            task.projectDirectory.set(project.layout.projectDirectory)
 
             val primaryGraphConfig = getPrimaryGraphConfig(task)
             val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
