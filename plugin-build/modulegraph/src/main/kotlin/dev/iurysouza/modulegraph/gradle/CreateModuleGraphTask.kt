@@ -112,7 +112,8 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     fun execute() {
         runCatching {
             val results =
-                graphModels.orNull ?: error("Graph models have not been computed on time!")
+                graphModels.orNull
+                    ?: error("Graph models have not been computed. This is a bug in the plugin - please report it!")
             results.forEach { result ->
                 val config = result.config
                 val mermaidGraph = Mermaid.generateGraph(result)
