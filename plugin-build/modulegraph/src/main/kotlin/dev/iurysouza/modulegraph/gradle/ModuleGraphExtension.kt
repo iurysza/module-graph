@@ -111,7 +111,7 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
     fun graph(
         readmePath: String,
         heading: String,
-        setupConfig: GraphConfig.Builder.() -> Unit,
+        setupConfig: GraphConfig.Builder.() -> Unit = {},
     ) {
         val configBuilder = GraphConfig.Builder(readmePath, heading)
         configBuilder.setupConfig()
