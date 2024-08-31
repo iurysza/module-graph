@@ -4,6 +4,7 @@ import dev.iurysouza.modulegraph.gradle.graphparser.ProjectParser
 import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.GradleProjectQuerier
 import dev.iurysouza.modulegraph.model.GraphConfig
 import dev.iurysouza.modulegraph.model.GraphParseResult
+import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -22,6 +23,11 @@ open class ModuleGraphPlugin : Plugin<Project> {
             TASK_NAME,
             CreateModuleGraphTask::class.java,
         ) { task ->
+
+            if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+                task.doNotTrackState("https://github.com/iurysza/module-graph/issues/51")
+            }
+
             task.heading.set(extension.heading)
             task.readmePath.set(extension.readmePath)
             task.theme.set(extension.theme)
