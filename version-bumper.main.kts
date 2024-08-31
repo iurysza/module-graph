@@ -10,8 +10,15 @@ val README_FILE = "./README.md"
 
 enum class VersionPart { MAJOR, MINOR, PATCH }
 
-fun bumpVersion(part: VersionPart, release: Boolean) {
-    val currentVersion = getCurrentVersion()
+fun bumpVersion(part: VersionPart, release: Boolean, isSnapshot: Boolean) {
+    val currentVersion = getCurrentVersion().removeSuffix("-SNAPSHOT")
+    if (isSnapshot) {
+        val snapshotVersion = "$currentVersion-SNAPSHOT"
+        updateVersionFile(snapshotVersion)
+        commitTagAndPush(snapshotVersion)
+        return
+    }
+
     val newVersion = incrementVersion(currentVersion, part)
     updateVersionFile(newVersion)
     updateReadmeVersions(newVersion)
@@ -57,7 +64,7 @@ fun updateReadmeVersions(newVersion: String) {
         val readmeContent = File(README_FILE).readText()
         val updatedContent = readmeContent.replace(
             Regex("""dev\.iurysouza:modulegraph:\d+\.\d+\.\d+"""),
-            "dev.iurysouza:modulegraph:${newVersion.removePrefix("v")}"
+            "dev.iurysouza:modulegraph:${newVersion.removePrefix("v")}",
         )
         File(README_FILE).writeText(updatedContent)
         println("Updated version references in README to $newVersion")
@@ -116,13 +123,14 @@ val part = when (args.getOrNull(0)?.uppercase()) {
     else -> VersionPart.PATCH
 }
 val release = args.getOrNull(1)?.toBoolean() ?: false
+val isSnapshot = args.getOrNull(2)?.toBoolean() ?: false
 
 println("Bumping version...")
 println("Part: $part")
 println("Release: $release")
 
 try {
-    bumpVersion(part, release)
+    bumpVersion(part, release, isSnapshot)
 } catch (e: Exception) {
     println("Error: ${e.message}")
     exitProcess(1)
