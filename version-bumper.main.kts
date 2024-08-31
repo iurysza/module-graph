@@ -1,7 +1,7 @@
 #!/usr/bin/env kotlin
 
-@file:DependsOn("org.jetbrains.kotlin:kotlin-stdlib:2.0.20")
-@file:DependsOn("org.jetbrains.kotlin:kotlin-reflect:2.0.20")
+@file:DependsOn("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
+@file:DependsOn("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
 
 import kotlin.script.experimental.dependencies.DependsOn
 import java.io.File
@@ -96,19 +96,22 @@ fun runCommand(vararg command: String) {
     }
 }
 
-fun main(args: Array<String>) {
-    val part = when (args.getOrNull(0)?.uppercase()) {
-        "MAJOR" -> VersionPart.MAJOR
-        "MINOR" -> VersionPart.MINOR
-        "PATCH" -> VersionPart.PATCH
-        else -> VersionPart.PATCH // default
-    }
-    val release = args.getOrNull(1)?.toBoolean() ?: false
+// Main execution
+val part = when (args.getOrNull(0)?.uppercase()) {
+    "MAJOR" -> VersionPart.MAJOR
+    "MINOR" -> VersionPart.MINOR
+    "PATCH" -> VersionPart.PATCH
+    else -> VersionPart.PATCH // default
+}
+val release = args.getOrNull(1)?.toBoolean() ?: false
 
-    try {
-        bumpVersion(part, release)
-    } catch (e: Exception) {
-        println("Error: ${e.message}")
-        exitProcess(1)
-    }
+println("Bumping version...")
+println("Part: $part")
+println("Release: $release")
+
+try {
+    bumpVersion(part, release)
+} catch (e: Exception) {
+    println("Error: ${e.message}")
+    exitProcess(1)
 }
