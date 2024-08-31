@@ -1,15 +1,12 @@
 #!/usr/bin/env kotlin
 
-@file:DependsOn("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
-@file:DependsOn("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
-
-import kotlin.script.experimental.dependencies.DependsOn
 import java.io.File
 import java.io.IOException
 import java.util.Properties
 import kotlin.system.exitProcess
 
 val VERSION_FILE = "./plugin-build/gradle.properties"
+val README_FILE = "./README.md"
 
 enum class VersionPart { MAJOR, MINOR, PATCH }
 
@@ -17,6 +14,7 @@ fun bumpVersion(part: VersionPart, release: Boolean) {
     val currentVersion = getCurrentVersion()
     val newVersion = incrementVersion(currentVersion, part)
     updateVersionFile(newVersion)
+    updateReadmeVersions(newVersion)
     commitTagAndPush(newVersion)
 
     if (release) {
@@ -52,6 +50,21 @@ fun updateVersionFile(newVersion: String) {
     properties.setProperty("VERSION", newVersion.removePrefix("v"))
     File(VERSION_FILE).outputStream().use { properties.store(it, null) }
     println(properties)
+}
+
+fun updateReadmeVersions(newVersion: String) {
+    try {
+        val readmeContent = File(README_FILE).readText()
+        val updatedContent = readmeContent.replace(
+            Regex("""dev\.iurysouza:modulegraph:\d+\.\d+\.\d+"""),
+            "dev.iurysouza:modulegraph:${newVersion.removePrefix("v")}"
+        )
+        File(README_FILE).writeText(updatedContent)
+        println("Updated version references in README to $newVersion")
+    } catch (e: IOException) {
+        println("An error occurred while updating README: ${e.message}")
+        exitProcess(1)
+    }
 }
 
 fun commitTagAndPush(newVersion: String) {
@@ -96,12 +109,11 @@ fun runCommand(vararg command: String) {
     }
 }
 
-// Main execution
 val part = when (args.getOrNull(0)?.uppercase()) {
     "MAJOR" -> VersionPart.MAJOR
     "MINOR" -> VersionPart.MINOR
     "PATCH" -> VersionPart.PATCH
-    else -> VersionPart.PATCH // default
+    else -> VersionPart.PATCH
 }
 val release = args.getOrNull(1)?.toBoolean() ?: false
 
