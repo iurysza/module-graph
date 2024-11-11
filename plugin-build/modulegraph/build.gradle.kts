@@ -1,7 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm")
     `java-gradle-plugin`
@@ -18,19 +16,19 @@ dependencies {
     testRuntimeOnly(libs.junit5Engine)
     testImplementation(gradleTestKit())
 }
+
 // Configure the test task to use JUnit 5
 tasks.test {
     useJUnitPlatform()
 }
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
+kotlin {
+    jvmToolchain(8)
 }
 
 gradlePlugin {

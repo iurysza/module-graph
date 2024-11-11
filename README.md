@@ -1,7 +1,7 @@
 [![Pre Merge Checks](https://github.com/iurysza/module-graph/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/iurysza/module-graph/actions?query=workflow%3A%22Pre+Merge+Checks%22) [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE) ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
 
 <p align="center">
-  <img src="assets/module-graph-icon.png" alt="module graph icon" width="100"/>
+    <img src="./assets/module-graph-icon.png" alt="module graph icon" width="100px">
 </p>
 
 ## Module Graph Plugin
@@ -133,7 +133,7 @@ moduleGraphConfig {
 
 </details>
 
-<p></p>
+<br>
 
 <details open>
 <summary><b>build.gradle.kts (Kotlin DSL)</b></summary>
@@ -253,7 +253,7 @@ Optional settings:
   default, no nodes are focused.
   If set, the matching nodes will be highlighted and only related nodes will be shown. The color can be customized via the `focusColor` property
   from `Theme.BASE`. [Read more](#focusing-on-specific-nodes).
-- **showFullPath**: Whether to show the full path of the modules in the graph. Default is `false`. This removes subgraphs.
+- **showFullPath**: Whether to show the full path of the modules in the graph. Default is `false`. This removes sub-graphs.
 - **theme**: The [mermaid theme](https://mermaid.js.org/config/theming.html) to be used for styling
   the graph. Default is `NEUTRAL`.
     - Further customization is possible by setting the `themeVariables` property on the `BASE` theme. Check the
@@ -335,7 +335,7 @@ You can see this in the samples above.
 
 ### Show me that graph!
 
-This is an example of using the plugin on an Android project with a multimodule setup.
+This is an example of using the plugin on an Android project with a multi-module setup.
 Here, the following configuration was used:
 
 ```kotlin
@@ -614,7 +614,6 @@ graph LR
 
 > [!NOTE]
 > Modules can only have one type. So we're using a hardcoded precedence order for identifying them.
->
 
 ### Precedence
 
@@ -629,7 +628,7 @@ Feel free to open an issue or submit a pull request for any bugs/improvements.
 
 ## License 📄
 
-This project is licensed under the MIT License - see the [License](License) file for details.
+This project is licensed under the MIT License - see the [License](./LICENSE) file for details.
 
 ## Buy Me a Coffee
 
