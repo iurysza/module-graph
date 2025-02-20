@@ -41,6 +41,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.rootModulesRegex.set(extension.rootModulesRegex)
             task.graphConfigs.set(extension.graphConfigs)
             task.projectDirectory.set(project.layout.projectDirectory)
+            task.strictMode.set(extension.strictMode)
 
             val primaryGraphConfig = getPrimaryGraphConfig(task)
             val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
@@ -85,6 +86,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
         val excludedModulesRegex = task.excludedModulesRegex.orNull
         val rootModulesRegex = task.rootModulesRegex.orNull
         val showFullPath = task.showFullPath.orNull
+        val strictMode = task.strictMode.orNull
 
         val params: List<Any?> = listOf(
             readmePath,
@@ -98,6 +100,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             excludedModulesRegex,
             rootModulesRegex,
             showFullPath,
+            strictMode,
         )
 
         /**
@@ -129,6 +132,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             this.excludedModulesRegex = excludedModulesRegex
             this.rootModulesRegex = rootModulesRegex
             this.focusedModulesRegex = focusedModulesRegex
+            this.strictMode = strictMode
         }.build()
     }
 }

@@ -11,7 +11,7 @@ internal object DigraphBuilder {
     ): List<DigraphModel> {
         val graphModel = graphResult.graph
         val config = graphResult.config
-        verifySufficientGraph(graphResult)
+        verifySufficientGraph(graphResult, config.strictMode)
 
         return graphModel.flatMap { (source, targetList) ->
             when (config.linkText) {
@@ -21,7 +21,7 @@ internal object DigraphBuilder {
                 buildModel(config, source, target)
             }
         }.also { result ->
-            throwIfNothingMatches(result, config.focusedModulesRegex)
+            throwIfNothingMatches(result, config.focusedModulesRegex, config.strictMode)
         }
     }
 
@@ -68,25 +68,46 @@ internal object DigraphBuilder {
         }
     }
 
-    private fun throwIfNothingMatches(modelList: List<DigraphModel>, regex: String?) {
-        require(modelList.isNotEmpty()) {
-            """
-                    |No modules match the specified pattern: $regex
-                    |This was set via the `focusedModulesRegex` property.
+    private fun throwIfNothingMatches(modelList: List<DigraphModel>, regex: String?, strictMode: Boolean) {
+        val errorMsg = """
+                    |
+                    |No modules were found matching the pattern: $regex
+                    |This pattern was configured through the `focusedModulesRegex` property.
+                    |Please verify that:
+                    |1. The regex pattern is correct and matches your intended modules
+                    |2. The modules you want to focus on exist in your project
+                    |3. The modules are not being excluded by other configuration settings
             """.trimMargin()
+        if (strictMode) {
+            require(modelList.isNotEmpty()) { errorMsg }
+        } else {
+            println(errorMsg)
         }
     }
 
-    private fun verifySufficientGraph(graphResult: GraphParseResult) {
+    private fun verifySufficientGraph(graphResult: GraphParseResult, strictMode: Boolean) {
         val graphModel = graphResult.graph
         val config = graphResult.config
 
         val dependencies = graphModel.values.flatten().distinctBy { it.path }.size
-        require(graphModel.keys.size > 1 || dependencies > 0) {
-            """
-                    |The project must have at least two modules to generate a graph.
-                    |It may be that the config is too restrictive: $config
+        val errorMsg = """
+                    |
+                    |Unable to generate dependency graph
+                    |A minimum of two connected modules is required to create a meaningful graph.
+                    |Please verify your configuration settings are not overly restrictive:
+                    |
+                    |Current configuration:
+                    |$config
+                    |
+                    |Try adjusting the exclusion/inclusion patterns if needed.
             """.trimMargin()
+
+        if (strictMode) {
+            require(graphModel.keys.size > 1 || dependencies > 0) { errorMsg }
+        } else {
+            if (graphModel.keys.size <= 1 && dependencies == 0) {
+                println(errorMsg)
+            }
         }
     }
 

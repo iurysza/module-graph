@@ -67,6 +67,13 @@ data class GraphConfig(
     val excludedModulesRegex: String?,
 
     /**
+     * Whether to fail the task if no modules are found matching the specified criteria
+     * (e.g., focusedModulesRegex, rootModulesRegex).
+     * If set to `false`, the task will silently no-op if no modules are found.
+     */
+    val strictMode: Boolean,
+
+    /**
      * A Regex to match modules that should be used as root modules.
      * If this value is supplied,
      * the generated graph will only include dependencies (direct and transitive) of root modules.
@@ -108,7 +115,11 @@ data class GraphConfig(
         /** @see [GraphConfig.focusedModulesRegex] */
         var focusedModulesRegex: String? = null
 
-        /** Handles default values */
+        /**
+         * See [GraphConfig.strictMode]
+         */
+        var strictMode: Boolean? = null
+
         internal fun build() = GraphConfig(
             readmePath = readmePath,
             heading = heading,
@@ -121,6 +132,7 @@ data class GraphConfig(
             excludedModulesRegex = excludedModulesRegex,
             rootModulesRegex = rootModulesRegex,
             showFullPath = showFullPath ?: false,
+            strictMode = strictMode ?: false,
         )
     }
 }

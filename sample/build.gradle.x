@@ -26,6 +26,8 @@ moduleGraphConfig {
     // focusedModulesRegex.set(""".*gama.*""")
     // excludedModulesRegex.set(".*alpha.*")
     // rootModulesRegex.set(".*gama.*")
+    // strictMode.set(true)
+
 
     /* Primary graph - optional theme */
     def customTheme = new Theme.BASE()

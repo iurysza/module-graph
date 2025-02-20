@@ -32,8 +32,29 @@ internal object ProjectParser {
         } else {
             allProjectPaths.filter { rootModuleInclusionPattern.matches(it) }
         }
-        require(rootModules.isNotEmpty()) {
-            "The graph cannot be generated as no rootModules were found"
+        val strictModePrefix = "Graph generation failed in strict mode.\n\n"
+        val strictModeSuffix = """
+            |Current configuration:
+            |$config
+            |If you intend to generate a graph without root module restrictions, disable strict mode by setting 'strictMode = false' in your moduleGraphConfig.
+            """.trimMargin()
+
+        val commonMessage = """
+            |No modules were found matching the 'rootModulesRegex' configuration.
+            |In strict mode, at least one root module must be found to generate a graph.
+            |Please check your 'rootModulesRegex' configuration in your build file.
+        """.trimMargin()
+
+        val errorMsg = if (config.strictMode) {
+            strictModePrefix + commonMessage + strictModeSuffix
+        } else {
+            commonMessage
+        }
+
+        if (config.strictMode) {
+            require(rootModules.isNotEmpty()) { "\n${errorMsg}" }
+        } else if (rootModules.isEmpty()) {
+            println("\n${errorMsg}")
         }
         return parseFromRoots(
             rootModulePaths = rootModules,

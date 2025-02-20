@@ -84,6 +84,7 @@ moduleGraphConfig {
     // rootModulesRegex = ".*moduleName.*" // optional
     // setStyleByModuleType = true // optional
     // theme = Theme.NEUTRAL // optional
+    // strictMode = false // optional
     // Or you can fully customize it by using the BASE theme:
     // theme = new Theme.BASE(
     //     [
@@ -188,6 +189,7 @@ moduleGraphConfig {
     // focusedModulesRegex.set(".*(projectName).*") // optional
     // rootModulesRegex.set(".*moduleName.*") // optional
     // theme.set(Theme.NEUTRAL) // optional
+    // strictMode.set(false) // optional
     // or you can fully customize it by using the BASE theme:
     // Theme.BASE(
     //     themeVariables = mapOf(
@@ -274,6 +276,7 @@ Optional settings:
     - Regex matching the modules that should be used as root modules.
       If this value is supplied, the generated graph will only include dependencies (direct and transitive) of root modules.
       In other words, the graph will only include modules that can be reached from a root module.
+- **strictMode**: When enabled, the task will fail if any module dependencies cannot be resolved (invalid regex, no modules found, etc). Default is `false`.
 
 ### Multiple graphs
 

@@ -84,6 +84,7 @@ internal fun getConfig(
     linkText: LinkText? = null,
     setStyleByModuleType: Boolean? = null,
     showFullPath: Boolean? = null,
+    strictMode: Boolean? = null,
 ) =
     GraphConfig.Builder(
         readmePath = readmePath,
@@ -98,6 +99,7 @@ internal fun getConfig(
         this.linkText = linkText
         this.setStyleByModuleType = setStyleByModuleType
         this.showFullPath = showFullPath
+        this.strictMode = strictMode
     }.build()
 
 internal val liveMatchReconstructedModel = mapOf(
