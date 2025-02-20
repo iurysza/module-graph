@@ -37,7 +37,7 @@ internal object ProjectParser {
             |Current configuration:
             |$config
             |If you intend to generate a graph without root module restrictions, disable strict mode by setting 'strictMode = false' in your moduleGraphConfig.
-            """.trimMargin()
+        """.trimMargin()
 
         val commonMessage = """
             |No modules were found matching the 'rootModulesRegex' configuration.
@@ -52,9 +52,9 @@ internal object ProjectParser {
         }
 
         if (config.strictMode) {
-            require(rootModules.isNotEmpty()) { "\n${errorMsg}" }
+            require(rootModules.isNotEmpty()) { "\n$errorMsg" }
         } else if (rootModules.isEmpty()) {
-            println("\n${errorMsg}")
+            println("\n$errorMsg")
         }
         return parseFromRoots(
             rootModulePaths = rootModules,

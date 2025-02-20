@@ -47,7 +47,7 @@ class MermaidGraphTest {
     }
 
     @Test
-    fun `Given a single module project and StrictMode is ON, when generating graph, then it throws IllegalArgumentException`() {
+    fun `Given a single module and StrictMode is ON, when generating graph, then it throws IllegalArgumentException`() {
         val graphModel = mapOf(Module(":example") to listOf<Module>())
         val result = GraphParseResult(graphModel, getConfig(strictMode = true))
 
