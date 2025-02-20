@@ -48,4 +48,5 @@ tasks.register("clean", Delete::class.java) {
 
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = "8.9"
 }
