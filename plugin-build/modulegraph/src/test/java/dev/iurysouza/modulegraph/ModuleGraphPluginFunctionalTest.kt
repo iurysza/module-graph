@@ -3,10 +3,7 @@ package dev.iurysouza.modulegraph
 import java.io.File
 import kotlin.random.Random
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -468,7 +465,7 @@ class ModuleGraphPluginFunctionalTest {
     }
 
     @Test
-    fun `plugin throws exception when single module project is used`() {
+    fun `plugin throws exception when single module project is used and strictMode is ON`() {
         settingsFile.writeText(
             """
             rootProject.name = "test"
@@ -485,6 +482,7 @@ class ModuleGraphPluginFunctionalTest {
 
             moduleGraphConfig {
                 heading.set("### Dependency Diagram")
+                strictMode.set(true)
                 readmePath.set("${readmeFilePath()}")
             }
             """.trimIndent(),
@@ -499,7 +497,7 @@ class ModuleGraphPluginFunctionalTest {
     }
 
     @Test
-    fun `plugin throws exception when invalid focusedModulesRegex is provided`() {
+    fun `plugin throws exception when invalid focusedModulesRegex is provided and strictMode is ON`() {
         settingsFile.writeText(
             """
             rootProject.name = "test"
@@ -521,6 +519,7 @@ class ModuleGraphPluginFunctionalTest {
                 showFullPath.set(true)
                 focusedModulesRegex.set("$invalidPattern")
                 heading.set("### Dependency Diagram")
+                strictMode.set(true)
                 readmePath.set("${readmeFilePath()}")
                 theme.set($MODULEGRAPH_PACKAGE.Theme.BASE(focusColor = "#F5A622"))
             }
@@ -540,7 +539,7 @@ class ModuleGraphPluginFunctionalTest {
     }
 
     @Test
-    fun `plugin throws exception when excludedModuleMatch causes the graph to be empty`() {
+    fun `plugin throws exception when excludedModuleMatch causes the graph to be empty and strictMode is ON`() {
         settingsFile.writeText(
             """
             rootProject.name = "test"
@@ -561,7 +560,7 @@ class ModuleGraphPluginFunctionalTest {
             moduleGraphConfig {
                 heading.set("### Dependency Diagram")
                 readmePath.set("${readmeFilePath()}")
-
+                strictMode.set(true)
                 excludedModulesRegex.set("$invalidPattern")
             }
             dependencies {

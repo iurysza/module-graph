@@ -102,6 +102,14 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
         objects.listProperty(GraphConfig::class.java)
 
     /**
+     * Whether to fail the task if no modules are found matching the specified criteria
+     * (e.g., focusedModulesRegex, rootModulesRegex or single module project).
+     * If set to `false`, the task will no-op if no modules are found.
+     * Defaults to `false`.
+     */
+    val strictMode: Property<Boolean> = objects.property(Boolean::class.java)
+
+    /**
      * Creates a new [GraphConfig] based on the configuration block,
      * and adds it to [graphConfigs].
      * This function provides a DSL for adding graphs.

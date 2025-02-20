@@ -22,6 +22,7 @@ moduleGraphConfig {
     orientation.set(Orientation.TOP_TO_BOTTOM)
     linkText.set(LinkText.NONE)
     setStyleByModuleType.set(true)
+    // strictMode.set(false)
     theme.set(
         Theme.BASE(
             themeVariables = mapOf(

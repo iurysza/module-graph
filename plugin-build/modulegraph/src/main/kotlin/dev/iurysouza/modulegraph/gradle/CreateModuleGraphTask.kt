@@ -1,10 +1,6 @@
 package dev.iurysouza.modulegraph.gradle
 
-import dev.iurysouza.modulegraph.LinkText
-import dev.iurysouza.modulegraph.Mermaid
-import dev.iurysouza.modulegraph.Orientation
-import dev.iurysouza.modulegraph.ReadmeWriter
-import dev.iurysouza.modulegraph.Theme
+import dev.iurysouza.modulegraph.*
 import dev.iurysouza.modulegraph.model.GraphConfig
 import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.gradle.api.DefaultTask
@@ -115,6 +111,14 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @get:OutputDirectory
     @get:Option(option = "projectDirectory", description = "The root project directory")
     internal abstract val projectDirectory: DirectoryProperty
+
+    @get:Input
+    @get:Option(
+        option = "strictMode",
+        description = "Whether to fail the task if no modules are found matching the specified criteria",
+    )
+    @get:Optional
+    abstract val strictMode: Property<Boolean>
 
     init {
         group = "Reporting"

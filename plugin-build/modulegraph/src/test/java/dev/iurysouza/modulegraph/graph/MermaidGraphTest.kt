@@ -1,6 +1,8 @@
 package dev.iurysouza.modulegraph.graph
 
-import dev.iurysouza.modulegraph.*
+import dev.iurysouza.modulegraph.Mermaid
+import dev.iurysouza.modulegraph.Orientation
+import dev.iurysouza.modulegraph.Theme
 import dev.iurysouza.modulegraph.gradle.Module
 import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -45,9 +47,9 @@ class MermaidGraphTest {
     }
 
     @Test
-    fun `Given a single module project, when generating graph, then it throws IllegalArgumentException`() {
+    fun `Given a single module and StrictMode is ON, when generating graph, then it throws IllegalArgumentException`() {
         val graphModel = mapOf(Module(":example") to listOf<Module>())
-        val result = GraphParseResult(graphModel, getConfig())
+        val result = GraphParseResult(graphModel, getConfig(strictMode = true))
 
         assertThrows<IllegalArgumentException> {
             Mermaid.generateGraph(result)
