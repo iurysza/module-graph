@@ -8,8 +8,10 @@ internal object FlatSubgraphBuilder {
 
     /**
      * The `build` function groups digraph models by parent and generates mermaid syntax for subgraphs.
+     * This builder is used when [GraphConfig.nestingEnabled] is false or [GraphConfig.showFullPath] is true.
      *
      * @param list The list of digraph models to be grouped by parent.
+     * @param showFullPath Whether to show the full path of modules in the graph.
      * @return The resulting `MermaidCode` corresponding to the structured digraphs.
      *
      * eg.:
@@ -23,7 +25,7 @@ internal object FlatSubgraphBuilder {
      *  end
      *```
      *
-     *Where "sample" and "container" are parent nodes, and "alpha", "zeta", and "gama" are children.
+     * Where "sample" and "container" are parent nodes, and "alpha", "zeta", and "gama" are children.
      */
     fun build(list: List<DigraphModel>, showFullPath: Boolean): MermaidCode {
         if (showFullPath) return MermaidCode.EMPTY
