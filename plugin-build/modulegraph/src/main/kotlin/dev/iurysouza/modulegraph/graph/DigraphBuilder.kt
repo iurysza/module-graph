@@ -70,7 +70,7 @@ internal object DigraphBuilder {
 
     private fun throwIfNothingMatches(modelList: List<DigraphModel>, regex: String?, strictMode: Boolean) {
         if (!modelList.isEmpty()) return
-        
+
         val errorMsg = """
             |No modules were found matching the pattern: $regex
             |This pattern was configured through the `focusedModulesRegex` property.
