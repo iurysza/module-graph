@@ -649,7 +649,8 @@ Given these modules:
 ```mermaid
 %%{
   init: {
-    'theme': 'neutral'
+    'theme': 'base',
+    'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
   }
 }%%
 
@@ -664,7 +665,7 @@ graph LR
   :App --> :libs:app-common
   :App --> :libs:crash-reporting:api
   :App --> :libs:crash-reporting:firebase
-  classDef focus fill:#769566,stroke:#fff,stroke-width:2px,color:#fff;
+  classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
   class :App focus
 ```
 
@@ -672,7 +673,8 @@ graph LR
 ```mermaid
 %%{
   init: {
-    'theme': 'neutral'
+    'theme': 'base',
+    'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
   }
 }%%
 
@@ -687,9 +689,8 @@ graph LR
   :App --> :libs:app-common
   :App --> :libs:crash-reporting:api
   :App --> :libs:crash-reporting:firebase
-  classDef focus fill:#769566,stroke:#fff,stroke-width:2px,color:#fff;
+  classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
   class :App focus
-
 ```
 
 Nested subgraphs can help better visualize your project's module hierarchy, especially in larger projects with many nested modules. Note that this feature is automatically disabled if `showFullPath` is true.
@@ -710,7 +711,8 @@ This will display the complete path for each module without any subgraph groupin
 ```mermaid
 %%{
   init: {
-    'theme': 'neutral'
+    'theme': 'base',
+    'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
   }
 }%%
 
@@ -722,12 +724,11 @@ graph LR
   :App --> :libs:app-common
   :App --> :libs:crash-reporting:api
   :App --> :libs:crash-reporting:firebase
-  classDef focus fill:#769566,stroke:#fff,stroke-width:2px,color:#fff;
+  classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
   class :App focus
 ```
 
 This view can be useful when you want to see the full module paths at a glance without any grouping structure.
-
 
 ## Contributing 🤝
 
