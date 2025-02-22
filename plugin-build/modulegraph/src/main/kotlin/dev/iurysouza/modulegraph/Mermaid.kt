@@ -1,7 +1,7 @@
 package dev.iurysouza.modulegraph
 
-import dev.iurysouza.modulegraph.graph.subgraph.SubgraphBuilder
 import dev.iurysouza.modulegraph.graph.*
+import dev.iurysouza.modulegraph.graph.subgraph.SubgraphBuilder
 import dev.iurysouza.modulegraph.model.GraphParseResult
 
 internal object Mermaid {

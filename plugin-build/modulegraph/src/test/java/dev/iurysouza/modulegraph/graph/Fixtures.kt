@@ -86,8 +86,7 @@ internal fun getConfig(
     showFullPath: Boolean? = null,
     strictMode: Boolean? = null,
     enableNesting: Boolean? = null,
-
-    ) =
+) =
     GraphConfig.Builder(
         readmePath = readmePath,
         heading = heading,

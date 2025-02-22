@@ -13,4 +13,3 @@ internal object SubgraphBuilder {
         else -> FlatSubgraphBuilder.build(digraphModels, config.showFullPath)
     }
 }
-

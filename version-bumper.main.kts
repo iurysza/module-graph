@@ -5,8 +5,8 @@ import java.io.IOException
 import java.util.Properties
 import kotlin.system.exitProcess
 
-val VERSION_FILE = "./plugin-build/gradle.properties"
-val README_FILE = "./README.md"
+val versionFile = "./plugin-build/gradle.properties"
+val readmeFile = "./readme.md"
 
 enum class VersionPart { MAJOR, MINOR, PATCH }
 
@@ -33,7 +33,7 @@ fun bumpVersion(part: VersionPart, release: Boolean, isSnapshot: Boolean) {
 fun getCurrentVersion(): String {
     return try {
         val properties = Properties()
-        File(VERSION_FILE).inputStream().use { properties.load(it) }
+        File(versionFile).inputStream().use { properties.load(it) }
         properties.getProperty("VERSION") ?: throw IOException("Version not found in properties file")
     } catch (e: IOException) {
         println("Version file not found!")
@@ -53,20 +53,20 @@ fun incrementVersion(currentVersion: String, part: VersionPart): String {
 
 fun updateVersionFile(newVersion: String) {
     val properties = Properties()
-    File(VERSION_FILE).inputStream().use { properties.load(it) }
+    File(versionFile).inputStream().use { properties.load(it) }
     properties.setProperty("VERSION", newVersion.removePrefix("v"))
-    File(VERSION_FILE).outputStream().use { properties.store(it, null) }
+    File(versionFile).outputStream().use { properties.store(it, null) }
     println(properties)
 }
 
 fun updateReadmeVersions(newVersion: String) {
     try {
-        val readmeContent = File(README_FILE).readText()
+        val readmeContent = File(readmeFile).readText()
         val updatedContent = readmeContent.replace(
             Regex("""dev\.iurysouza:modulegraph:\d+\.\d+\.\d+"""),
             "dev.iurysouza:modulegraph:${newVersion.removePrefix("v")}",
         )
-        File(README_FILE).writeText(updatedContent)
+        File(readmeFile).writeText(updatedContent)
         println("Updated version references in README to $newVersion")
     } catch (e: IOException) {
         println("An error occurred while updating README: ${e.message}")
@@ -77,7 +77,7 @@ fun updateReadmeVersions(newVersion: String) {
 fun commitTagAndPush(newVersion: String) {
     try {
         println("Committing changes...")
-        runCommand("git", "add", VERSION_FILE)
+        runCommand("git", "add", versionFile)
         runCommand("git", "commit", "-m", "Bump version to $newVersion")
         runCommand("git", "push")
         runCommand("git", "tag", newVersion)

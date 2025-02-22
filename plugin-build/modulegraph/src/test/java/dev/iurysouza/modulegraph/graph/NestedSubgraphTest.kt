@@ -6,7 +6,7 @@ import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class NestedSubgraphLiveMatchGraphTest {
+class NestedSubgraphTest {
 
     @Test
     fun `Build digraph with nested subgraphs`() {
@@ -14,7 +14,7 @@ class NestedSubgraphLiveMatchGraphTest {
         val config = getConfig()
         val result = Mermaid.generateGraph(GraphParseResult(graphModel, config))
 
-        val nestedGraph ="""
+        val nestedGraph = """
         ```mermaid
             %%{
               init: {
@@ -60,7 +60,6 @@ class NestedSubgraphLiveMatchGraphTest {
         """.trimIndent()
         assertEquals(nestedGraph, result)
     }
-
 
     private fun nestedModuleGraph() = mapOf(
         Module(
