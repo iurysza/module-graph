@@ -83,8 +83,10 @@ moduleGraphConfig {
     // focusedModulesRegex = ".*(projectName).*" // optional
     // rootModulesRegex = ".*moduleName.*" // optional
     // setStyleByModuleType = true // optional
-    // theme = Theme.NEUTRAL // optional
     // strictMode = false // optional
+    // nestingEnabled = true // optional
+
+    // theme = Theme.NEUTRAL // optional
     // Or you can fully customize it by using the BASE theme:
     // theme = new Theme.BASE(
     //     [
@@ -188,8 +190,10 @@ moduleGraphConfig {
     // excludedModulesRegex.set(".*moduleName.*") // optional
     // focusedModulesRegex.set(".*(projectName).*") // optional
     // rootModulesRegex.set(".*moduleName.*") // optional
-    // theme.set(Theme.NEUTRAL) // optional
     // strictMode.set(false) // optional
+    // nestingEnabled.set(true) // optional
+
+    // theme.set(Theme.NEUTRAL) // optional
     // or you can fully customize it by using the BASE theme:
     // Theme.BASE(
     //     themeVariables = mapOf(
@@ -272,12 +276,14 @@ Optional settings:
 - **excludedConfigurationsRegex**:
     - Regex matching the configurations which should be ignored. e.g. "implementation", "testImplementation".
 - **excludedModulesRegex**:
-    - Regex matching the modules which should be ignored.
-- **rootModules**:
-    - Regex matching the modules that should be used as root modules.
-      If this value is supplied, the generated graph will only include dependencies (direct and transitive) of root modules.
-      In other words, the graph will only include modules that can be reached from a root module.
-- **strictMode**: When enabled, the task will fail if any module dependencies cannot be resolved (invalid regex, no modules found, etc.). Default is `false`.
+    - Regex matching the modules which should be ignored when traversing dependencies.
+    - When a module matches this pattern, it and its dependencies will be excluded from the graph.
+    - Note: This only excludes modules when they appear as dependencies. If a module matches this pattern but is also selected as a root module (either explicitly via `rootModulesRegex` or implicitly when `rootModulesRegex` is not set), it will still appear in the graph.
+- **rootModulesRegex**:
+    - Regex matching the modules that should be used as starting points for building the graph.
+    - If set, only these modules and their dependencies (direct and transitive) will be included in the graph.
+    - If not set, all modules are considered root modules, which means the graph will include all modules and their dependencies.
+    - This is useful when you want to focus on a specific part of your project's dependency structure.
 
 ### Multiple graphs
 
@@ -730,6 +736,66 @@ graph LR
 
 This view can be useful when you want to see the full module paths at a glance without any grouping structure.
 
+
+```kotlin
+moduleGraphConfig {
+    // ... other config ...
+
+    // Example: Include only modules under the 'features' directory as roots,
+    // and exclude any test modules
+    rootModulesRegex.set(".*:features:.*")
+    excludedModulesRegex.set(".*test.*")
+}
+```
+
+### Common Module Filtering Scenarios
+
+```kotlin
+// Scenario 1: Show everything ✅
+moduleGraphConfig {
+    // No filters - shows all modules and all dependencies
+}
+
+// Scenario 2: Show only feature modules and what they depend on ✅
+moduleGraphConfig {
+    rootModulesRegex.set(":features:.*")
+    // Result:
+    // - Shows all :features:* modules
+    // - Shows only dependencies of feature modules
+}
+```
+
+
+#### Excluding Modules
+
+To effectively exclude certain modules from your graph, you need to:
+
+1. Set `rootModulesRegex` to match your desired root modules
+2. Set `excludedModulesRegex` to match the modules you want to ignore
+
+```kotlin
+// Scenario 3: Try to exclude feature modules ❌
+moduleGraphConfig {
+    // Don't set rootModulesRegex (all modules are roots)
+    excludedModulesRegex.set(":features:.*")
+    // Result:
+    // - Shows ALL modules (because they're all roots)
+    // - The exclusion pattern has no effect since all modules are roots
+}
+
+// Scenario 3 (CORRECT WAY): Focus on app module, ignore feature modules ✅
+moduleGraphConfig {
+    rootModulesRegex.set(":app")
+    excludedModulesRegex.set(":features:.*")
+    // Result:
+    // - Shows :app module
+    // - Shows its dependencies (except feature modules)
+    // - Shows dependencies of dependencies (except feature modules)
+}
+```
+
+If you don't set `rootModulesRegex`, all modules will be considered root modules and cannot be excluded, even if they match `excludedModulesRegex`.
+
 ## Contributing 🤝
 
 Feel free to open an issue or submit a pull request for any bugs/improvements.
@@ -746,3 +812,5 @@ greatly appreciated and help to support the development. [Relevant xkcd](https:/
 <a href="https://www.buymeacoffee.com/iurysza" target="_blank">
 <img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Pingado" style="height: 51px !important;width: 217px !important;" >
 </a>
+
+
