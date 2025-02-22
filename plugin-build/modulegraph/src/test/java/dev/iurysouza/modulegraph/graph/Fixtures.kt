@@ -85,7 +85,9 @@ internal fun getConfig(
     setStyleByModuleType: Boolean? = null,
     showFullPath: Boolean? = null,
     strictMode: Boolean? = null,
-) =
+    enableNesting: Boolean? = null,
+
+    ) =
     GraphConfig.Builder(
         readmePath = readmePath,
         heading = heading,
@@ -100,6 +102,7 @@ internal fun getConfig(
         this.setStyleByModuleType = setStyleByModuleType
         this.showFullPath = showFullPath
         this.strictMode = strictMode
+        this.enableNesting = enableNesting
     }.build()
 
 internal val liveMatchReconstructedModel = mapOf(

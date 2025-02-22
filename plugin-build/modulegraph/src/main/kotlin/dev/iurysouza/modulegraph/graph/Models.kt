@@ -10,10 +10,19 @@ internal data class DigraphModel(
 internal data class ModuleNode(
     val name: String,
     val isFocused: Boolean,
-    val fullName: String,
+    val fullPath: String,
     val config: ModuleConfig,
     val type: ModuleType,
     val parent: String,
+) {
+    val pathSegments: List<String> get() = fullPath.split(':').filter { it.isNotEmpty() }
+}
+
+internal data class PathNode(
+    val name: String,
+    val fullPath: String,
+    val children: MutableMap<String, PathNode> = mutableMapOf(),
+    val modules: MutableList<ModuleNode> = mutableListOf(),
 )
 
 @JvmInline

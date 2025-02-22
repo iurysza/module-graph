@@ -42,6 +42,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.graphConfigs.set(extension.graphConfigs)
             task.projectDirectory.set(project.layout.projectDirectory)
             task.strictMode.set(extension.strictMode)
+            task.nestingEnabled.set(extension.nestingEnabled)
 
             val primaryGraphConfig = getPrimaryGraphConfig(task)
             val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
@@ -87,6 +88,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
         val rootModulesRegex = task.rootModulesRegex.orNull
         val showFullPath = task.showFullPath.orNull
         val strictMode = task.strictMode.orNull
+        val nestingEnabled = task.nestingEnabled.orNull
 
         val params: List<Any?> = listOf(
             readmePath,
@@ -101,6 +103,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             rootModulesRegex,
             showFullPath,
             strictMode,
+            nestingEnabled,
         )
 
         /**
@@ -133,6 +136,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             this.rootModulesRegex = rootModulesRegex
             this.focusedModulesRegex = focusedModulesRegex
             this.strictMode = strictMode
+            this.nestingEnabled = nestingEnabled
         }.build()
     }
 }

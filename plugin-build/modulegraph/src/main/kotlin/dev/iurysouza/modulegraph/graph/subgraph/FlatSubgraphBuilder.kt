@@ -1,6 +1,10 @@
-package dev.iurysouza.modulegraph.graph
+package dev.iurysouza.modulegraph.graph.subgraph
 
-internal object SubgraphBuilder {
+import dev.iurysouza.modulegraph.graph.DigraphModel
+import dev.iurysouza.modulegraph.graph.MermaidCode
+import dev.iurysouza.modulegraph.graph.ModuleNode
+
+internal object FlatSubgraphBuilder {
 
     /**
      * The `build` function groups digraph models by parent and generates mermaid syntax for subgraphs.
@@ -31,7 +35,7 @@ internal object SubgraphBuilder {
         subgraphModel: List<Pair<String, List<ModuleNode>>>,
     ): MermaidCode = MermaidCode(
         subgraphModel.joinToString("\n") { (parent, children) ->
-            val childrenNames = children.joinToString("\n") { """    ${it.fullName}["${it.name}"]""" }
+            val childrenNames = children.joinToString("\n") { """    ${it.fullPath}["${it.name}"]""" }
             """|  subgraph $parent
                |$childrenNames
                |  end
@@ -45,7 +49,7 @@ internal object SubgraphBuilder {
         .flatMap { listOf(it.source, it.target) }
         .filter { it.parent.isNotEmpty() }
         .groupBy { it.parent }
-        .map { (parent, children) -> parent to children.distinctBy { it.fullName } }
+        .map { (parent, children) -> parent to children.distinctBy { it.fullPath } }
         .sortedBy { it.first }
         .toList()
 }

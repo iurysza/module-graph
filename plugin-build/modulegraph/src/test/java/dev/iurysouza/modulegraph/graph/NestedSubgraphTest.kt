@@ -12,10 +12,31 @@ class NestedSubgraphLiveMatchGraphTest {
     fun `Build digraph with nested subgraphs`() {
         val graphModel = nestedModuleGraph()
         val config = getConfig()
-
         val result = Mermaid.generateGraph(GraphParseResult(graphModel, config))
 
+        val nestedGraph ="""
+        ```mermaid
+            %%{
+              init: {
+                'theme': 'neutral'
+              }
+            }%%
 
+            graph LR
+              subgraph :libs
+                :libs:app-common["app-common"]
+                subgraph :crash-reporting
+                  :libs:crash-reporting:api["api"]
+                  :libs:crash-reporting:firebase["firebase"]
+                end
+              end
+              :App --> :libs:app-common
+              :App --> :libs:crash-reporting:api
+              :App --> :libs:crash-reporting:firebase
+            classDef focus fill:#769566,stroke:#fff,stroke-width:2px,color:#fff;
+            class :App focus
+        ```
+        """.trimIndent()
         val expectedMermaidCode = """
         ```mermaid
         %%{
@@ -37,7 +58,7 @@ class NestedSubgraphLiveMatchGraphTest {
           :App --> :libs:crash-reporting:firebase
         ```
         """.trimIndent()
-        assertEquals(expectedMermaidCode, result)
+        assertEquals(nestedGraph, result)
     }
 
 

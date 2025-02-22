@@ -50,7 +50,7 @@ internal object DigraphBuilder {
             else -> DigraphModel(
                 source = ModuleNode(
                     name = sourceFullName.getProjectName(showFullPath),
-                    fullName = sourceFullName,
+                    fullPath = sourceFullName,
                     isFocused = sourceMatches && isFocusedModulesRegexSet,
                     config = ModuleConfig.none(),
                     type = source.type,
@@ -58,7 +58,7 @@ internal object DigraphBuilder {
                 ),
                 target = ModuleNode(
                     name = targetFullName!!.getProjectName(showFullPath),
-                    fullName = targetFullName,
+                    fullPath = targetFullName,
                     isFocused = targetMatches && isFocusedModulesRegexSet,
                     config = target.configName?.let { ModuleConfig(it) } ?: ModuleConfig.none(),
                     type = target.type,

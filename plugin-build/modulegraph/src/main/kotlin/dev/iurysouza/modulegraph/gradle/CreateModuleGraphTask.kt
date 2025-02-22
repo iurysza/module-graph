@@ -105,6 +105,14 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val setStyleByModuleType: Property<Boolean>
 
     @get:Input
+    @get:Option(
+        option = "nestingEnabled",
+        description = "Whether to enable nested subgraphs in the generated graph",
+    )
+    @get:Optional
+    abstract val nestingEnabled: Property<Boolean>
+
+    @get:Input
     @get:Option(option = "graphModels", description = "The produced graph models")
     internal abstract val graphModels: ListProperty<GraphParseResult>
 

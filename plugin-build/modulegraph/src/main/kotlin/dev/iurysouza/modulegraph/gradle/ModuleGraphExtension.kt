@@ -96,18 +96,26 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
     val showFullPath: Property<Boolean> = objects.property(Boolean::class.java)
 
     /**
-     * A list of additional graph configs to generate graphs for.
-     */
-    val graphConfigs: ListProperty<GraphConfig> =
-        objects.listProperty(GraphConfig::class.java)
-
-    /**
      * Whether to fail the task if no modules are found matching the specified criteria
      * (e.g., focusedModulesRegex, rootModulesRegex or single module project).
      * If set to `false`, the task will no-op if no modules are found.
      * Defaults to `false`.
      */
     val strictMode: Property<Boolean> = objects.property(Boolean::class.java)
+
+    /**
+     * Whether to enable nested subgraphs in the generated graph.
+     * When enabled, modules will be grouped into subgraphs based on their path structure.
+     * For example, modules under ":libs:feature1" and ":libs:feature2" will be nested under a ":libs" subgraph.
+     * Note: This option is ignored if [showFullPath] is true.
+     */
+    val nestingEnabled: Property<Boolean> = objects.property(Boolean::class.java)
+
+    /**
+     * A list of additional graph configs to generate graphs for.
+     */
+    val graphConfigs: ListProperty<GraphConfig> =
+        objects.listProperty(GraphConfig::class.java)
 
     /**
      * Creates a new [GraphConfig] based on the configuration block,
