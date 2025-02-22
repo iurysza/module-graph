@@ -250,7 +250,7 @@ Required settings:
 
 Optional settings:
 
-- **setStyleByModuleType**: Whether to style the modules based on their type (KotlinMultiplatform, Android Library, etc). Default is `false`. [Read more](#module-type-based-styling).
+- **setStyleByModuleType**: Whether to style the modules based on their type (KotlinMultiplatform, Android Library, etc.). Default is `false`. [Read more](#module-type-based-styling).
 - **nestingEnabled**: Whether to enable nested subgraphs in the generated graph. Groups modules into subgraphs based on their path structure. Default is `false`. [Read more](#nested-subgraphs).
 - **focusedModulesRegex**: The regex to match nodes in the graph (project names) that should be focused. By
   default, no nodes are focused.
@@ -277,7 +277,7 @@ Optional settings:
     - Regex matching the modules that should be used as root modules.
       If this value is supplied, the generated graph will only include dependencies (direct and transitive) of root modules.
       In other words, the graph will only include modules that can be reached from a root module.
-- **strictMode**: When enabled, the task will fail if any module dependencies cannot be resolved (invalid regex, no modules found, etc). Default is `false`.
+- **strictMode**: When enabled, the task will fail if any module dependencies cannot be resolved (invalid regex, no modules found, etc.). Default is `false`.
 
 ### Multiple graphs
 

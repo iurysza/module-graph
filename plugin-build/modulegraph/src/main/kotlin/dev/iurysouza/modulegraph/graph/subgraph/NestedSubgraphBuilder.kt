@@ -41,7 +41,7 @@ internal object NestedSubgraphBuilder {
         }
     }
 
-    private fun generateNestedSubgraphs(node: PathNode, depth: Int = 1): String {
+    private fun generateNestedSubgraphs(node: PathNode, depth: Int = 0): String {
         // If empty, do nothing
         if (node.children.isEmpty() && node.modules.isEmpty()) return ""
         return buildString {

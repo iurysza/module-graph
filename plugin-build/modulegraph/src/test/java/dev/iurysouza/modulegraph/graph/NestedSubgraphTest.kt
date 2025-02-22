@@ -11,33 +11,42 @@ class NestedSubgraphTest {
     @Test
     fun `Build digraph with nested subgraphs`() {
         val graphModel = nestedModuleGraph()
-        val config = getConfig()
+        val config = getConfig(nestingEnabled = true)
         val result = Mermaid.generateGraph(GraphParseResult(graphModel, config))
 
         val nestedGraph = """
         ```mermaid
-            %%{
-              init: {
-                'theme': 'neutral'
-              }
-            }%%
+        %%{
+          init: {
+            'theme': 'neutral'
+          }
+        }%%
 
-            graph LR
-              subgraph :libs
-                :libs:app-common["app-common"]
-                subgraph :crash-reporting
-                  :libs:crash-reporting:api["api"]
-                  :libs:crash-reporting:firebase["firebase"]
-                end
-              end
-              :App --> :libs:app-common
-              :App --> :libs:crash-reporting:api
-              :App --> :libs:crash-reporting:firebase
-            classDef focus fill:#769566,stroke:#fff,stroke-width:2px,color:#fff;
-            class :App focus
+        graph LR
+          :App["App"]
+          subgraph :libs
+            :libs:app-common["app-common"]
+            subgraph :crash-reporting
+              :libs:crash-reporting:api["api"]
+              :libs:crash-reporting:firebase["firebase"]
+            end
+          end
+
+          :App --> :libs:app-common
+          :App --> :libs:crash-reporting:api
+          :App --> :libs:crash-reporting:firebase
         ```
         """.trimIndent()
-        val expectedMermaidCode = """
+        assertEquals(nestedGraph, result)
+    }
+
+    @Test
+    fun `Build digraph with flat subgraphs`() {
+        val graphModel = nestedModuleGraph()
+        val config = getConfig(nestingEnabled = false)
+        val result = Mermaid.generateGraph(GraphParseResult(graphModel, config))
+
+        val expectedGraph = """
         ```mermaid
         %%{
           init: {
@@ -58,7 +67,7 @@ class NestedSubgraphTest {
           :App --> :libs:crash-reporting:firebase
         ```
         """.trimIndent()
-        assertEquals(nestedGraph, result)
+        assertEquals(expectedGraph, result)
     }
 
     private fun nestedModuleGraph() = mapOf(

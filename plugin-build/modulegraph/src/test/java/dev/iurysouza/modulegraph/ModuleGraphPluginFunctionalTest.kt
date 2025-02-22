@@ -42,7 +42,7 @@ class ModuleGraphPluginFunctionalTest {
             """.trimIndent(),
         )
 
-        val appBuildFile = File(testProjectDir, "App/build.gradle.kts").apply {
+        File(testProjectDir, "App/build.gradle.kts").apply {
             parentFile.mkdirs()
             writeText(
                 """
@@ -87,6 +87,7 @@ class ModuleGraphPluginFunctionalTest {
                 }%%
 
                 graph LR
+                  :App["App"]
                   subgraph :libs
                     :libs:app-common["app-common"]
                     subgraph :crash-reporting
@@ -94,6 +95,7 @@ class ModuleGraphPluginFunctionalTest {
                       :libs:crash-reporting:firebase["firebase"]
                     end
                   end
+
                   :App --> :libs:app-common
                   :App --> :libs:crash-reporting:api
                   :App --> :libs:crash-reporting:firebase
