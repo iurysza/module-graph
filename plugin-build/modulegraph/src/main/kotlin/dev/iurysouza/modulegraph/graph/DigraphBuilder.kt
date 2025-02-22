@@ -69,20 +69,18 @@ internal object DigraphBuilder {
     }
 
     private fun throwIfNothingMatches(modelList: List<DigraphModel>, regex: String?, strictMode: Boolean) {
+        if (!modelList.isEmpty()) return
+        
         val errorMsg = """
-                    |
-                    |No modules were found matching the pattern: $regex
-                    |This pattern was configured through the `focusedModulesRegex` property.
-                    |Please verify that:
-                    |1. The regex pattern is correct and matches your intended modules
-                    |2. The modules you want to focus on exist in your project
-                    |3. The modules are not being excluded by other configuration settings
+            |No modules were found matching the pattern: $regex
+            |This pattern was configured through the `focusedModulesRegex` property.
+            |Please verify that:
+            |1. The regex pattern is correct and matches your intended modules
+            |2. The modules you want to focus on exist in your project
+            |3. The modules are not being excluded by other configuration settings
         """.trimMargin()
-        if (strictMode) {
-            require(modelList.isNotEmpty()) { errorMsg }
-        } else {
-            println(errorMsg)
-        }
+
+        if (strictMode) error(errorMsg) else println(errorMsg)
     }
 
     private fun verifySufficientGraph(graphResult: GraphParseResult, strictMode: Boolean) {
