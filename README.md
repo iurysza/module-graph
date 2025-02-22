@@ -164,7 +164,7 @@ plugins {
     }
 }
 
-apply(plugin = "dev.iurysouza:modulegraph")
+apply(plugin = "dev.iurysouza.modulegraph")
 ```
 
 </details>
@@ -250,7 +250,8 @@ Required settings:
 
 Optional settings:
 
-- **setStyleByModuleType**: Whether to style the modules based on their type (KotlinMultiplatform, Android Library, etc). Default is `false`. [Read more](#module-type-based-styling).
+- **setStyleByModuleType**: Whether to style the modules based on their type (KotlinMultiplatform, Android Library, etc.). Default is `false`. [Read more](#module-type-based-styling).
+- **nestingEnabled**: Whether to enable nested subgraphs in the generated graph. Groups modules into subgraphs based on their path structure. Default is `false`. [Read more](#nested-subgraphs).
 - **focusedModulesRegex**: The regex to match nodes in the graph (project names) that should be focused. By
   default, no nodes are focused.
   If set, the matching nodes will be highlighted and only related nodes will be shown. The color can be customized via the `focusColor` property
@@ -276,7 +277,7 @@ Optional settings:
     - Regex matching the modules that should be used as root modules.
       If this value is supplied, the generated graph will only include dependencies (direct and transitive) of root modules.
       In other words, the graph will only include modules that can be reached from a root module.
-- **strictMode**: When enabled, the task will fail if any module dependencies cannot be resolved (invalid regex, no modules found, etc). Default is `false`.
+- **strictMode**: When enabled, the task will fail if any module dependencies cannot be resolved (invalid regex, no modules found, etc.). Default is `false`.
 
 ### Multiple graphs
 
@@ -624,6 +625,110 @@ The system determines the module type based on the hierarchy of applied plugins.
 
 - A module with both `React Native` and `Android Library` will be identified as `React Native`.
 - A module with both `Android Library` and `Kotlin` will be identified as `Android Library`.
+
+## Nested Subgraphs
+
+The plugin supports two ways of organizing modules in the graph: flat subgraphs (default) and nested subgraphs. You can enable nested subgraphs using the `nestingEnabled` property:
+
+```kotlin
+moduleGraphConfig {
+    //... keep previous configs
+    nestingEnabled.set(true)
+}
+```
+
+### Flat vs Nested Example
+
+Given these modules:
+- :App
+- :libs:crash-reporting:api
+- :libs:crash-reporting:firebase
+- :libs:app-common
+
+**Flat subgraphs** (default):
+```mermaid
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
+  }
+}%%
+
+graph LR
+  subgraph :libs
+    :libs:app-common["app-common"]
+  end
+  subgraph :libs:crash-reporting
+    :libs:crash-reporting:api["api"]
+    :libs:crash-reporting:firebase["firebase"]
+  end
+  :App --> :libs:app-common
+  :App --> :libs:crash-reporting:api
+  :App --> :libs:crash-reporting:firebase
+  classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
+  class :App focus
+```
+
+**Nested subgraphs** (with `nestingEnabled = true`):
+```mermaid
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
+  }
+}%%
+
+graph LR
+  subgraph :libs
+    :libs:app-common["app-common"]
+    subgraph :crash-reporting
+      :libs:crash-reporting:api["api"]
+      :libs:crash-reporting:firebase["firebase"]
+    end
+  end
+  :App --> :libs:app-common
+  :App --> :libs:crash-reporting:api
+  :App --> :libs:crash-reporting:firebase
+  classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
+  class :App focus
+```
+
+Nested subgraphs can help better visualize your project's module hierarchy, especially in larger projects with many nested modules. Note that this feature is automatically disabled if `showFullPath` is true.
+
+### Full Path View
+
+You can also choose to show the full path of each module using the `showFullPath` property:
+
+```kotlin
+moduleGraphConfig {
+    //... keep previous configs
+    showFullPath.set(true)
+}
+```
+
+This will display the complete path for each module without any subgraph grouping:
+
+```mermaid
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {"primaryTextColor":"#fff","primaryColor":"#5a4f7c","primaryBorderColor":"#5a4f7c","lineColor":"#f5a623","tertiaryColor":"#40375c","fontSize":"12px"}
+  }
+}%%
+
+graph LR
+  :App
+  :libs:app-common
+  :libs:crash-reporting:api
+  :libs:crash-reporting:firebase
+  :App --> :libs:app-common
+  :App --> :libs:crash-reporting:api
+  :App --> :libs:crash-reporting:firebase
+  classDef focus fill:#E04380,stroke:#fff,stroke-width:2px,color:#fff;
+  class :App focus
+```
+
+This view can be useful when you want to see the full module paths at a glance without any grouping structure.
 
 ## Contributing 🤝
 

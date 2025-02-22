@@ -28,7 +28,7 @@ internal object DigraphCodeBuilder {
     )
 
     private fun toMermaid(it: DigraphModel, linkText: LinkText): CharSequence = """
-        |  ${it.source.fullName} ${linkText.toLinkString(it.target.config.value)} ${it.target.fullName}
+        |  ${it.source.fullPath} ${linkText.toLinkString(it.target.config.value)} ${it.target.fullPath}
     """.trimMargin()
 }
 

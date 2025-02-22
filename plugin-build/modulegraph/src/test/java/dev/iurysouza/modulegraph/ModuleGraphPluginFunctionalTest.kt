@@ -31,6 +31,80 @@ class ModuleGraphPluginFunctionalTest {
     }
 
     @Test
+    fun `when plugin is ran with nested modules it produces the expected output`() {
+        settingsFile.writeText(
+            """
+                rootProject.name = "test"
+                include(":libs:app-common")
+                include(":libs:crash-reporting:api")
+                include(":libs:crash-reporting:firebase")
+                include(":App")
+            """.trimIndent(),
+        )
+
+        File(testProjectDir, "App/build.gradle.kts").apply {
+            parentFile.mkdirs()
+            writeText(
+                """
+                    plugins {
+                        java
+                        id("$MODULEGRAPH_PACKAGE")
+                    }
+
+                    moduleGraphConfig {
+                        heading.set("### Dependency Diagram")
+                        readmePath.set("${readmeFilePath()}")
+                        nestingEnabled.set(true)
+                    }
+                    dependencies {
+                        implementation(project(":libs:app-common"))
+                        implementation(project(":libs:crash-reporting:api"))
+                        implementation(project(":libs:crash-reporting:firebase"))
+                    }
+                """.trimIndent(),
+            )
+        }
+
+        readmeFile.writeText("### Dependency Diagram")
+
+        // Run the plugin task
+        GradleRunner.create()
+            .withProjectDir(testProjectDir)
+            .withArguments("createModuleGraph")
+            .withPluginClasspath()
+            .build()
+
+        // Check if the output matches the expected result
+        val expectedOutput =
+            """
+                ### Dependency Diagram
+
+                ```mermaid
+                %%{
+                  init: {
+                    'theme': 'neutral'
+                  }
+                }%%
+
+                graph LR
+                  :App["App"]
+                  subgraph :libs
+                    :libs:app-common["app-common"]
+                    subgraph :crash-reporting
+                      :libs:crash-reporting:api["api"]
+                      :libs:crash-reporting:firebase["firebase"]
+                    end
+                  end
+
+                  :App --> :libs:app-common
+                  :App --> :libs:crash-reporting:api
+                  :App --> :libs:crash-reporting:firebase
+                ```
+            """.trimIndent()
+        assertEquals(expectedOutput, readmeFile.readText())
+    }
+
+    @Test
     fun `when plugin is ran it produces the expected output`() {
         settingsFile.writeText(
             """

@@ -2,6 +2,7 @@ package dev.iurysouza.modulegraph.graph
 
 import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.gradle.Module
+import dev.iurysouza.modulegraph.graph.subgraph.FlatSubgraphBuilder
 import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -21,7 +22,7 @@ class SubgraphBuilderTest {
         val config = getConfig()
         val result = GraphParseResult(graphModel, config)
 
-        val subgraph = SubgraphBuilder.build(
+        val subgraph = FlatSubgraphBuilder.build(
             list = DigraphBuilder.build(result),
             showFullPath = false,
         ).value
@@ -43,7 +44,7 @@ class SubgraphBuilderTest {
         )
         val result = GraphParseResult(graphModel, config)
 
-        val subgraph = SubgraphBuilder.build(
+        val subgraph = FlatSubgraphBuilder.build(
             list = DigraphBuilder.build(result),
             showFullPath = true,
         )
@@ -60,7 +61,7 @@ class SubgraphBuilderTest {
         )
         val result = GraphParseResult(graphModel, config)
 
-        val subgraph = SubgraphBuilder.build(
+        val subgraph = FlatSubgraphBuilder.build(
             list = DigraphBuilder.build(result),
             showFullPath = false,
         )

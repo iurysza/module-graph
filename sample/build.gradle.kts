@@ -53,12 +53,14 @@ moduleGraphConfig {
         readmePath = "./README.md",
         heading = "# Graph with root: gama",
     ) {
+        nestingEnabled = true
         rootModulesRegex = ".*gama.*"
     }
     graph(
         readmePath = "./SomeOtherReadme.md",
         heading = "# Graph",
     ) {
+        nestingEnabled = false
         rootModulesRegex = ".*zeta.*"
     }
 }

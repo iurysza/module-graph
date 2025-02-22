@@ -1,11 +1,17 @@
-package dev.iurysouza.modulegraph.graph
+package dev.iurysouza.modulegraph.graph.subgraph
 
-internal object SubgraphBuilder {
+import dev.iurysouza.modulegraph.graph.DigraphModel
+import dev.iurysouza.modulegraph.graph.MermaidCode
+import dev.iurysouza.modulegraph.graph.ModuleNode
+
+internal object FlatSubgraphBuilder {
 
     /**
      * The `build` function groups digraph models by parent and generates mermaid syntax for subgraphs.
+     * This builder is used when [GraphConfig.nestingEnabled] is false or [GraphConfig.showFullPath] is true.
      *
      * @param list The list of digraph models to be grouped by parent.
+     * @param showFullPath Whether to show the full path of modules in the graph.
      * @return The resulting `MermaidCode` corresponding to the structured digraphs.
      *
      * eg.:
@@ -19,7 +25,7 @@ internal object SubgraphBuilder {
      *  end
      *```
      *
-     *Where "sample" and "container" are parent nodes, and "alpha", "zeta", and "gama" are children.
+     * Where "sample" and "container" are parent nodes, and "alpha", "zeta", and "gama" are children.
      */
     fun build(list: List<DigraphModel>, showFullPath: Boolean): MermaidCode {
         if (showFullPath) return MermaidCode.EMPTY
@@ -31,7 +37,7 @@ internal object SubgraphBuilder {
         subgraphModel: List<Pair<String, List<ModuleNode>>>,
     ): MermaidCode = MermaidCode(
         subgraphModel.joinToString("\n") { (parent, children) ->
-            val childrenNames = children.joinToString("\n") { """    ${it.fullName}["${it.name}"]""" }
+            val childrenNames = children.joinToString("\n") { """    ${it.fullPath}["${it.name}"]""" }
             """|  subgraph $parent
                |$childrenNames
                |  end
@@ -45,7 +51,7 @@ internal object SubgraphBuilder {
         .flatMap { listOf(it.source, it.target) }
         .filter { it.parent.isNotEmpty() }
         .groupBy { it.parent }
-        .map { (parent, children) -> parent to children.distinctBy { it.fullName } }
+        .map { (parent, children) -> parent to children.distinctBy { it.fullPath } }
         .sortedBy { it.first }
         .toList()
 }

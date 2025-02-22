@@ -74,6 +74,14 @@ data class GraphConfig(
     val strictMode: Boolean,
 
     /**
+     * Whether to enable nested subgraphs in the generated graph.
+     * When enabled, modules will be grouped into subgraphs based on their path structure.
+     * For example, modules under ":libs:feature1" and ":libs:feature2" will be nested under a ":libs" subgraph.
+     * Note: This option is ignored if [showFullPath] is true.
+     */
+    val nestingEnabled: Boolean,
+
+    /**
      * A Regex to match modules that should be used as root modules.
      * If this value is supplied,
      * the generated graph will only include dependencies (direct and transitive) of root modules.
@@ -120,19 +128,27 @@ data class GraphConfig(
          */
         var strictMode: Boolean? = null
 
-        internal fun build() = GraphConfig(
-            readmePath = readmePath,
-            heading = heading,
-            theme = theme ?: Theme.NEUTRAL,
-            orientation = orientation ?: Orientation.LEFT_TO_RIGHT,
-            linkText = linkText ?: LinkText.NONE,
-            setStyleByModuleType = setStyleByModuleType ?: false,
-            focusedModulesRegex = focusedModulesRegex,
-            excludedConfigurationsRegex = excludedConfigurationsRegex,
-            excludedModulesRegex = excludedModulesRegex,
-            rootModulesRegex = rootModulesRegex,
-            showFullPath = showFullPath ?: false,
-            strictMode = strictMode ?: false,
-        )
+        /**
+         * See [@GraphConfig.nestingEnabled]
+         */
+        var nestingEnabled: Boolean? = null
+
+        internal fun build(): GraphConfig {
+            return GraphConfig(
+                readmePath = readmePath,
+                heading = heading,
+                theme = theme ?: Theme.NEUTRAL,
+                orientation = orientation ?: Orientation.LEFT_TO_RIGHT,
+                linkText = linkText ?: LinkText.NONE,
+                setStyleByModuleType = setStyleByModuleType ?: false,
+                focusedModulesRegex = focusedModulesRegex,
+                excludedConfigurationsRegex = excludedConfigurationsRegex,
+                excludedModulesRegex = excludedModulesRegex,
+                rootModulesRegex = rootModulesRegex,
+                showFullPath = showFullPath ?: false,
+                strictMode = strictMode ?: false,
+                nestingEnabled = nestingEnabled ?: false,
+            )
+        }
     }
 }

@@ -30,7 +30,6 @@ graph TB
     :sample:zeta["zeta"]
     :sample:beta["beta"]
     :sample:alpha["alpha"]
-    :sample:test["test"]
   end
   subgraph :sample:container
     :sample:container:gama["gama"]
@@ -42,7 +41,6 @@ graph TB
   :sample:alpha --> :sample:beta
   :sample:alpha --> :sample:container:gama
   :sample:alpha --> :sample:container:delta
-  :sample:alpha --> :sample:test
 
 classDef java fill:#B5661C,stroke:#fff,stroke-width:2px,color:#fff;
 class :sample:container:gama java
@@ -50,7 +48,6 @@ class :sample:zeta java
 class :sample:beta java
 class :sample:alpha java
 class :sample:container:delta java
-class :sample:test java
 
 ```
 # Graph with root: gama
@@ -63,5 +60,15 @@ class :sample:test java
 }%%
 
 graph LR
+  subgraph :sample
+    :sample:zeta["zeta"]
+    :sample:zeta["zeta"]
+    :sample:beta["beta"]
+    subgraph :container
+      :sample:container:gama["gama"]
+    end
+  end
 
+  :sample:container:gama --> :sample:zeta
+  :sample:zeta --> :sample:beta
 ```
