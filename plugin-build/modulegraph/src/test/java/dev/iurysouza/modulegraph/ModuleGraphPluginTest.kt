@@ -2,26 +2,15 @@ package dev.iurysouza.modulegraph
 
 import dev.iurysouza.modulegraph.gradle.CreateModuleGraphTask
 import dev.iurysouza.modulegraph.gradle.ModuleGraphExtension
-import org.gradle.api.GradleException
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 class ModuleGraphPluginTest {
 
     private val pluginId = "dev.iurysouza.modulegraph"
     private val pluginExtension = "moduleGraphConfig"
-
-    @Test
-    fun `error when plugin is applied to the project without valid graph config`() {
-        val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply(pluginId)
-        assertThrows<GradleException> {
-            project.tasks.getByName("createModuleGraph")
-        }
-    }
 
     @Test
     fun `extension moduleGraphConfig is created correctly`() {
@@ -34,10 +23,6 @@ class ModuleGraphPluginTest {
     fun `plugin is correctly applied to the project with minimal valid graph config`() {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply(pluginId)
-        (project.extensions.getByName(pluginExtension) as ModuleGraphExtension).apply {
-            readmePath.set("README.md")
-            heading.set("# Heading")
-        }
         assert(project.tasks.getByName("createModuleGraph") is CreateModuleGraphTask)
     }
 

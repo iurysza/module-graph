@@ -1,9 +1,3 @@
-[![Pre Merge Checks](https://github.com/iurysza/module-graph/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/iurysza/module-graph/actions?query=workflow%3A%22Pre+Merge+Checks%22) [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE) ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
-
-<p align="center">
-    <img src="./assets/module-graph-icon.png" alt="module graph icon" width="100px">
-</p>
-
 ## Module Graph Plugin
 
 This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph of your project's module relationships,
@@ -64,7 +58,8 @@ apply plugin: "dev.iurysouza.modulegraph"
 
 </details>
 
-### Configuring the plugin
+<details>
+  <summary><b>Configuration Properties</b></summary>
 
 ```groovy
 import dev.iurysouza.modulegraph.LinkText
@@ -73,20 +68,20 @@ import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
 
 moduleGraphConfig {
-    readmePath = "./README.md"
-    heading = "### Module Graph"
-    // showFullPath = false // optional
-    // orientation = Orientation.LEFT_TO_RIGHT // optional
-    // linkText = LinkText.NONE // optional
-    // excludedConfigurationsRegex = ".*test.*" // optional
-    // excludedModulesRegex = ".*moduleName.*" // optional
-    // focusedModulesRegex = ".*(projectName).*" // optional
-    // rootModulesRegex = ".*moduleName.*" // optional
-    // setStyleByModuleType = true // optional
-    // strictMode = false // optional
-    // nestingEnabled = true // optional
+    // readmePath = "./README.md"
+    // heading = "### Module Graph"
+    // showFullPath = false
+    // orientation = Orientation.LEFT_TO_RIGHT
+    // linkText = LinkText.NONE
+    // excludedConfigurationsRegex = ".*test.*"
+    // excludedModulesRegex = ".*moduleName.*"
+    // focusedModulesRegex = ".*(projectName).*"
+    // rootModulesRegex = ".*moduleName.*"
+    // setStyleByModuleType = true
+    // strictMode = false
+    // nestingEnabled = true
 
-    // theme = Theme.NEUTRAL // optional
+    // theme = Theme.NEUTRAL
     // Or you can fully customize it by using the BASE theme:
     // theme = new Theme.BASE(
     //     [
@@ -135,6 +130,7 @@ moduleGraphConfig {
 ```
 
 </details>
+</details>
 
 <br>
 
@@ -171,7 +167,8 @@ apply(plugin = "dev.iurysouza.modulegraph")
 
 </details>
 
-### Configuring the plugin
+<details>
+  <summary><b>Configuration Properties</b></summary>
 
 ```kotlin
 import dev.iurysouza.modulegraph.LinkText
@@ -180,18 +177,18 @@ import dev.iurysouza.modulegraph.Orientation
 import dev.iurysouza.modulegraph.Theme
 
 moduleGraphConfig {
-    readmePath.set("./README.md")
-    heading = "### Module Graph"
-    // showFullPath.set(false) // optional
-    // orientation.set(Orientation.LEFT_TO_RIGHT) //optional
-    // linkText.set(LinkText.NONE) // optional
-    // setStyleByModuleType.set(true) // optional
-    // excludedConfigurationsRegex.set(".*test.*") // optional
-    // excludedModulesRegex.set(".*moduleName.*") // optional
-    // focusedModulesRegex.set(".*(projectName).*") // optional
-    // rootModulesRegex.set(".*moduleName.*") // optional
-    // strictMode.set(false) // optional
-    // nestingEnabled.set(true) // optional
+    // readmePath.set("./README.md")
+    // heading.set("### Module Graph")
+    // showFullPath.set(false)
+    // orientation.set(Orientation.LEFT_TO_RIGHT)
+    // linkText.set(LinkText.NONE)
+    // setStyleByModuleType.set(true)
+    // excludedConfigurationsRegex.set(".*test.*")
+    // excludedModulesRegex.set(".*moduleName.*")
+    // focusedModulesRegex.set(".*(projectName).*")
+    // rootModulesRegex.set(".*moduleName.*")
+    // strictMode.set(false)
+    // nestingEnabled.set(true)
 
     // theme.set(Theme.NEUTRAL) // optional
     // or you can fully customize it by using the BASE theme:
@@ -211,7 +208,7 @@ moduleGraphConfig {
     // ),
     // )
 
-    // You can add additional graphs.
+    // You can include additional graphs.
     // A separate graph will be generated for each config below.
     // graph(
     //     readmePath = "./README.md",
@@ -229,31 +226,26 @@ moduleGraphConfig {
 ```
 
 </details>
+</details>
 
-## Usage
-
-Make sure you have a heading in your `README` with the same format as the one you set in the
-configuration, if not, the plugin will append it with the graph to the end of the file.
-
-After that, just run the following command:
+### Running it
+You can run the plugin's task right away without any extra configuration. The plugin tries to provide sensible defaults, so after applying it to your project you can:
 
 ```sh
 ./gradlew createModuleGraph
 ```
 
-Now, just look for the generated graph in your project's README file.
+This will generate a module graph in your README file. If you need further customization, keep reading for more detailed examples of how to configure it.
+
 
 ## Configuration Docs
 
 Each Graph has the following configuration parameters.
 
-Required settings:
-
-- **readmePath**: The path of the file where the dependency graph will be added.
-- **heading**: The heading where the dependency graph will be added.
-
 Optional settings:
 
+- **readmePath**: The path of the file where the dependency graph will be added. Defaults to "README.md" in the root directory of the project.
+- **heading**: The heading where the dependency graph will be added. Defaults to "# Primary Graph".
 - **setStyleByModuleType**: Whether to style the modules based on their type (KotlinMultiplatform, Android Library, etc.). Default is `false`. [Read more](#module-type-based-styling).
 - **nestingEnabled**: Whether to enable nested subgraphs in the generated graph. Groups modules into subgraphs based on their path structure. Default is `false`. [Read more](#nested-subgraphs).
 - **focusedModulesRegex**: The regex to match nodes in the graph (project names) that should be focused. By
@@ -291,9 +283,10 @@ You can apply configuration options directly in the root of the `moduleGraphConf
 
 ```kotlin
 moduleGraphConfig {
-    readmePath.set("${rootDir}/README.md")
-    heading.set("### Module Graph")
-    showFullPath.set(false)
+    // All parameters are optional with sensible defaults
+    readmePath.set("${rootDir}/README.md")  // Optional, defaults to "README.md" in root directory
+    heading.set("### Module Graph")          // Optional, defaults to "# Module Graph"
+    showFullPath.set(false)                 // Optional
 }
 ```
 
@@ -812,5 +805,3 @@ greatly appreciated and help to support the development. [Relevant xkcd](https:/
 <a href="https://www.buymeacoffee.com/iurysza" target="_blank">
 <img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Pingado" style="height: 51px !important;width: 217px !important;" >
 </a>
-
-

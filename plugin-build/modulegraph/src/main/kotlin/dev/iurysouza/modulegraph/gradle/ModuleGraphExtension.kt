@@ -50,13 +50,13 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
 
     /**
      * The path of the readme file where the graph will be appended.
-     * This is a required input.
+     * This is an optional input. Defaults to "README.md".
      */
     val readmePath: Property<String> = objects.property(String::class.java)
 
     /**
      * The heading under which the graph will be appended in the readme file.
-     * This is a required input.
+     * This is an optional input. Defaults to "Module Graph".
      */
     val heading: Property<String> = objects.property(String::class.java)
 

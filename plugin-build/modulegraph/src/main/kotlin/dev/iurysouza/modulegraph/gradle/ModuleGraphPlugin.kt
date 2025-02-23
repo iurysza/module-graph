@@ -76,7 +76,9 @@ open class ModuleGraphPlugin : Plugin<Project> {
     /** @return the primary graph config, or null if the primary config is not provided */
     private fun getPrimaryGraphConfig(task: CreateModuleGraphTask): GraphConfig? {
         val readmePath = task.readmePath.orNull
-        val heading = task.heading.orNull
+            ?: task.project.rootDir.resolve("README.md").absolutePath
+
+        val heading = task.heading.orNull ?: "# Module Graph"
 
         val theme = task.theme.orNull
         val orientation = task.orientation.orNull
@@ -115,16 +117,9 @@ open class ModuleGraphPlugin : Plugin<Project> {
         // then there is no primary config - simple as
         if (!hasPrimaryConfig) return null
 
-        /**
-         * Crash to alert the user that a required parameter for the primary config is missing,
-         * so the config they've set up is invalid.
-         */
-        fun missingRequiredParameter(name: String): Nothing =
-            error("Primary graph config is invalid! Missing required parameter: $name")
-
         return GraphConfig.Builder(
-            readmePath = readmePath ?: missingRequiredParameter("readmePath"),
-            heading = heading ?: missingRequiredParameter("heading"),
+            readmePath = readmePath,
+            heading = heading,
         ).apply {
             this.theme = theme
             this.orientation = orientation
