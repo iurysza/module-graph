@@ -1,3 +1,9 @@
+[![Pre Merge Checks](https://github.com/iurysza/module-graph/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/iurysza/module-graph/actions?query=workflow%3A%22Pre+Merge+Checks%22) [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE) ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
+
+<p align="center">
+    <img src="./assets/module-graph-icon.png" alt="module graph icon" width="100px">
+</p>
+
 ## Module Graph Plugin
 
 This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph of your project's module relationships,
@@ -34,7 +40,7 @@ You'll just need to add it to your project's **root** `build.gradle` or `build.g
 
 ```groovy
 plugins {
-    id "dev.iurysouza.modulegraph" version "0.11.0"
+    id "dev.iurysouza.modulegraph" version "0.12.0"
 }
 ```
 
@@ -49,7 +55,7 @@ plugins {
         }
     }
     dependencies {
-        classpath "dev.iurysouza:modulegraph:0.11.0"
+        classpath "dev.iurysouza:modulegraph:0.12.0"
     }
 }
 
@@ -143,7 +149,7 @@ moduleGraphConfig {
 
 ```kotlin
 plugins {
-    id("dev.iurysouza.modulegraph") version "0.11.0"
+    id("dev.iurysouza.modulegraph") version "0.12.0"
 }
 ```
 
@@ -158,7 +164,7 @@ plugins {
         }
     }
     dependencies {
-        classpath("dev.iurysouza:modulegraph:0.11.0")
+        classpath("dev.iurysouza:modulegraph:0.12.0")
     }
 }
 
@@ -283,10 +289,9 @@ You can apply configuration options directly in the root of the `moduleGraphConf
 
 ```kotlin
 moduleGraphConfig {
-    // All parameters are optional with sensible defaults
-    readmePath.set("${rootDir}/README.md")  // Optional, defaults to "README.md" in root directory
-    heading.set("### Module Graph")          // Optional, defaults to "# Module Graph"
-    showFullPath.set(false)                 // Optional
+    readmePath.set("${rootDir}/README.md")
+    heading.set("### Module Graph")
+    showFullPath.set(false)
 }
 ```
 
