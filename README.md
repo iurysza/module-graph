@@ -1,9 +1,3 @@
-[![Pre Merge Checks](https://github.com/iurysza/module-graph/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/iurysza/module-graph/actions?query=workflow%3A%22Pre+Merge+Checks%22) [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE) ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
-
-<p align="center">
-    <img src="./assets/module-graph-icon.png" alt="module graph icon" width="100px">
-</p>
-
 ## Module Graph Plugin
 
 This plugin generates a [Mermaid](https://github.com/mermaid-js/mermaid) graph of your project's module relationships,
@@ -64,7 +58,8 @@ apply plugin: "dev.iurysouza.modulegraph"
 
 </details>
 
-### Configuring the plugin
+<details>
+  <summary><b>Configuration Properties</b></summary>
 
 ```groovy
 import dev.iurysouza.modulegraph.LinkText
@@ -135,6 +130,7 @@ moduleGraphConfig {
 ```
 
 </details>
+</details>
 
 <br>
 
@@ -171,7 +167,8 @@ apply(plugin = "dev.iurysouza.modulegraph")
 
 </details>
 
-### Configuring the plugin
+<details>
+  <summary><b>Configuration Properties</b></summary>
 
 ```kotlin
 import dev.iurysouza.modulegraph.LinkText
@@ -229,19 +226,17 @@ moduleGraphConfig {
 ```
 
 </details>
+</details>
 
-## Usage
-
-Make sure you have a heading in your `README` with the same format as the one you set in the
-configuration, if not, the plugin will append it with the graph to the end of the file.
-
-After that, just run the following command:
+### Running it
+You can run the plugin's task right away without any extra configuration. The plugin tries to provide sensible defaults, so after applying it to your project you can:
 
 ```sh
 ./gradlew createModuleGraph
 ```
 
-Now, just look for the generated graph in your project's README file.
+This will generate a module graph in your README file. If you need further customization, keep reading for more detailed examples of how to configure it.
+
 
 ## Configuration Docs
 
