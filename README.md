@@ -34,7 +34,7 @@ You'll just need to add it to your project's **root** `build.gradle` or `build.g
 
 ```groovy
 plugins {
-    id "dev.iurysouza.modulegraph" version "0.10.1"
+    id "dev.iurysouza.modulegraph" version "0.12.0"
 }
 ```
 
@@ -49,7 +49,7 @@ plugins {
         }
     }
     dependencies {
-        classpath "dev.iurysouza:modulegraph:0.11.0"
+        classpath "dev.iurysouza:modulegraph:0.12.0"
     }
 }
 
@@ -143,7 +143,7 @@ moduleGraphConfig {
 
 ```kotlin
 plugins {
-    id("dev.iurysouza.modulegraph") version "0.10.1"
+    id("dev.iurysouza.modulegraph") version "0.12.0"
 }
 ```
 
@@ -158,7 +158,7 @@ plugins {
         }
     }
     dependencies {
-        classpath("dev.iurysouza:modulegraph:0.11.0")
+        classpath("dev.iurysouza:modulegraph:0.12.0")
     }
 }
 
@@ -283,10 +283,9 @@ You can apply configuration options directly in the root of the `moduleGraphConf
 
 ```kotlin
 moduleGraphConfig {
-    // All parameters are optional with sensible defaults
-    readmePath.set("${rootDir}/README.md")  // Optional, defaults to "README.md" in root directory
-    heading.set("### Module Graph")          // Optional, defaults to "# Module Graph"
-    showFullPath.set(false)                 // Optional
+    readmePath.set("${rootDir}/README.md")
+    heading.set("### Module Graph")
+    showFullPath.set(false)
 }
 ```
 
