@@ -129,7 +129,7 @@ data class GraphConfig(
         var strictMode: Boolean? = null
 
         /**
-         * See [@GraphConfig.nestingEnabled]
+         * See [GraphConfig.nestingEnabled]
          */
         var nestingEnabled: Boolean? = null
 
