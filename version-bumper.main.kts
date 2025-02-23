@@ -10,7 +10,27 @@ val readmeFile = "./readme.md"
 
 enum class VersionPart { MAJOR, MINOR, PATCH }
 
+fun checkMainBranch() {
+    try {
+        val currentBranch = ProcessBuilder("git", "rev-parse", "--abbrev-ref", "HEAD")
+            .redirectOutput(ProcessBuilder.Redirect.PIPE)
+            .redirectError(ProcessBuilder.Redirect.PIPE)
+            .start()
+            .inputStream.bufferedReader().readText().trim()
+
+        if (currentBranch != "main") {
+            println("Error: Must be on main branch to bump version. Current branch: $currentBranch")
+            exitProcess(1)
+        }
+    } catch (e: IOException) {
+        println("Error checking git branch: ${e.message}")
+        exitProcess(1)
+    }
+}
+
 fun bumpVersion(part: VersionPart, release: Boolean, isSnapshot: Boolean) {
+    checkMainBranch()
+    
     val currentVersion = getCurrentVersion().removeSuffix("-SNAPSHOT")
     if (isSnapshot) {
         val snapshotVersion = "$currentVersion-SNAPSHOT"
