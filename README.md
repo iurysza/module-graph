@@ -55,7 +55,7 @@ plugins {
         }
     }
     dependencies {
-        classpath "dev.iurysouza:modulegraph:0.12.0"
+        classpath "dev.iurysouza:modulegraph:0.12.1"
     }
 }
 
@@ -164,7 +164,7 @@ plugins {
         }
     }
     dependencies {
-        classpath("dev.iurysouza:modulegraph:0.12.0")
+        classpath("dev.iurysouza:modulegraph:0.12.1")
     }
 }
 

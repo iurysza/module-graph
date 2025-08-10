@@ -6,7 +6,7 @@ import java.util.Properties
 import kotlin.system.exitProcess
 
 val versionFile = "./plugin-build/gradle.properties"
-val readmeFile = "./readme.md"
+val readmeFile = "./README.md"
 
 enum class VersionPart { MAJOR, MINOR, PATCH }
 
@@ -94,18 +94,103 @@ fun updateReadmeVersions(newVersion: String) {
     }
 }
 
+// Rollback functions for different failure scenarios
+fun rollbackStaging(originalVersionContent: String) {
+    println("Rolling back staging...")
+    try {
+        runCommand("git", "restore", "--staged", versionFile)
+        File(versionFile).writeText(originalVersionContent)
+        println("Rollback: File unstaged and restored to original content")
+    } catch (e: IOException) {
+        println("Warning: Could not rollback staging: ${e.message}")
+    }
+}
+
+fun rollbackCommit(originalVersionContent: String) {
+    println("Rolling back commit...")
+    try {
+        runCommand("git", "reset", "--hard", "HEAD~1")
+        File(versionFile).writeText(originalVersionContent)
+        println("Rollback: Reset HEAD and restored version file")
+    } catch (e: IOException) {
+        println("Warning: Could not rollback commit: ${e.message}")
+    }
+}
+
+fun rollbackTagAndCommit(newVersion: String, originalVersionContent: String) {
+    println("Rolling back local tag and commit...")
+    try {
+        runCommand("git", "tag", "-d", newVersion)
+        runCommand("git", "reset", "--hard", "HEAD~1")
+        File(versionFile).writeText(originalVersionContent)
+        println("Rollback: Deleted local tag, reset HEAD, and restored version file")
+    } catch (e: IOException) {
+        println("Warning: Could not rollback tag and commit: ${e.message}")
+    }
+}
+
+fun rollbackCommitOnRemote(newVersion: String, originalVersionContent: String) {
+    println("Rolling back after remote commit push...")
+    try {
+        runCommand("git", "reset", "--hard", "HEAD~1")
+        File(versionFile).writeText(originalVersionContent)
+        println("WARNING: Commit was pushed to remote but tag creation failed.")
+        println("WARNING: Manual cleanup required - remote has the commit but no tag.")
+        println("Rollback: Reset local HEAD and restored version file")
+    } catch (e: IOException) {
+        println("Warning: Could not rollback local state: ${e.message}")
+    }
+}
+
 fun commitTagAndPush(newVersion: String) {
+    // Capture original state for rollback
+    val originalVersionContent = try {
+        File(versionFile).readText()
+    } catch (e: IOException) {
+        println("Error: Cannot read original version file for rollback")
+        throw e
+    }
+    
+    var commitCreated = false
+    var commitPushed = false  
+    var tagCreated = false
+    
     try {
         println("Committing changes...")
+        
+        // Step 1: git add (low risk - no rollback needed for this step)
         runCommand("git", "add", versionFile)
+        
+        // Step 2: git commit 
         runCommand("git", "commit", "-m", "Bump version to $newVersion")
-        runCommand("git", "push")
+        commitCreated = true
+        
+        // Step 3: git push
+        runCommand("git", "push") 
+        commitPushed = true
+        
+        // Step 4: git tag
         runCommand("git", "tag", newVersion)
+        tagCreated = true
+        
+        // Step 5: git push tag
         runCommand("git", "push", "origin", newVersion)
+        
         println("Version updated to $newVersion and tag pushed")
+        
     } catch (e: IOException) {
-        println("An error occurred while running git commands: ${e.message}")
-        exitProcess(1)
+        println("Git operation failed: ${e.message}")
+        
+        // Rollback based on what operations succeeded
+        when {
+            tagCreated && commitPushed -> rollbackTagAndCommit(newVersion, originalVersionContent)
+            commitPushed -> rollbackCommitOnRemote(newVersion, originalVersionContent)
+            commitCreated -> rollbackCommit(originalVersionContent)
+            else -> rollbackStaging(originalVersionContent)
+        }
+        
+        println("Repository has been rolled back to previous state")
+        throw e
     }
 }
 
