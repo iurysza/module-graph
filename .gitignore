@@ -51,3 +51,5 @@ captures/
 .idea/jarRepositories.xml
 .idea/navEditor.xml
 !/gradle/wrapper/gradle-wrapper.jar
+.serena/
+CLAUDE.md
