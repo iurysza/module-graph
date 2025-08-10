@@ -21,7 +21,7 @@ internal class GradleProjectQuerier(private val allProjects: Set<Project>) : Pro
         return project.configurations.map { config ->
             val projectPaths = config.dependencies
                 .withType(ProjectDependency::class.java)
-                .map { subproject -> subproject.dependencyProject.path }
+                .map { subproject -> subproject.path }
             GradleProjectConfiguration(config.name, projectPaths)
         }
     }
