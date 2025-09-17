@@ -78,4 +78,24 @@ class DigraphCodeBuilderTest {
         """.trimMargin()
         assertEquals(expectedMermaidCode, mermaidCode.value)
     }
+
+    @Test
+    fun `Build digraph with include isolated modules returns correct graph`() {
+        val graphModel = graphWithIsolatedModules()
+        val config = getConfig(includeIsolatedModules = true)
+        val result = GraphParseResult(graphModel, config)
+
+        val mermaidCode = DigraphCodeBuilder.build(
+            digraphModel = DigraphBuilder.build(result),
+            linkText = config.linkText,
+        )
+
+        val expected = """
+            |  :app --> :utilities
+            |  :group:child1 --> :group:child2
+            |  :isolated["isolated"]
+            |  :group:lonely["lonely"]
+        """.trimMargin()
+        assertEquals(expected, mermaidCode.value)
+    }
 }

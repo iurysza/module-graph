@@ -43,6 +43,7 @@ class ModuleGraphPluginTest {
             excludedModulesRegex.set("project")
             focusedModulesRegex.set(".*test.*")
             rootModulesRegex.set(".*")
+            includeIsolatedModules.set(true)
         }
 
         val task = project.tasks.getByName("createModuleGraph") as CreateModuleGraphTask
@@ -57,5 +58,6 @@ class ModuleGraphPluginTest {
         assertEquals("implementation", task.excludedConfigurationsRegex.get())
         assertEquals("project", task.excludedModulesRegex.get())
         assertEquals(".*", task.rootModulesRegex.get())
+        assertEquals(true, task.includeIsolatedModules.get())
     }
 }

@@ -113,6 +113,14 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     abstract val nestingEnabled: Property<Boolean>
 
     @get:Input
+    @get:Option(
+        option = "includeIsolatedModules",
+        description = "Whether to render modules with no dependencies or dependants",
+    )
+    @get:Optional
+    abstract val includeIsolatedModules: Property<Boolean>
+
+    @get:Input
     @get:Option(option = "graphModels", description = "The produced graph models")
     internal abstract val graphModels: ListProperty<GraphParseResult>
 

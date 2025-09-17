@@ -25,6 +25,7 @@ internal class ProjectParserRootModulesTest {
         ModuleToDeps.commonData,
         ModuleToDeps.coreNetworking,
         ModuleToDeps.coreUtil,
+        ModuleToDeps.isolated,
     )
 
     private val projectQuerier = object : ProjectQuerier {
@@ -45,7 +46,16 @@ internal class ProjectParserRootModulesTest {
 
     @Test
     fun `correct graph when root module is app`() {
-        val expectedGraph = entireGraph
+        val expectedGraph = mapOf(
+            ModuleToDeps.app,
+            ModuleToDeps.featAUi,
+            ModuleToDeps.commonComponent,
+            ModuleToDeps.coreUi,
+            ModuleToDeps.featAData,
+            ModuleToDeps.commonData,
+            ModuleToDeps.coreNetworking,
+            ModuleToDeps.coreUtil,
+        )
         val actualGraph = ProjectParser.parseProjectGraph(
             allProjectPaths = Project.allPaths,
             config = getConfig(rootModulesRegex = MockProjectPath.app, theme = theme),
@@ -122,6 +132,25 @@ internal class ProjectParserRootModulesTest {
 
         Assertions.assertEquals(expectedGraph, actualGraph)
     }
+
+    @Test
+    fun `correct graph when include isolated modules is true`() {
+        val expectedGraph = entireGraph + ModuleToDeps.isolated
+        val actualGraph = ProjectParser.parseProjectGraph(
+            allProjectPaths = Project.allPaths,
+            config = getConfig(rootModulesRegex = null, theme = theme, includeIsolatedModules = true),
+            projectQuerier = projectQuerier,
+        )
+
+        Assertions.assertEquals(expectedGraph, actualGraph)
+        val isolatedModule = Module(
+            path = MockProjectPath.isolated,
+            type = Default.moduleType,
+            configName = null,
+        )
+        Assertions.assertTrue(actualGraph.containsKey(isolatedModule))
+        Assertions.assertTrue(actualGraph[isolatedModule]?.isEmpty() == true)
+    }
 }
 
 private object Default {
@@ -138,6 +167,7 @@ private object MockProjectPath {
     const val coreUtil = ":core:util"
     const val commonData = ":common:data"
     const val coreNetworking = ":core:networking"
+    const val isolated = ":isolated"
 }
 
 private data class ProjectAndDeps(val path: ProjectPath, val deps: List<ProjectPath>)
@@ -181,6 +211,11 @@ private object Project {
         ),
     )
 
+    val isolated = ProjectAndDeps(
+        MockProjectPath.isolated,
+        emptyList(),
+    )
+
     val all = listOf(
         coreUtil,
         coreNetworking,
@@ -190,6 +225,7 @@ private object Project {
         featAUi,
         featAData,
         app,
+        isolated,
     )
 
     val allPaths = all.map { it.path }
@@ -222,6 +258,8 @@ private object ModuleToDeps {
     val coreUtil = createDefaultModuleSource(MockProjectPath.coreUtil) to listOf(
         createDefaultModuleTarget(MockProjectPath.coreNetworking),
     )
+
+    val isolated = createDefaultModuleSource(MockProjectPath.isolated) to emptyList<Module>()
 
     private fun createDefaultModuleSource(path: String) = Module(
         path = path,

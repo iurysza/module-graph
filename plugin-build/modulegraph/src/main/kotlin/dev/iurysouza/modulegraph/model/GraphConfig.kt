@@ -46,6 +46,12 @@ data class GraphConfig(
      */
     val showFullPath: Boolean,
 
+    /**
+     * Whether to include modules that have no dependencies and no dependants.
+     * Disabled by default.
+     */
+    val includeIsolatedModules: Boolean,
+
     /* Content regex pattern parameters */
 
     /**
@@ -111,6 +117,9 @@ data class GraphConfig(
         /** @see [GraphConfig.showFullPath] */
         var showFullPath: Boolean? = null
 
+        /** @see [GraphConfig.includeIsolatedModules] */
+        var includeIsolatedModules: Boolean? = null
+
         /** @see [GraphConfig.excludedConfigurationsRegex] */
         var excludedConfigurationsRegex: String? = null
 
@@ -146,6 +155,7 @@ data class GraphConfig(
                 excludedModulesRegex = excludedModulesRegex,
                 rootModulesRegex = rootModulesRegex,
                 showFullPath = showFullPath ?: false,
+                includeIsolatedModules = includeIsolatedModules ?: false,
                 strictMode = strictMode ?: false,
                 nestingEnabled = nestingEnabled ?: false,
             )

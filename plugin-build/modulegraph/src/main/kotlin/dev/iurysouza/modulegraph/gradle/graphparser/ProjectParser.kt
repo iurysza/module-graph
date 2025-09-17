@@ -80,7 +80,7 @@ internal object ProjectParser {
     /**
      * To handle root modules we need to parse the dependency tree recursively,
      * starting at the root module nodes.
-     * This ensures we only include module nodes that are reachable from the root.
+     * This ensures we include all modules reachable from the root and isolated modules.
      *
      * It can happen that projects have circular dependencies.
      * Gradle will refuse to build such a project, but we can still render it in a graph -
@@ -102,6 +102,16 @@ internal object ProjectParser {
             // it's a waste of time, and it might lead to infinite recursion
             if (sourceProjectPath in projectPathsParsed) return
             projectPathsParsed.add(sourceProjectPath)
+
+            // Ensure the source module is present in the graph even if it has no dependencies
+            // Skip the Gradle root project path ":" to avoid rendering a stray colon node
+            if (moduleExclusionPattern.matches(sourceProjectPath).not() && sourceProjectPath != ":") {
+                val sourceModule = Module(
+                    path = sourceProjectPath,
+                    type = projectQuerier.getProjectType(sourceProjectPath, customModuleTypes),
+                )
+                projectGraph.putIfAbsent(sourceModule, emptyList())
+            }
 
             projectQuerier.getConfigurations(sourceProjectPath).forEach { config ->
                 val deps = config.getDirectDependencies(

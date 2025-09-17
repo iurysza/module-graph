@@ -282,6 +282,7 @@ Optional settings:
     - If set, only these modules and their dependencies (direct and transitive) will be included in the graph.
     - If not set, all modules are considered root modules, which means the graph will include all modules and their dependencies.
     - This is useful when you want to focus on a specific part of your project's dependency structure.
+-   **includeIndependentModules**: Whether to include modules with no connections (no dependencies and no dependants) in the graph. Default is `false`.
 
 ### Multiple graphs
 

@@ -13,14 +13,30 @@ internal object DigraphBuilder {
         val config = graphResult.config
         verifySufficientGraph(graphResult, config.strictMode)
 
-        return graphModel.flatMap { (source, targetList) ->
+        val edgeModels = graphModel.flatMap { (source, targetList) ->
             when (config.linkText) {
                 LinkText.NONE -> targetList.distinctBy { it.path }
                 else -> targetList
             }.mapNotNull { target ->
                 buildModel(config, source, target)
             }
-        }.also { result ->
+        }
+
+        val isolatedModels = if (config.includeIsolatedModules) {
+            val targetsSet = graphModel.values.flatten().map { it.path }.toSet()
+            val isolatedSources = graphModel.keys.filter { source ->
+                val hasNoOutgoing = graphModel[source].isNullOrEmpty()
+                val hasNoIncoming = !targetsSet.contains(source.path)
+                hasNoOutgoing && hasNoIncoming
+            }
+            isolatedSources.mapNotNull { source ->
+                buildModel(config, source, source)
+            }
+        } else {
+            emptyList()
+        }
+
+        return (edgeModels + isolatedModels).also { result ->
             throwIfNothingMatches(result, config.focusedModulesRegex, config.strictMode)
         }
     }
@@ -43,7 +59,7 @@ internal object DigraphBuilder {
         }
         val isFocusedModulesRegexSet = focusedModulesRegex != null
         val shouldNotAddToGraph =
-            sourceFullName == targetFullName || (!sourceMatches && !targetMatches)
+            (!sourceMatches && !targetMatches)
 
         return when {
             shouldNotAddToGraph -> null

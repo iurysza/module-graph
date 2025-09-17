@@ -43,6 +43,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.projectDirectory.set(project.layout.projectDirectory)
             task.strictMode.set(extension.strictMode)
             task.nestingEnabled.set(extension.nestingEnabled)
+            task.includeIsolatedModules.set(extension.includeIsolatedModules)
 
             val primaryGraphConfig = getPrimaryGraphConfig(task)
             val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
@@ -89,6 +90,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
         val excludedModulesRegex = task.excludedModulesRegex.orNull
         val rootModulesRegex = task.rootModulesRegex.orNull
         val showFullPath = task.showFullPath.orNull
+        val includeIsolatedModules = task.includeIsolatedModules.orNull
         val strictMode = task.strictMode.orNull
         val nestingEnabled = task.nestingEnabled.orNull
 
@@ -104,6 +106,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             excludedModulesRegex,
             rootModulesRegex,
             showFullPath,
+            includeIsolatedModules,
             strictMode,
             nestingEnabled,
         )
@@ -126,6 +129,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             this.linkText = linkText
             this.setStyleByModuleType = setStyleByModuleType
             this.showFullPath = showFullPath
+            this.includeIsolatedModules = includeIsolatedModules
             this.excludedConfigurationsRegex = excludedConfigurationsRegex
             this.excludedModulesRegex = excludedModulesRegex
             this.rootModulesRegex = rootModulesRegex

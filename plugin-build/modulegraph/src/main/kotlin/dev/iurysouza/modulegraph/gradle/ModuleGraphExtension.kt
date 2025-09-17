@@ -112,6 +112,12 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
     val nestingEnabled: Property<Boolean> = objects.property(Boolean::class.java)
 
     /**
+     * Whether to include modules that have no dependencies and no dependants.
+     * Disabled by default.
+     */
+    val includeIsolatedModules: Property<Boolean> = objects.property(Boolean::class.java)
+
+    /**
      * A list of additional graph configs to generate graphs for.
      */
     val graphConfigs: ListProperty<GraphConfig> =

@@ -46,6 +46,17 @@ internal fun aModuleGraph() = mapOf(
         ),
 )
 
+internal fun graphWithIsolatedModules() = linkedMapOf(
+    Module(path = ":app") to listOf(
+        Module(path = ":utilities", configName = "implementation"),
+    ),
+    Module(path = ":group:child1") to listOf(
+        Module(path = ":group:child2", configName = "implementation"),
+    ),
+    Module(path = ":isolated") to emptyList(),
+    Module(path = ":group:lonely") to emptyList(),
+)
+
 internal val expectedMermaidGraphCode = """
         |```mermaid
         |%%{
@@ -84,6 +95,7 @@ internal fun getConfig(
     linkText: LinkText? = null,
     setStyleByModuleType: Boolean? = null,
     showFullPath: Boolean? = null,
+    includeIsolatedModules: Boolean? = null,
     strictMode: Boolean? = null,
     nestingEnabled: Boolean? = null,
 ) =
@@ -100,6 +112,7 @@ internal fun getConfig(
         this.linkText = linkText
         this.setStyleByModuleType = setStyleByModuleType
         this.showFullPath = showFullPath
+        this.includeIsolatedModules = includeIsolatedModules
         this.strictMode = strictMode
         this.nestingEnabled = nestingEnabled
     }.build()
