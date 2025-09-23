@@ -17,9 +17,10 @@ internal object DigraphBuilder {
             when (config.linkText) {
                 LinkText.NONE -> targetList.distinctBy { it.path }
                 else -> targetList
-            }.mapNotNull { target ->
-                buildModel(config, source, target)
-            }
+            }.filter { target -> target.path != source.path }
+                .mapNotNull { target ->
+                    buildModel(config, source, target)
+                }
         }
 
         val isolatedModels = if (config.includeIsolatedModules) {
