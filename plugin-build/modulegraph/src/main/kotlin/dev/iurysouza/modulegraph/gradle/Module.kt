@@ -5,7 +5,7 @@ import java.io.Serializable as JavaSerializable
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class Module(
+data class Module(
     val path: String,
     val configName: String? = null,
     val type: ModuleType = ModuleType.Java(),

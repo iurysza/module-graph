@@ -142,7 +142,7 @@ data class GraphConfig(
          */
         var nestingEnabled: Boolean? = null
 
-        internal fun build(): GraphConfig {
+        fun build(): GraphConfig {
             return GraphConfig(
                 readmePath = readmePath,
                 heading = heading,

@@ -122,11 +122,11 @@ abstract class CreateModuleGraphTask : DefaultTask() {
 
     @get:Input
     @get:Option(option = "graphModels", description = "The produced graph models")
-    internal abstract val graphModels: ListProperty<GraphParseResult>
+    abstract val graphModels: ListProperty<GraphParseResult>
 
     @get:OutputDirectory
     @get:Option(option = "projectDirectory", description = "The root project directory")
-    internal abstract val projectDirectory: DirectoryProperty
+    abstract val projectDirectory: DirectoryProperty
 
     @get:Input
     @get:Option(
