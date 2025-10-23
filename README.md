@@ -795,6 +795,39 @@ moduleGraphConfig {
 
 If you don't set `rootModulesRegex`, all modules will be considered root modules and cannot be excluded, even if they match `excludedModulesRegex`.
 
+## Providing a Custom Graph Model
+
+Per default, the plugin generates a graph from the relationships between Gradle modules in your project. You can also extend the task to render graphs from custom data for example, to visualize third-party dependencies or other non-project relationships.
+
+Here's a basic example of how to create a custom graph model by registering a new task of type `CreateModuleGraphTask`:
+
+```kotlin
+import dev.iurysouza.modulegraph.gradle.CreateModuleGraphTask
+import dev.iurysouza.modulegraph.gradle.Module
+import dev.iurysouza.modulegraph.ModuleType
+import dev.iurysouza.modulegraph.model.GraphConfig
+import dev.iurysouza.modulegraph.model.GraphParseResult
+
+tasks.register<CreateModuleGraphTask>("customModuleGraph") {
+    // Build your custom graph model
+    val moduleA = Module(":alpha", null, ModuleType.JavaLibrary())
+    val moduleB = Module(":beta", null, ModuleType.Unknown())
+
+    val fullGraph = linkedMapOf(
+        moduleA to listOf(moduleB)
+    )
+
+    // Configure the graph
+    val builder = GraphConfig.Builder("README.md", "Custom Module Graph")
+    builder.showFullPath = true
+    val config = builder.build()
+
+    // Set the custom graph model and project directory as task inputs
+    graphModels.set(listOf(GraphParseResult(fullGraph, config)))
+    projectDirectory.set(project.layout.projectDirectory)
+}
+```
+
 ## Contributing 🤝
 
 Feel free to open an issue or submit a pull request for any bugs/improvements.
