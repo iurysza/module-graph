@@ -1,4 +1,6 @@
 pluginManagement {
+    includeBuild("plugin-build")
+
     repositories {
         gradlePluginPortal()
         mavenCentral()
@@ -6,7 +8,12 @@ pluginManagement {
     }
 }
 
+plugins {
+    id("dev.iurysouza.modulegraph.settings")
+}
+
 dependencyResolutionManagement {
+    @Suppress("UnstableApiUsage")
     repositories {
         mavenCentral()
         google()
@@ -21,4 +28,3 @@ include(":sample:zeta")
 include(":sample:test")
 include(":sample:container:gama")
 include(":sample:container:delta")
-includeBuild("plugin-build")

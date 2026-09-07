@@ -243,6 +243,30 @@ You can run the plugin's task right away without any extra configuration. The pl
 
 This will generate a module graph in your README file. If you need further customization, keep reading for more detailed examples of how to configure it.
 
+## Isolated Projects & Configuration Cache
+
+> [!NOTE]
+> The information within this section applies purely to projects leveraging the experimental Gradle [Isolated Projects](https://docs.gradle.org/current/userguide/isolated_projects.html) feature.
+
+The plugin is fully compatible with the [Configuration Cache](https://docs.gradle.org/current/userguide/configuration_cache.html) and [Isolated Projects](https://docs.gradle.org/current/userguide/isolated_projects.html). It never reads another project's state: each project contributes its own dependency snapshot from within its own context, and the graph is assembled at task-execution time.
+
+For multi-project builds, apply the **settings plugin** once in `settings.gradle.kts`. It applies the plugin to the root project (giving you `createModuleGraph` and the `moduleGraphConfig` extension) and makes every other project contribute automatically:
+
+```kotlin
+// settings.gradle.kts
+plugins {
+    id("dev.iurysouza.modulegraph.settings") version "0.13.0"
+}
+```
+
+Then configure as usual in the root `build.gradle.kts` and run with Isolated Projects enabled:
+
+```sh
+./gradlew createModuleGraph -Dorg.gradle.unsafe.isolated-projects=true
+```
+
+Applying the regular `dev.iurysouza.modulegraph` plugin still works and graphs the project it is applied to, but only the settings plugin can aggregate sibling projects without breaking isolation.
+
 
 ## Configuration Docs
 

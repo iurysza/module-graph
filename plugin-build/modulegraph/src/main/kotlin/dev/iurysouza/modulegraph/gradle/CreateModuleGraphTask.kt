@@ -1,6 +1,8 @@
 package dev.iurysouza.modulegraph.gradle
 
 import dev.iurysouza.modulegraph.*
+import dev.iurysouza.modulegraph.gradle.graphparser.ProjectParser
+import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.SnapshotProjectQuerier
 import dev.iurysouza.modulegraph.model.GraphConfig
 import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.gradle.api.DefaultTask
@@ -8,6 +10,7 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.services.ServiceReference
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
@@ -120,9 +123,17 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @get:Optional
     abstract val includeIsolatedModules: Property<Boolean>
 
+    /** All graph configs (primary + additional) resolved at configuration time. */
     @get:Input
-    @get:Option(option = "graphModels", description = "The produced graph models")
-    internal abstract val graphModels: ListProperty<GraphParseResult>
+    internal abstract val graphConfigsResolved: ListProperty<GraphConfig>
+
+    /**
+     * Registry of every project's contributed
+     * [dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectInfo], read at execution time.
+     */
+    @Suppress("UnstableApiUsage")
+    @get:ServiceReference(ModuleGraphRegistry.NAME)
+    internal abstract val registry: Property<ModuleGraphRegistry>
 
     @get:OutputDirectory
     @get:Option(option = "projectDirectory", description = "The root project directory")
@@ -144,8 +155,19 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @TaskAction
     fun execute() {
         runCatching {
-            val results = graphModels.orNull
-                ?: error("Graph models have not been computed. This is a bug in the plugin - please report it!")
+            val configs = graphConfigsResolved.get()
+            val snapshot = registry.get().snapshot()
+            val allProjectPaths = snapshot.keys.toList()
+            val projectQuerier = SnapshotProjectQuerier(snapshot)
+
+            val results = configs.map { config ->
+                val projectGraph = ProjectParser.parseProjectGraph(
+                    allProjectPaths = allProjectPaths,
+                    config = config,
+                    projectQuerier = projectQuerier,
+                )
+                GraphParseResult(projectGraph, config)
+            }
 
             results.forEach { result ->
                 val config = result.config

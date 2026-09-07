@@ -1,18 +1,35 @@
 package dev.iurysouza.modulegraph.gradle
 
-import dev.iurysouza.modulegraph.gradle.graphparser.ProjectParser
-import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.GradleProjectQuerier
+import dev.iurysouza.modulegraph.externalDependencyCoordinates
+import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfiguration
+import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectInfo
 import dev.iurysouza.modulegraph.model.GraphConfig
-import dev.iurysouza.modulegraph.model.GraphParseResult
+import dev.iurysouza.modulegraph.snapshotAppliedPluginIds
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ProjectDependency
 
 private const val EXTENSION_NAME = "moduleGraphConfig"
 private const val TASK_NAME = "createModuleGraph"
 
+/**
+ * Applies the module graph to a single project: creates the `moduleGraphConfig` extension and the
+ * `createModuleGraph` task, and contributes the project's own [ProjectInfo] snapshot.
+ */
 open class ModuleGraphPlugin : Plugin<Project> {
     override fun apply(project: Project) {
+        project.gradle.sharedServices.registerIfAbsent(
+            ModuleGraphRegistry.NAME,
+            ModuleGraphRegistry::class.java,
+        ) {}
+        val contribution = project.tasks.register(
+            ModuleGraphContributeTask.NAME,
+            ModuleGraphContributeTask::class.java,
+        ) { task ->
+            task.projectInfo.set(project.provider { project.collectProjectInfo() })
+        }
+
         val extension = project.extensions.create(
             EXTENSION_NAME,
             ModuleGraphExtension::class.java,
@@ -44,6 +61,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
             task.strictMode.set(extension.strictMode)
             task.nestingEnabled.set(extension.nestingEnabled)
             task.includeIsolatedModules.set(extension.includeIsolatedModules)
+            task.dependsOn(contribution)
 
             val primaryGraphConfig = getPrimaryGraphConfig(task)
             val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
@@ -56,21 +74,7 @@ open class ModuleGraphPlugin : Plugin<Project> {
                     """.trimIndent(),
                 )
             }
-
-            val allProjects = project.allprojects
-            val allProjectPaths = allProjects.map { it.path }
-            val projectQuerier = GradleProjectQuerier(allProjects)
-
-            val results = allGraphConfigs.map { config ->
-                val projectGraph = ProjectParser.parseProjectGraph(
-                    allProjectPaths = allProjectPaths,
-                    config = config,
-                    projectQuerier = projectQuerier,
-                )
-                GraphParseResult(projectGraph, config)
-            }
-
-            task.graphModels.set(results)
+            task.graphConfigsResolved.set(allGraphConfigs)
         }
     }
 
@@ -138,4 +142,20 @@ open class ModuleGraphPlugin : Plugin<Project> {
             this.nestingEnabled = nestingEnabled
         }.build()
     }
+}
+
+/** @return a [ProjectInfo] snapshot of the given project's own configurations and plugins. */
+internal fun Project.collectProjectInfo(): ProjectInfo {
+    val collectedConfigurations = configurations.map { configuration ->
+        val projectPaths = configuration.dependencies
+            .withType(ProjectDependency::class.java)
+            .map { dependency -> dependency.path }
+        GradleProjectConfiguration(configuration.name, projectPaths)
+    }
+    return ProjectInfo(
+        path = path,
+        pluginIds = snapshotAppliedPluginIds(),
+        externalDependencies = externalDependencyCoordinates(),
+        configurations = collectedConfigurations,
+    )
 }

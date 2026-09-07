@@ -41,6 +41,14 @@ gradlePlugin {
             displayName = property("DISPLAY_NAME").toString()
             tags.set(listOf("mermaid", "diagram"))
         }
+        create("${property("ID")}.settings") {
+            id = "${property("ID")}.settings"
+            implementationClass = property("IMPLEMENTATION_CLASS_SETTINGS").toString()
+            version = property("VERSION").toString()
+            description = property("DESCRIPTION").toString()
+            displayName = "${property("DISPLAY_NAME")} (Settings)"
+            tags.set(listOf("mermaid", "diagram"))
+        }
     }
 }
 

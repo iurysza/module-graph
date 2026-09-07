@@ -69,35 +69,86 @@ private val defaultPlugins = listOf(
 )
 
 /**
- * Determines the primary plugin type applied to the project based on a precedence order.
+ * Determines the primary [ModuleType] from a precedence-ordered list of candidates.
  *
- * The first plugin from this ordered list that matches a plugin applied to the project
- * is returned as the primary plugin type. If no such plugin is found, `PluginType.Unknown()`
- * is returned.
+ * The first candidate whose id matches an applied plugin id or an external dependency coordinate is
+ * returned, or [ModuleType.Unknown] if none match.
  *
- * @param customPlugins A list of additional `PluginType` instances that should be considered
- *                      alongside the predefined list of plugins.
- * @return The primary `PluginType` applied to the project or `PluginType.Unknown()` if
- *         no match is found.
+ * @param pluginIds the ids of plugins applied to the project.
+ * @param externalDependencies the "group:name" coordinates of the project's external dependencies.
+ * @param customPlugins additional [ModuleType] candidates considered alongside the defaults.
  */
-internal fun Project.getModuleType(
+internal fun resolveModuleType(
+    pluginIds: List<String>,
+    externalDependencies: List<String>,
     customPlugins: List<ModuleType>,
 ): ModuleType = (customPlugins + defaultPlugins)
     .distinctBy { it.id }
     .sortedWith(pluginTypeComparator)
-    .firstOrNull {
-        plugins.hasPlugin(it.id) || hasLibraryDependency(it.id)
+    .firstOrNull { type ->
+        pluginIds.contains(type.id) || externalDependencies.any {
+            type.id.toRegex().matches(it)
+        }
     } ?: ModuleType.Unknown()
 
-internal fun Project.hasLibraryDependency(dependencyGroupAndName: String): Boolean = runCatching {
+/** @return the ids of all known module-type plugins applied to this project. */
+internal fun Project.appliedModuleTypePluginIds(
+    customPlugins: List<ModuleType>,
+): List<String> = (customPlugins + defaultPlugins)
+    .map { it.id }
+    .distinct()
+    .filter { plugins.hasPlugin(it) }
+
+/**
+ * Snapshot of applied plugin ids for [ProjectInfo].
+ *
+ * Prefers listing every applied plugin id via Gradle's plugin manager so custom
+ * [ModuleType] plugin ids survive Isolated Projects snapshots. Falls back to probing
+ * [defaultPlugins] plus [customPlugins] when the richer listing is unavailable.
+ */
+internal fun Project.snapshotAppliedPluginIds(
+    customPlugins: List<ModuleType> = emptyList(),
+): List<String> {
+    val fromManager = allAppliedPluginIdsOrNull().orEmpty()
+    val fromProbe = appliedModuleTypePluginIds(customPlugins)
+    return (fromManager + fromProbe).distinct()
+}
+
+/**
+ * Lists applied plugin ids using [org.gradle.api.plugins.PluginManager] internals when
+ * present (`getPluginContainer` + `findPluginIdForClass`). Returns null if unavailable.
+ */
+internal fun Project.allAppliedPluginIdsOrNull(): List<String>? = try {
+    val manager = pluginManager
+    val getContainer = manager.javaClass.methods.firstOrNull {
+        it.name == "getPluginContainer" && it.parameterCount == 0
+    } ?: return null
+    val findId = manager.javaClass.methods.firstOrNull {
+        it.name == "findPluginIdForClass" && it.parameterCount == 1
+    } ?: return null
+    val container = getContainer.invoke(manager) as? Iterable<*> ?: return null
+    container.mapNotNull { plugin ->
+        if (plugin == null) return@mapNotNull null
+        val optional = findId.invoke(manager, plugin.javaClass) ?: return@mapNotNull null
+        val isPresent = optional.javaClass.getMethod("isPresent").invoke(optional) as Boolean
+        if (!isPresent) return@mapNotNull null
+        optional.javaClass.getMethod("get").invoke(optional)?.toString()
+    }.distinct()
+} catch (_: ReflectiveOperationException) {
+    null
+} catch (_: ClassCastException) {
+    null
+}
+
+/** @return the "group:name" coordinates of every external dependency declared in this project. */
+internal fun Project.externalDependencyCoordinates(): List<String> = runCatching {
     configurations.flatMap { configuration ->
         configuration.dependencies.filterIsInstance<ExternalModuleDependency>()
-    }.any { dependency ->
-        dependencyGroupAndName.toRegex().matches("${dependency.group}:${dependency.name}")
-    }
+    }.map { dependency -> "${dependency.group}:${dependency.name}" }
+        .distinct()
 }.getOrElse { e ->
     println("Error resolving dependencies: ${e.message}")
-    false
+    emptyList()
 }
 
 internal val pluginPrecedenceOrder = listOf(

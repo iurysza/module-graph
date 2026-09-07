@@ -1,4 +1,8 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import dev.iurysouza.modulegraph.LinkText
+import dev.iurysouza.modulegraph.ModuleType
+import dev.iurysouza.modulegraph.Orientation
+import dev.iurysouza.modulegraph.Theme
 import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
@@ -70,4 +74,44 @@ tasks.register("preMerge") {
 
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
+}
+
+moduleGraphConfig {
+    heading.set("# Primary Graph")
+    readmePath.set("./sample/README.md")
+    showFullPath.set(false)
+    orientation.set(Orientation.TOP_TO_BOTTOM)
+    linkText.set(LinkText.NONE)
+    setStyleByModuleType.set(true)
+    theme.set(
+        Theme.BASE(
+            themeVariables = mapOf(
+                "primaryTextColor" to "#F6F8FAff",
+                "primaryColor" to "#5a4f7c",
+                "primaryBorderColor" to "#5a4f7c",
+                "tertiaryColor" to "#40375c",
+                "lineColor" to "#f5a623",
+                "fontSize" to "12px",
+            ),
+            focusColor = "#F5A622",
+            moduleTypes = listOf(
+                ModuleType.Kotlin("#2C4162"),
+            ),
+        ),
+    )
+    excludedConfigurationsRegex.set(""".*test.*""")
+    graph(
+        readmePath = "./sample/README.md",
+        heading = "# Graph with root: gama",
+    ) {
+        nestingEnabled = true
+        rootModulesRegex = ".*gama.*"
+    }
+    graph(
+        readmePath = "./sample/SomeOtherReadme.md",
+        heading = "# Graph",
+    ) {
+        nestingEnabled = false
+        rootModulesRegex = ".*zeta.*"
+    }
 }
