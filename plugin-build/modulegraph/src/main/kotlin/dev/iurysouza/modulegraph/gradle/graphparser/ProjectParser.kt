@@ -62,6 +62,7 @@ internal object ProjectParser {
             configExclusionPattern = configExclusionPattern,
             moduleExclusionPattern = moduleExclusionPattern,
             projectQuerier = projectQuerier,
+            showTransitiveDependencies = config.showTransitiveDependencies,
         )
     }
 
@@ -93,6 +94,7 @@ internal object ProjectParser {
         configExclusionPattern: RegexMatcher?,
         moduleExclusionPattern: RegexMatcher?,
         projectQuerier: ProjectQuerier,
+        showTransitiveDependencies: Boolean,
     ): ProjectGraph {
         val projectGraph = hashMapOf<Module, List<Module>>()
         val projectPathsParsed = hashSetOf<ProjectPath>()
@@ -127,7 +129,9 @@ internal object ProjectParser {
                         customModuleTypes = customModuleTypes,
                         projectQuerier = projectQuerier,
                     )
-                    parseModuleDeps(targetProject)
+                    if (showTransitiveDependencies) {
+                        parseModuleDeps(targetProject)
+                    }
                 }
             }
         }

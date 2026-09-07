@@ -123,6 +123,14 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @get:Optional
     abstract val includeIsolatedModules: Property<Boolean>
 
+    @get:Input
+    @get:Option(
+        option = "showTransitiveDependencies",
+        description = "Whether to include transitive project dependencies in the graph",
+    )
+    @get:Optional
+    abstract val showTransitiveDependencies: Property<Boolean>
+
     /** All graph configs (primary + additional) resolved at configuration time. */
     @get:Input
     internal abstract val graphConfigsResolved: ListProperty<GraphConfig>

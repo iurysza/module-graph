@@ -307,6 +307,23 @@ Optional settings:
     - If not set, all modules are considered root modules, which means the graph will include all modules and their dependencies.
     - This is useful when you want to focus on a specific part of your project's dependency structure.
 -   **includeIsolatedModules**: Whether to include modules with no connections (no dependencies and no dependants) in the graph. Default is `false`.
+- **showTransitiveDependencies**: Whether to include transitive project dependencies. Default is `true`.
+    - When `true`, the graph includes the full dependency closure of root modules (current behavior).
+    - When `false`, only **direct** dependencies of the root modules are shown — useful to simplify large graphs.
+    - Most effective together with `rootModulesRegex`.
+
+### Show only direct dependencies
+
+On large multi-module projects the full transitive graph can be hard to read. Set `showTransitiveDependencies` to `false` to keep only edges from root modules to their immediate dependencies:
+
+```kotlin
+moduleGraphConfig {
+    readmePath.set("${rootDir}/README.md")
+    heading.set("### Direct Dependencies")
+    rootModulesRegex.set(".*:app$")
+    showTransitiveDependencies.set(false)
+}
+```
 
 ### Multiple graphs
 
