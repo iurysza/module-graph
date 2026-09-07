@@ -75,6 +75,13 @@ open class ModuleGraphPlugin : Plugin<Project> {
                 )
             }
             task.graphConfigsResolved.set(allGraphConfigs)
+            // Declare actual outputs so Gradle can track up-to-date / CC without claiming
+            // the entire project directory (see issue #72).
+            task.outputFiles.setFrom(
+                task.graphConfigsResolved.zip(task.projectDirectory) { configs, dir ->
+                    configs.map { config -> dir.file(config.readmePath) }
+                },
+            )
         }
     }
 
