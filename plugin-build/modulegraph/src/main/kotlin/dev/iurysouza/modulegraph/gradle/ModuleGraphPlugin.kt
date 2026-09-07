@@ -80,11 +80,11 @@ open class ModuleGraphPlugin : Plugin<Project> {
 
     /** @return the primary graph config, or null if the primary config is not provided */
     private fun getPrimaryGraphConfig(task: CreateModuleGraphTask): GraphConfig? {
+        // Read raw task properties first — defaults for readmePath/heading must not be applied
+        // before the hasPrimaryConfig check, or graph-only setups always emit a primary graph
+        // into README.md (issue #70).
         val readmePath = task.readmePath.orNull
-            ?: task.project.rootDir.resolve("README.md").absolutePath
-
-        val heading = task.heading.orNull ?: "# Module Graph"
-
+        val heading = task.heading.orNull
         val theme = task.theme.orNull
         val orientation = task.orientation.orNull
         val focusedModulesRegex = task.focusedModulesRegex.orNull
@@ -125,8 +125,9 @@ open class ModuleGraphPlugin : Plugin<Project> {
         if (!hasPrimaryConfig) return null
 
         return GraphConfig.Builder(
-            readmePath = readmePath,
-            heading = heading,
+            readmePath = readmePath
+                ?: task.project.rootDir.resolve("README.md").absolutePath,
+            heading = heading ?: "# Module Graph",
         ).apply {
             this.theme = theme
             this.orientation = orientation

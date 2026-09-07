@@ -5,6 +5,7 @@ import dev.iurysouza.modulegraph.gradle.ModuleGraphExtension
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class ModuleGraphPluginTest {
@@ -23,7 +24,28 @@ class ModuleGraphPluginTest {
     fun `plugin is correctly applied to the project with minimal valid graph config`() {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply(pluginId)
+        (project.extensions.getByName(pluginExtension) as ModuleGraphExtension).apply {
+            readmePath.set("${project.projectDir}/README.md")
+            heading.set("# Module Graph")
+        }
         assert(project.tasks.getByName("createModuleGraph") is CreateModuleGraphTask)
+    }
+
+    @Test
+    fun `graph-only config does not resolve a primary graph`() {
+        val project = ProjectBuilder.builder().build()
+        project.pluginManager.apply(pluginId)
+        (project.extensions.getByName(pluginExtension) as ModuleGraphExtension).apply {
+            graph(
+                readmePath = "${project.projectDir}/docs/GRAPH.md",
+                heading = "## Custom Graph",
+            )
+        }
+        val task = project.tasks.getByName("createModuleGraph") as CreateModuleGraphTask
+        val configs = task.graphConfigsResolved.get()
+        assertEquals(1, configs.size)
+        assertEquals("## Custom Graph", configs.single().heading)
+        assertTrue(configs.single().readmePath.endsWith("docs/GRAPH.md"))
     }
 
     @Test
