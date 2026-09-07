@@ -118,6 +118,13 @@ open class ModuleGraphExtension @Inject constructor(project: Project) {
     val includeIsolatedModules: Property<Boolean> = objects.property(Boolean::class.java)
 
     /**
+     * Whether to follow transitive project dependencies when building the graph.
+     * Defaults to `true` (full dependency closure). Set to `false` to show only
+     * direct dependencies of root modules — useful for large multi-module projects.
+     */
+    val showTransitiveDependencies: Property<Boolean> = objects.property(Boolean::class.java)
+
+    /**
      * A list of additional graph configs to generate graphs for.
      */
     val graphConfigs: ListProperty<GraphConfig> =

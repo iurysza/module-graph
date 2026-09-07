@@ -96,6 +96,7 @@ internal fun getConfig(
     setStyleByModuleType: Boolean? = null,
     showFullPath: Boolean? = null,
     includeIsolatedModules: Boolean? = null,
+    showTransitiveDependencies: Boolean? = null,
     strictMode: Boolean? = null,
     nestingEnabled: Boolean? = null,
 ) =
@@ -113,6 +114,7 @@ internal fun getConfig(
         this.setStyleByModuleType = setStyleByModuleType
         this.showFullPath = showFullPath
         this.includeIsolatedModules = includeIsolatedModules
+        this.showTransitiveDependencies = showTransitiveDependencies
         this.strictMode = strictMode
         this.nestingEnabled = nestingEnabled
     }.build()

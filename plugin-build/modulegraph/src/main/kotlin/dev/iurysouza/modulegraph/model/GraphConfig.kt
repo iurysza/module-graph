@@ -52,6 +52,14 @@ data class GraphConfig(
      */
     val includeIsolatedModules: Boolean,
 
+    /**
+     * Whether to follow transitive project dependencies when building the graph.
+     * When `true` (default), the graph includes the full dependency closure of root modules.
+     * When `false`, only direct dependencies of the root modules are shown.
+     * Most useful together with [rootModulesRegex] on large multi-module projects.
+     */
+    val showTransitiveDependencies: Boolean,
+
     /* Content regex pattern parameters */
 
     /**
@@ -120,6 +128,9 @@ data class GraphConfig(
         /** @see [GraphConfig.includeIsolatedModules] */
         var includeIsolatedModules: Boolean? = null
 
+        /** @see [GraphConfig.showTransitiveDependencies] */
+        var showTransitiveDependencies: Boolean? = null
+
         /** @see [GraphConfig.excludedConfigurationsRegex] */
         var excludedConfigurationsRegex: String? = null
 
@@ -156,6 +167,7 @@ data class GraphConfig(
                 rootModulesRegex = rootModulesRegex,
                 showFullPath = showFullPath ?: false,
                 includeIsolatedModules = includeIsolatedModules ?: false,
+                showTransitiveDependencies = showTransitiveDependencies ?: true,
                 strictMode = strictMode ?: false,
                 nestingEnabled = nestingEnabled ?: false,
             )

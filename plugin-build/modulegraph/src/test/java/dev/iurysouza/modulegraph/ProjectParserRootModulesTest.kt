@@ -134,6 +134,49 @@ internal class ProjectParserRootModulesTest {
     }
 
     @Test
+    fun `direct-only graph when showTransitiveDependencies is false and root is app`() {
+        val expectedGraph = mapOf(
+            ModuleToDeps.app,
+        )
+        val actualGraph = ProjectParser.parseProjectGraph(
+            allProjectPaths = Project.allPaths,
+            config = getConfig(
+                rootModulesRegex = MockProjectPath.app,
+                theme = theme,
+                showTransitiveDependencies = false,
+            ),
+            projectQuerier = projectQuerier,
+        )
+
+        Assertions.assertEquals(expectedGraph, actualGraph)
+    }
+
+    @Test
+    fun `full transitive graph when showTransitiveDependencies is true and root is app`() {
+        val expectedGraph = mapOf(
+            ModuleToDeps.app,
+            ModuleToDeps.featAUi,
+            ModuleToDeps.commonComponent,
+            ModuleToDeps.coreUi,
+            ModuleToDeps.featAData,
+            ModuleToDeps.commonData,
+            ModuleToDeps.coreNetworking,
+            ModuleToDeps.coreUtil,
+        )
+        val actualGraph = ProjectParser.parseProjectGraph(
+            allProjectPaths = Project.allPaths,
+            config = getConfig(
+                rootModulesRegex = MockProjectPath.app,
+                theme = theme,
+                showTransitiveDependencies = true,
+            ),
+            projectQuerier = projectQuerier,
+        )
+
+        Assertions.assertEquals(expectedGraph, actualGraph)
+    }
+
+    @Test
     fun `correct graph when include isolated modules is true`() {
         val expectedGraph = entireGraph + ModuleToDeps.isolated
         val actualGraph = ProjectParser.parseProjectGraph(
