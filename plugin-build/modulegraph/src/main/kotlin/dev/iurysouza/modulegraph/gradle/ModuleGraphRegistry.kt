@@ -9,8 +9,8 @@ import org.gradle.api.services.BuildServiceParameters
 /**
  * Build-scoped service that aggregates each project's [ProjectInfo].
  *
- * Projects register their snapshot during configuration; [CreateModuleGraphTask] reads the
- * accumulated map at execution time.
+ * Projects register their snapshot at execution time via [ModuleGraphContributeTask];
+ * [CreateModuleGraphTask] reads the accumulated map when it runs.
  */
 internal abstract class ModuleGraphRegistry : BuildService<BuildServiceParameters.None> {
     private val infos = ConcurrentHashMap<ProjectPath, ProjectInfo>()
