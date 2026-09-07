@@ -1,10 +1,10 @@
 package dev.iurysouza.modulegraph.gradle
 
 import dev.iurysouza.modulegraph.externalDependencyCoordinates
-import dev.iurysouza.modulegraph.snapshotAppliedPluginIds
 import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfiguration
 import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectInfo
 import dev.iurysouza.modulegraph.model.GraphConfig
+import dev.iurysouza.modulegraph.snapshotAppliedPluginIds
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Plugin
 import org.gradle.api.Project
