@@ -8,8 +8,8 @@ import dev.iurysouza.modulegraph.snapshotAppliedPluginIds
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.tasks.TaskProvider
 
 private const val EXTENSION_NAME = "moduleGraphConfig"
 private const val TASK_NAME = "createModuleGraph"
