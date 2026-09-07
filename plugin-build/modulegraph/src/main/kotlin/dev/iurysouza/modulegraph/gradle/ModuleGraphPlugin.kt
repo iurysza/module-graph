@@ -1,7 +1,7 @@
 package dev.iurysouza.modulegraph.gradle
 
-import dev.iurysouza.modulegraph.snapshotAppliedPluginIds
 import dev.iurysouza.modulegraph.externalDependencyCoordinates
+import dev.iurysouza.modulegraph.snapshotAppliedPluginIds
 import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfiguration
 import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectInfo
 import dev.iurysouza.modulegraph.model.GraphConfig
