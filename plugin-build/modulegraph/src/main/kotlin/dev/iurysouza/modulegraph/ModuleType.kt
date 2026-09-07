@@ -109,9 +109,9 @@ internal fun Project.appliedModuleTypePluginIds(
 internal fun Project.snapshotAppliedPluginIds(
     customPlugins: List<ModuleType> = emptyList(),
 ): List<String> {
-    val fromManager = allAppliedPluginIdsOrNull()
-    if (fromManager != null) return fromManager
-    return appliedModuleTypePluginIds(customPlugins)
+    val fromManager = allAppliedPluginIdsOrNull().orEmpty()
+    val fromProbe = appliedModuleTypePluginIds(customPlugins)
+    return (fromManager + fromProbe).distinct()
 }
 
 /**
