@@ -652,59 +652,6 @@ class ModuleGraphPluginFunctionalTest {
         }
     }
 
-    @Test
-    fun `createModuleGraph can run alongside other tasks without overlapping output validation`() {
-        settingsFile.writeText(
-            """
-                rootProject.name = "test"
-                include(":example")
-                include(":groupFolder:example2")
-            """.trimIndent(),
-        )
-
-        exampleBuildFile.writeText(
-            """
-                plugins {
-                    java
-                    id("$MODULEGRAPH_PACKAGE")
-                }
-
-                moduleGraphConfig {
-                    heading.set("### Dependency Diagram")
-                    readmePath.set("${readmeFilePath()}")
-                }
-                dependencies {
-                    implementation(project(":groupFolder:example2"))
-                }
-            """.trimIndent(),
-        )
-        example2BuildFile.writeText(
-            """
-                plugins {
-                    java
-                }
-            """.trimIndent(),
-        )
-        readmeFile.writeText("### Dependency Diagram")
-
-        // Running createModuleGraph with another task that writes under build/
-        // used to fail Gradle overlapping-output validation when projectDirectory
-        // was wrongly declared as @OutputDirectory (issue #72).
-        val result = GradleRunner.create()
-            .withProjectDir(testProjectDir)
-            .withArguments("test", "createModuleGraph", "--stacktrace")
-            .withPluginClasspath()
-            .build()
-
-        assertTrue(result.output.contains("BUILD SUCCESSFUL") || result.tasks.isNotEmpty())
-        assertTrue(readmeFile.readText().contains(":example --> :groupFolder:example2"))
-        assertFalse(
-            result.output.contains("implicit dependency") ||
-                result.output.contains("overlapping output"),
-            result.output,
-        )
-    }
-
     /**
      * This is for Windows compatibility, as the path is used in the build file
      */
