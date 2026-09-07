@@ -1,6 +1,6 @@
 package dev.iurysouza.modulegraph.gradle
 
-import dev.iurysouza.modulegraph.appliedModuleTypePluginIds
+import dev.iurysouza.modulegraph.snapshotAppliedPluginIds
 import dev.iurysouza.modulegraph.externalDependencyCoordinates
 import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfiguration
 import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectInfo
@@ -154,7 +154,7 @@ internal fun Project.collectProjectInfo(): ProjectInfo {
     }
     return ProjectInfo(
         path = path,
-        pluginIds = appliedModuleTypePluginIds(emptyList()),
+        pluginIds = snapshotAppliedPluginIds(),
         externalDependencies = externalDependencyCoordinates(),
         configurations = collectedConfigurations,
     )
