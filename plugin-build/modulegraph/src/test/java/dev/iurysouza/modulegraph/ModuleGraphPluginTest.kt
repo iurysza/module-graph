@@ -4,7 +4,9 @@ import dev.iurysouza.modulegraph.gradle.CreateModuleGraphTask
 import dev.iurysouza.modulegraph.gradle.ModuleGraphExtension
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class ModuleGraphPluginTest {
@@ -59,5 +61,28 @@ class ModuleGraphPluginTest {
         assertEquals("project", task.excludedModulesRegex.get())
         assertEquals(".*", task.rootModulesRegex.get())
         assertEquals(true, task.includeIsolatedModules.get())
+    }
+
+    @Test
+    fun `createModuleGraph declares readme files as outputs not the project directory`() {
+        val project = ProjectBuilder.builder().build()
+        project.pluginManager.apply(pluginId)
+        val readmeRelPath = "docs/MODULE_GRAPH.md"
+        (project.extensions.getByName(pluginExtension) as ModuleGraphExtension).apply {
+            readmePath.set(readmeRelPath)
+            heading.set("# Module Graph")
+        }
+
+        val task = project.tasks.getByName("createModuleGraph") as CreateModuleGraphTask
+        val declaredOutputs = task.outputs.files.files
+
+        assertTrue(
+            declaredOutputs.any { it == project.projectDir.resolve(readmeRelPath) },
+            "Expected readme path among outputs, got: $declaredOutputs",
+        )
+        assertFalse(
+            declaredOutputs.contains(project.projectDir),
+            "projectDirectory must not be declared as an output",
+        )
     }
 }

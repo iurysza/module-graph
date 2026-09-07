@@ -6,14 +6,16 @@ import dev.iurysouza.modulegraph.gradle.graphparser.projectquerier.SnapshotProje
 import dev.iurysouza.modulegraph.model.GraphConfig
 import dev.iurysouza.modulegraph.model.GraphParseResult
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.services.ServiceReference
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 
@@ -135,9 +137,18 @@ abstract class CreateModuleGraphTask : DefaultTask() {
     @get:ServiceReference(ModuleGraphRegistry.NAME)
     internal abstract val registry: Property<ModuleGraphRegistry>
 
-    @get:OutputDirectory
+    /**
+     * Base directory used to resolve each graph config's relative [GraphConfig.readmePath].
+     * Not an output — marking it as one made Gradle treat the whole project tree as owned by
+     * this task and fail overlapping-output validation when run alongside other tasks.
+     */
+    @get:Internal
     @get:Option(option = "projectDirectory", description = "The root project directory")
     internal abstract val projectDirectory: DirectoryProperty
+
+    /** The readme files written by this task (one per resolved graph config). */
+    @get:OutputFiles
+    internal abstract val outputFiles: ConfigurableFileCollection
 
     @get:Input
     @get:Option(
