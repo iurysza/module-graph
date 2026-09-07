@@ -40,7 +40,7 @@ You'll just need to add it to your project's **root** `build.gradle` or `build.g
 
 ```groovy
 plugins {
-    id "dev.iurysouza.modulegraph" version "0.14.1" // x-release-please-version
+    id "dev.iurysouza.modulegraph" version "0.15.0" // x-release-please-version
 }
 ```
 
@@ -55,7 +55,7 @@ plugins {
         }
     }
     dependencies {
-        classpath "dev.iurysouza:modulegraph:0.14.1" // x-release-please-version
+        classpath "dev.iurysouza:modulegraph:0.15.0" // x-release-please-version
     }
 }
 
@@ -149,7 +149,7 @@ moduleGraphConfig {
 
 ```kotlin
 plugins {
-    id("dev.iurysouza.modulegraph") version "0.14.1" // x-release-please-version
+    id("dev.iurysouza.modulegraph") version "0.15.0" // x-release-please-version
 }
 ```
 
@@ -164,7 +164,7 @@ plugins {
         }
     }
     dependencies {
-        classpath("dev.iurysouza:modulegraph:0.14.1") // x-release-please-version
+        classpath("dev.iurysouza:modulegraph:0.15.0") // x-release-please-version
     }
 }
 
@@ -255,7 +255,7 @@ For multi-project builds, apply the **settings plugin** once in `settings.gradle
 ```kotlin
 // settings.gradle.kts
 plugins {
-    id("dev.iurysouza.modulegraph.settings") version "0.14.1" // x-release-please-version
+    id("dev.iurysouza.modulegraph.settings") version "0.15.0" // x-release-please-version
 }
 ```
 
