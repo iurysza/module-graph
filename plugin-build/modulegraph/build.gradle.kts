@@ -70,7 +70,6 @@ fun assertCleanVersionProperties(content: String) {
     sanitizePluginVersion(line.substringAfter("VERSION="))
 }
 
-
 val pluginVersion = sanitizePluginVersion(property("VERSION").toString())
 
 gradlePlugin {
@@ -98,7 +97,6 @@ gradlePlugin {
     website.set(property("WEBSITE").toString())
     vcsUrl.set(property("VCS_URL").toString())
 }
-
 
 tasks.register("validateVersionProperties") {
     group = "verification"
