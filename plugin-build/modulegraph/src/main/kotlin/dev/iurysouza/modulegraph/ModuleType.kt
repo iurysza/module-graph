@@ -99,6 +99,47 @@ internal fun Project.appliedModuleTypePluginIds(
     .distinct()
     .filter { plugins.hasPlugin(it) }
 
+/**
+ * Snapshot of applied plugin ids for [ProjectInfo].
+ *
+ * Prefers listing every applied plugin id via Gradle's plugin manager so custom
+ * [ModuleType] plugin ids survive Isolated Projects snapshots. Falls back to probing
+ * [defaultPlugins] plus [customPlugins] when the richer listing is unavailable.
+ */
+internal fun Project.snapshotAppliedPluginIds(
+    customPlugins: List<ModuleType> = emptyList(),
+): List<String> {
+    val fromManager = allAppliedPluginIdsOrNull()
+    if (fromManager != null) return fromManager
+    return appliedModuleTypePluginIds(customPlugins)
+}
+
+/**
+ * Lists applied plugin ids using [org.gradle.api.plugins.PluginManager] internals when
+ * present (`getPluginContainer` + `findPluginIdForClass`). Returns null if unavailable.
+ */
+internal fun Project.allAppliedPluginIdsOrNull(): List<String>? = try {
+    val manager = pluginManager
+    val getContainer = manager.javaClass.methods.firstOrNull {
+        it.name == "getPluginContainer" && it.parameterCount == 0
+    } ?: return null
+    val findId = manager.javaClass.methods.firstOrNull {
+        it.name == "findPluginIdForClass" && it.parameterCount == 1
+    } ?: return null
+    val container = getContainer.invoke(manager) as? Iterable<*> ?: return null
+    container.mapNotNull { plugin ->
+        if (plugin == null) return@mapNotNull null
+        val optional = findId.invoke(manager, plugin.javaClass) ?: return@mapNotNull null
+        val isPresent = optional.javaClass.getMethod("isPresent").invoke(optional) as Boolean
+        if (!isPresent) return@mapNotNull null
+        optional.javaClass.getMethod("get").invoke(optional)?.toString()
+    }.distinct()
+} catch (_: ReflectiveOperationException) {
+    null
+} catch (_: ClassCastException) {
+    null
+}
+
 /** @return the "group:name" coordinates of every external dependency declared in this project. */
 internal fun Project.externalDependencyCoordinates(): List<String> = runCatching {
     configurations.flatMap { configuration ->
