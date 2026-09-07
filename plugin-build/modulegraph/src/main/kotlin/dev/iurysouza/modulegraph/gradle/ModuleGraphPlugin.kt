@@ -9,6 +9,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.tasks.TaskProvider
 
 private const val EXTENSION_NAME = "moduleGraphConfig"
 private const val TASK_NAME = "createModuleGraph"
@@ -36,54 +37,59 @@ open class ModuleGraphPlugin : Plugin<Project> {
             project,
         )
 
-        project.tasks.register(
-            TASK_NAME,
-            CreateModuleGraphTask::class.java,
-        ) { task ->
+        project.tasks.register(TASK_NAME, CreateModuleGraphTask::class.java) { task ->
+            configureCreateModuleGraphTask(project, task, extension, contribution)
+        }
+    }
 
-            if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-                task.doNotTrackState("https://github.com/iurysza/module-graph/issues/51")
-            }
+    private fun configureCreateModuleGraphTask(
+        project: Project,
+        task: CreateModuleGraphTask,
+        extension: ModuleGraphExtension,
+        contribution: TaskProvider<ModuleGraphContributeTask>,
+    ) {
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            task.doNotTrackState("https://github.com/iurysza/module-graph/issues/51")
+        }
 
-            task.heading.set(extension.heading)
-            task.readmePath.set(extension.readmePath)
-            task.theme.set(extension.theme)
-            task.focusedModulesRegex.set(extension.focusedModulesRegex)
-            task.orientation.set(extension.orientation)
-            task.linkText.set(extension.linkText)
-            task.showFullPath.set(extension.showFullPath)
-            task.excludedConfigurationsRegex.set(extension.excludedConfigurationsRegex)
-            task.excludedModulesRegex.set(extension.excludedModulesRegex)
-            task.setStyleByModuleType.set(extension.setStyleByModuleType)
-            task.rootModulesRegex.set(extension.rootModulesRegex)
-            task.graphConfigs.set(extension.graphConfigs)
-            task.projectDirectory.set(project.layout.projectDirectory)
-            task.strictMode.set(extension.strictMode)
-            task.nestingEnabled.set(extension.nestingEnabled)
-            task.includeIsolatedModules.set(extension.includeIsolatedModules)
-            task.showTransitiveDependencies.set(extension.showTransitiveDependencies)
-            task.dependsOn(contribution)
+        task.heading.set(extension.heading)
+        task.readmePath.set(extension.readmePath)
+        task.theme.set(extension.theme)
+        task.focusedModulesRegex.set(extension.focusedModulesRegex)
+        task.orientation.set(extension.orientation)
+        task.linkText.set(extension.linkText)
+        task.showFullPath.set(extension.showFullPath)
+        task.excludedConfigurationsRegex.set(extension.excludedConfigurationsRegex)
+        task.excludedModulesRegex.set(extension.excludedModulesRegex)
+        task.setStyleByModuleType.set(extension.setStyleByModuleType)
+        task.rootModulesRegex.set(extension.rootModulesRegex)
+        task.graphConfigs.set(extension.graphConfigs)
+        task.projectDirectory.set(project.layout.projectDirectory)
+        task.strictMode.set(extension.strictMode)
+        task.nestingEnabled.set(extension.nestingEnabled)
+        task.includeIsolatedModules.set(extension.includeIsolatedModules)
+        task.showTransitiveDependencies.set(extension.showTransitiveDependencies)
+        task.dependsOn(contribution)
 
-            val primaryGraphConfig = getPrimaryGraphConfig(task)
-            val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
-            val allGraphConfigs = listOfNotNull(primaryGraphConfig) + additionalGraphConfigs
-            if (allGraphConfigs.isEmpty()) {
-                error(
-                    """
-                    No valid graph configs were found!
-                    Make sure to set up either the primary graph, or add additional graphs.
-                    """.trimIndent(),
-                )
-            }
-            task.graphConfigsResolved.set(allGraphConfigs)
-            // Declare actual outputs so Gradle can track up-to-date / CC without claiming
-            // the entire project directory (see issue #72).
-            task.outputFiles.setFrom(
-                task.graphConfigsResolved.zip(task.projectDirectory) { configs, dir ->
-                    configs.map { config -> dir.file(config.readmePath) }
-                },
+        val primaryGraphConfig = getPrimaryGraphConfig(task)
+        val additionalGraphConfigs = task.graphConfigs.getOrElse(emptyList())
+        val allGraphConfigs = listOfNotNull(primaryGraphConfig) + additionalGraphConfigs
+        if (allGraphConfigs.isEmpty()) {
+            error(
+                """
+                No valid graph configs were found!
+                Make sure to set up either the primary graph, or add additional graphs.
+                """.trimIndent(),
             )
         }
+        task.graphConfigsResolved.set(allGraphConfigs)
+        // Declare actual outputs so Gradle can track up-to-date / CC without claiming
+        // the entire project directory (see issue #72).
+        task.outputFiles.setFrom(
+            task.graphConfigsResolved.zip(task.projectDirectory) { configs, dir ->
+                configs.map { config -> dir.file(config.readmePath) }
+            },
+        )
     }
 
     /** @return the primary graph config, or null if the primary config is not provided */
