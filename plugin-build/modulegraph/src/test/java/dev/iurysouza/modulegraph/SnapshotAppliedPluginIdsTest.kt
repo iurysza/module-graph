@@ -12,14 +12,14 @@ class SnapshotAppliedPluginIdsTest {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply("java")
 
-        val pluginIds = project.snapshotAppliedPluginIds()
+        val custom = ModuleType.Custom("java", "#FF00FF")
+        val pluginIds = project.snapshotAppliedPluginIds(customPlugins = listOf(custom))
 
         assertTrue(
             pluginIds.any { it == "java" || it == "org.gradle.java" },
             "expected java plugin id in $pluginIds",
         )
 
-        val custom = ModuleType.Custom("java", "#FF00FF")
         val resolved = resolveModuleType(
             pluginIds = pluginIds,
             externalDependencies = emptyList(),
