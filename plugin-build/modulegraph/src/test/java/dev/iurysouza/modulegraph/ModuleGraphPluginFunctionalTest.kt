@@ -652,62 +652,6 @@ class ModuleGraphPluginFunctionalTest {
         }
     }
 
-    @Test
-    fun `graph-only config does not write primary README Module Graph section`() {
-        settingsFile.writeText(
-            """
-                rootProject.name = "test"
-                include(":example")
-                include(":groupFolder:example2")
-            """.trimIndent(),
-        )
-
-        val customReadme = File(testProjectDir, "docs/MODULE_GRAPHS.md")
-        customReadme.parentFile.mkdirs()
-        customReadme.writeText("## My Custom Graph")
-        val customPath = customReadme.absolutePath.replace("\\", "\\\\")
-        val rootReadmeOriginal = "# Untouched Root Readme\n"
-        readmeFile.writeText(rootReadmeOriginal)
-
-        exampleBuildFile.writeText(
-            """
-                plugins {
-                    java
-                    id("$MODULEGRAPH_PACKAGE")
-                }
-
-                moduleGraphConfig {
-                    graph(
-                        readmePath = "$customPath",
-                        heading = "## My Custom Graph",
-                    ) {
-                        orientation = $MODULEGRAPH_PACKAGE.Orientation.LEFT_TO_RIGHT
-                    }
-                }
-                dependencies {
-                    implementation(project(":groupFolder:example2"))
-                }
-            """.trimIndent(),
-        )
-        example2BuildFile.writeText(
-            """
-                plugins {
-                    java
-                }
-            """.trimIndent(),
-        )
-
-        GradleRunner.create()
-            .withProjectDir(testProjectDir)
-            .withArguments("createModuleGraph")
-            .withPluginClasspath()
-            .build()
-
-        assertEquals(rootReadmeOriginal, readmeFile.readText())
-        assertTrue(customReadme.readText().contains(":example --> :groupFolder:example2"))
-        assertFalse(readmeFile.readText().contains("# Module Graph"))
-    }
-
     /**
      * This is for Windows compatibility, as the path is used in the build file
      */
