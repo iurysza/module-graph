@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source_path="${BASH_SOURCE[0]}"
+while [[ -L "$source_path" ]]; do
+  source_dir="$(cd -P "$(dirname "$source_path")" >/dev/null 2>&1 && pwd)"
+  target="$(readlink "$source_path")"
+  if [[ "$target" = /* ]]; then
+    source_path="$target"
+  else
+    source_path="$source_dir/$target"
+  fi
+done
+script_dir="$(cd -P "$(dirname "$source_path")" >/dev/null 2>&1 && pwd)"
+
+exec python3 "$script_dir/generate_image.py" "$@"
