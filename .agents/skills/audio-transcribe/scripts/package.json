@@ -1,0 +1,11 @@
+{
+  "name": "audio-transcribe-skill",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@google/genai": "2.19.0"
+  }
+}

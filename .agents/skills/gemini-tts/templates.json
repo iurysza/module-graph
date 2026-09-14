@@ -1,0 +1,242 @@
+{
+    "defaultTemplate": "natural-tech-conference",
+    "voices": [
+        {
+            "name": "Achernar",
+            "style": "Soft",
+            "pitch": "Higher pitch"
+        },
+        {
+            "name": "Achird",
+            "style": "Friendly",
+            "pitch": "Lower middle pitch"
+        },
+        {
+            "name": "Algenib",
+            "style": "Gravelly",
+            "pitch": "Lower pitch"
+        },
+        {
+            "name": "Algieba",
+            "style": "Smooth",
+            "pitch": "Lower pitch"
+        },
+        {
+            "name": "Alnilam",
+            "style": "Firm",
+            "pitch": "Lower middle pitch"
+        },
+        {
+            "name": "Aoede",
+            "style": "Breezy",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Autonoe",
+            "style": "Bright",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Callirrhoe",
+            "style": "Easy-going",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Charon",
+            "style": "Informative",
+            "pitch": "Lower pitch"
+        },
+        {
+            "name": "Despina",
+            "style": "Smooth",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Enceladus",
+            "style": "Breathy",
+            "pitch": "Lower pitch"
+        },
+        {
+            "name": "Erinome",
+            "style": "Clear",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Fenrir",
+            "style": "Excitable",
+            "pitch": "Lower middle pitch"
+        },
+        {
+            "name": "Gacrux",
+            "style": "Mature",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Iapetus",
+            "style": "Clear",
+            "pitch": "Lower middle pitch"
+        },
+        {
+            "name": "Kore",
+            "style": "Firm",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Laomedeia",
+            "style": "Upbeat",
+            "pitch": "Higher pitch"
+        },
+        {
+            "name": "Leda",
+            "style": "Youthful",
+            "pitch": "Higher pitch"
+        },
+        {
+            "name": "Orus",
+            "style": "Firm",
+            "pitch": "Lower middle pitch"
+        },
+        {
+            "name": "Puck",
+            "style": "Upbeat",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Pulcherrima",
+            "style": "Forward",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Rasalgethi",
+            "style": "Informative",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Sadachbia",
+            "style": "Lively",
+            "pitch": "Lower pitch"
+        },
+        {
+            "name": "Sadaltager",
+            "style": "Knowledgeable",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Schedar",
+            "style": "Even",
+            "pitch": "Lower middle pitch"
+        },
+        {
+            "name": "Sulafat",
+            "style": "Warm",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Umbriel",
+            "style": "Easy-going",
+            "pitch": "Lower middle pitch"
+        },
+        {
+            "name": "Vindemiatrix",
+            "style": "Gentle",
+            "pitch": "Middle pitch"
+        },
+        {
+            "name": "Zephyr",
+            "style": "Bright",
+            "pitch": "Higher pitch"
+        },
+        {
+            "name": "Zubenelgenubi",
+            "style": "Casual",
+            "pitch": "Lower middle pitch"
+        }
+    ],
+    "templates": [
+        {
+            "id": "natural-tech-conference",
+            "label": "Natural San Francisco tech-conference delivery",
+            "voice": "Algenib",
+            "profile": "Experienced software engineer speaking normally at a small San Francisco technical conference. Calm, matter-of-fact, and unperformed.",
+            "scene": "A mid-sized conference breakout room. The speaker knows the topic and is explaining it plainly to engineering peers.",
+            "notes": "Use neutral conversational American English with a low emotional range. Keep volume, pitch, and pace mostly steady. Use ordinary sentence stress, modest pauses, and a slightly imperfect conversational rhythm. Do not punch keywords or perform personality. No drama, humor cues, rhetorical flourish, character voice, charisma push, or exaggerated warmth. Do not sound like a narrator, radio host, marketer, keynote speaker, or audiobook. Imagine answering a colleague's question clearly and casually.",
+            "speed": 1.3225,
+            "accent": "Neutral American"
+        },
+        {
+            "id": "mystery-narrator",
+            "label": "Deep, resonant mystery narrator",
+            "voice": "Orus",
+            "profile": "Deep, resonant mystery narrator with commanding presence",
+            "scene": "A dimly lit noir studio. Fog curls at the edges of a single spotlight.",
+            "style": "Atmospheric, brooding, cinematic",
+            "pace": "Slow and deliberate",
+            "accent": "Neutral",
+            "speed": 0.95
+        },
+        {
+            "id": "newscaster",
+            "label": "Crisp, authoritative news delivery",
+            "voice": "Iapetus",
+            "profile": "Crisp, authoritative news anchor",
+            "scene": "A professional broadcast studio with live cameras",
+            "style": "Clear, objective, authoritative",
+            "pace": "Steady and measured",
+            "accent": "Neutral American",
+            "speed": 1.05
+        },
+        {
+            "id": "whisper",
+            "label": "Intimate, quiet, close-mic",
+            "voice": "Kore",
+            "profile": "Intimate, close-mic whisper narrator",
+            "scene": "A quiet, private space inches from the microphone",
+            "style": "Intimate, hushed, personal",
+            "pace": "Very slow, deliberate",
+            "accent": "Neutral",
+            "speed": 0.9
+        },
+        {
+            "id": "empathetic",
+            "label": "Warm, reassuring, therapist-like",
+            "voice": "Kore",
+            "profile": "Warm, reassuring therapist-like narrator",
+            "scene": "A calm, safe therapeutic space with soft lighting",
+            "style": "Warm, gentle, empathetic",
+            "pace": "Natural, unhurried",
+            "accent": "Neutral",
+            "speed": 1.0
+        },
+        {
+            "id": "deadpan",
+            "label": "Flat, dry, comedic timing",
+            "voice": "Puck",
+            "profile": "Flat, dry, comedic narrator",
+            "scene": "A bare, neutral recording booth with no embellishment",
+            "style": "Deadpan, dry, understated",
+            "pace": "Even, unhurried",
+            "accent": "Neutral",
+            "speed": 1.0
+        },
+        {
+            "id": "promo-hype",
+            "label": "Energetic, fast-paced, commercial energy",
+            "voice": "Fenrir",
+            "profile": "Energetic, fast-paced commercial narrator",
+            "scene": "A high-energy broadcast studio with driving music",
+            "style": "Upbeat, energetic, enthusiastic",
+            "pace": "Fast, driving",
+            "accent": "Neutral American",
+            "speed": 1.15
+        },
+        {
+            "id": "podcast-newsletter",
+            "label": "Steady, grounded male podcast narrator",
+            "voice": "Iapetus",
+            "profile": "Steady, grounded male podcast narrator",
+            "notes": "Keep the tone calm, thoughtful, and lightly upbeat. Avoid sounding jolly, theatrical, sparkly, or overly animated. Keep pacing even and natural. Do not read markdown symbols or file formatting.",
+            "speed": 1.15,
+            "accent": "BBC British"
+        }
+    ]
+}
