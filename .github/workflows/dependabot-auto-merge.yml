@@ -1,0 +1,93 @@
+name: Dependabot auto-merge
+
+# main has no required status checks, so `gh pr merge --auto` would merge
+# while CI is still running. Wait for the existing pull request workflows,
+# then squash-merge. Semver-major updates stay open for a human.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: dependabot-auto-merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  auto-merge:
+    if: ${{ github.actor == 'dependabot[bot]' && github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Skip semver-major updates
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-major' }}
+        run: echo "Semver-major update. Leaving the pull request for a human."
+
+      - name: Squash-merge after CI succeeds
+        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+        run: |
+          set -euo pipefail
+
+          workflows=(
+            "Pre Merge Checks"
+            "Validate Gradle Wrapper"
+          )
+
+          echo "Update type: ${UPDATE_TYPE}"
+          echo "Waiting for CI on ${HEAD_SHA} (PR #${PR_NUMBER})"
+
+          deadline=$((SECONDS + 50 * 60))
+          while (( SECONDS < deadline )); do
+            ready=true
+            for workflow in "${workflows[@]}"; do
+              conclusion=$(gh run list \
+                --repo "$GITHUB_REPOSITORY" \
+                --commit "$HEAD_SHA" \
+                --workflow "$workflow" \
+                --event pull_request \
+                --limit 1 \
+                --json status,conclusion \
+                --jq '.[0] | if . == null then "missing" else "\(.status) \(.conclusion // "none")" end')
+
+              echo "${workflow}: ${conclusion}"
+
+              case "$conclusion" in
+                "completed success")
+                  ;;
+                "completed failure"|"completed cancelled"|"completed timed_out"|"completed startup_failure"|"completed action_required"|"completed skipped"|"completed stale"|"completed neutral")
+                  echo "${workflow} finished as ${conclusion}. Leaving the pull request open."
+                  exit 1
+                  ;;
+                *)
+                  ready=false
+                  ;;
+              esac
+            done
+
+            if [[ "$ready" == true ]]; then
+              gh pr merge --squash --match-head-commit "$HEAD_SHA" "$PR_NUMBER"
+              echo "Squash-merged PR #${PR_NUMBER}."
+              exit 0
+            fi
+
+            sleep 30
+          done
+
+          echo "Timed out waiting for CI. Leaving the pull request open."
+          exit 1
