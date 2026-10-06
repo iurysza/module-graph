@@ -49,6 +49,11 @@ jobs:
             "Validate Gradle Wrapper"
           )
 
+          if [[ -z "${UPDATE_TYPE}" ]]; then
+            echo "Dependabot metadata did not include an update type. Leaving the pull request open."
+            exit 1
+          fi
+
           echo "Update type: ${UPDATE_TYPE}"
           echo "Waiting for CI on ${HEAD_SHA} (PR #${PR_NUMBER})"
 
