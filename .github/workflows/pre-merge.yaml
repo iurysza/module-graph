@@ -20,7 +20,7 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
       - name: Cache Gradle Caches
         uses: gradle/gradle-build-action@v2
       - name: Configure JDK
