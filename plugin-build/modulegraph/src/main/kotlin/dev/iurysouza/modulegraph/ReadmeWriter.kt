@@ -34,12 +34,12 @@ internal object ReadmeWriter {
     }
 
     private fun findPredefinedSection(readmeLines: List<String>, section: String): Int {
-        return readmeLines.indexOfFirst { it.startsWith(section) }
+        val index = readmeLines.indexOfFirst { it.startsWith(section) }
+        return index
     }
 
     private fun findNextSectionStart(readmeLines: List<String>, startIndex: Int): Int {
-        return readmeLines.drop(startIndex + 1).indexOfFirst { it.startsWith("#") }.let {
-            if (it != -1) it + startIndex + 1 else readmeLines.size
-        }
+        val relativeIndex = readmeLines.drop(startIndex + 1).indexOfFirst { it.startsWith("#") }
+        return if (relativeIndex == -1) readmeLines.size else relativeIndex + startIndex + 1
     }
 }

@@ -48,6 +48,5 @@ open class ModuleGraphSettingsPlugin : Plugin<Settings> {
         }
     }
 
-    private fun ProjectDescriptor.allPaths(): List<String> =
-        listOf(path) + children.flatMap { it.allPaths() }
+    private fun ProjectDescriptor.allPaths(): List<String> = listOf(path) + children.flatMap { it.allPaths() }
 }

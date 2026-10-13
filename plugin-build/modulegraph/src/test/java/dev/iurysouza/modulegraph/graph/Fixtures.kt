@@ -99,25 +99,24 @@ internal fun getConfig(
     showTransitiveDependencies: Boolean? = null,
     strictMode: Boolean? = null,
     nestingEnabled: Boolean? = null,
-) =
-    GraphConfig.Builder(
-        readmePath = readmePath,
-        heading = heading,
-    ).apply {
-        this.theme = theme
-        this.rootModulesRegex = rootModulesRegex
-        this.orientation = orientation
-        this.focusedModulesRegex = focusedModulesRegex
-        this.excludedConfigurationsRegex = excludedConfigurationsRegex
-        this.excludedModulesRegex = excludedModulesRegex
-        this.linkText = linkText
-        this.setStyleByModuleType = setStyleByModuleType
-        this.showFullPath = showFullPath
-        this.includeIsolatedModules = includeIsolatedModules
-        this.showTransitiveDependencies = showTransitiveDependencies
-        this.strictMode = strictMode
-        this.nestingEnabled = nestingEnabled
-    }.build()
+) = GraphConfig.Builder(
+    readmePath = readmePath,
+    heading = heading,
+).apply {
+    this.theme = theme
+    this.rootModulesRegex = rootModulesRegex
+    this.orientation = orientation
+    this.focusedModulesRegex = focusedModulesRegex
+    this.excludedConfigurationsRegex = excludedConfigurationsRegex
+    this.excludedModulesRegex = excludedModulesRegex
+    this.linkText = linkText
+    this.setStyleByModuleType = setStyleByModuleType
+    this.showFullPath = showFullPath
+    this.includeIsolatedModules = includeIsolatedModules
+    this.showTransitiveDependencies = showTransitiveDependencies
+    this.strictMode = strictMode
+    this.nestingEnabled = nestingEnabled
+}.build()
 
 internal val liveMatchReconstructedModel = mapOf(
     Module(":core:footballinfo") to listOf(

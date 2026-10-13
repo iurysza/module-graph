@@ -43,28 +43,28 @@ internal object NodeStyleBuilder {
     private fun applyStylingByPluginType(
         nodeList: List<ModuleNode>,
         config: GraphConfig,
-    ): String {
-        return if (config.setStyleByModuleType) {
-            """
+    ): String = if (config.setStyleByModuleType) {
+        """
                 |
                 |${
-                nodeList
-                    .distinctBy { it.type }
-                    .joinToString("\n") {
-                        defineStyleClass(it.pluginClass(), it.type.color)
-                    }
-            }
-            """.trimMargin() + """
+            nodeList
+                .distinctBy { it.type }
+                .joinToString("\n") {
+                    defineStyleClass(it.pluginClass(), it.type.color)
+                }
+        }
+        """.trimMargin() + """
                 |
                 |${nodeList.joinToString("\n") { "class ${it.fullPath} ${it.pluginClass()}" }}
-            """.trimMargin()
-        } else {
-            ""
-        }
+        """.trimMargin()
+    } else {
+        ""
     }
 
-    private fun defineStyleClass(className: String, color: String) =
-        """classDef $className fill:$color,stroke:#fff,stroke-width:2px,color:#fff;"""
+    private fun defineStyleClass(className: String, color: String): String {
+        val attributes = "fill:$color,stroke:#fff,stroke-width:2px,color:#fff"
+        return "classDef $className $attributes;"
+    }
 
     private fun ModuleNode.pluginClass(): String = when (type) {
         is ModuleType.ReactNativeLibrary -> "react-native"
