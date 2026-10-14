@@ -70,12 +70,10 @@ internal object ProjectParser {
     private fun GradleProjectConfiguration.getDirectDependencies(
         configExclusionPattern: RegexMatcher?,
         moduleExclusionPattern: RegexMatcher?,
-    ): List<String> {
-        return if (configExclusionPattern.matches(name)) {
-            emptyList()
-        } else {
-            projectPaths.filterNot { moduleExclusionPattern.matches(it) }
-        }
+    ): List<String> = if (configExclusionPattern.matches(name)) {
+        emptyList()
+    } else {
+        projectPaths.filterNot { moduleExclusionPattern.matches(it) }
     }
 
     /**

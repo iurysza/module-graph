@@ -1,7 +1,6 @@
 package dev.iurysouza.modulegraph.gradle.graphparser.projectquerier
 
 import dev.iurysouza.modulegraph.ModuleType
-import dev.iurysouza.modulegraph.gradle.graphparser.model.GradleProjectConfiguration
 import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectInfo
 import dev.iurysouza.modulegraph.gradle.graphparser.model.ProjectPath
 import dev.iurysouza.modulegraph.resolveModuleType
@@ -22,6 +21,5 @@ internal class SnapshotProjectQuerier(
         )
     }
 
-    override fun getConfigurations(projectPath: ProjectPath): List<GradleProjectConfiguration> =
-        infoByPath[projectPath]?.configurations ?: emptyList()
+    override fun getConfigurations(projectPath: ProjectPath) = infoByPath[projectPath]?.configurations ?: emptyList()
 }

@@ -18,40 +18,47 @@ sealed class ModuleType(
         override val color: String,
     ) : ModuleType(id, color)
 
-    data class KotlinMultiplatform(override val color: String = "#C792EA") : ModuleType(
-        id = "org.jetbrains.kotlin.multiplatform",
-        color = color,
-    )
+    data class KotlinMultiplatform(override val color: String = "#C792EA") :
+        ModuleType(
+            id = "org.jetbrains.kotlin.multiplatform",
+            color = color,
+        )
 
-    data class ReactNativeLibrary(override val color: String = "#5DD3F3") : ModuleType(
-        id = "com.facebook.react:react-.*",
-        color = color,
-    )
+    data class ReactNativeLibrary(override val color: String = "#5DD3F3") :
+        ModuleType(
+            id = "com.facebook.react:react-.*",
+            color = color,
+        )
 
-    data class AndroidApp(override val color: String = "#2C4162") : ModuleType(
-        id = "com.android.application",
-        color = color,
-    )
+    data class AndroidApp(override val color: String = "#2C4162") :
+        ModuleType(
+            id = "com.android.application",
+            color = color,
+        )
 
-    data class AndroidLibrary(override val color: String = "#3BD482") : ModuleType(
-        id = "com.android.library",
-        color = color,
-    )
+    data class AndroidLibrary(override val color: String = "#3BD482") :
+        ModuleType(
+            id = "com.android.library",
+            color = color,
+        )
 
-    data class Kotlin(override val color: String = "#8150FF") : ModuleType(
-        id = "org.jetbrains.kotlin.jvm",
-        color = color,
-    )
+    data class Kotlin(override val color: String = "#8150FF") :
+        ModuleType(
+            id = "org.jetbrains.kotlin.jvm",
+            color = color,
+        )
 
-    data class JavaLibrary(override val color: String = "#EC8324") : ModuleType(
-        id = "java-library",
-        color = color,
-    )
+    data class JavaLibrary(override val color: String = "#EC8324") :
+        ModuleType(
+            id = "java-library",
+            color = color,
+        )
 
-    data class Java(override val color: String = "#B5661C") : ModuleType(
-        id = "java",
-        color = color,
-    )
+    data class Java(override val color: String = "#B5661C") :
+        ModuleType(
+            id = "java",
+            color = color,
+        )
 
     companion object {
         private const val serialVersionUID: Long = 1L
@@ -86,9 +93,10 @@ internal fun resolveModuleType(
     .distinctBy { it.id }
     .sortedWith(pluginTypeComparator)
     .firstOrNull { type ->
-        pluginIds.contains(type.id) || externalDependencies.any {
-            type.id.toRegex().matches(it)
-        }
+        pluginIds.contains(type.id) ||
+            externalDependencies.any {
+                type.id.toRegex().matches(it)
+            }
     } ?: ModuleType.Unknown()
 
 /** @return the ids of all known module-type plugins applied to this project. */

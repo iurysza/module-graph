@@ -153,24 +153,22 @@ data class GraphConfig(
          */
         var nestingEnabled: Boolean? = null
 
-        internal fun build(): GraphConfig {
-            return GraphConfig(
-                readmePath = readmePath,
-                heading = heading,
-                theme = theme ?: Theme.NEUTRAL,
-                orientation = orientation ?: Orientation.LEFT_TO_RIGHT,
-                linkText = linkText ?: LinkText.NONE,
-                setStyleByModuleType = setStyleByModuleType ?: false,
-                focusedModulesRegex = focusedModulesRegex,
-                excludedConfigurationsRegex = excludedConfigurationsRegex,
-                excludedModulesRegex = excludedModulesRegex,
-                rootModulesRegex = rootModulesRegex,
-                showFullPath = showFullPath ?: false,
-                includeIsolatedModules = includeIsolatedModules ?: false,
-                showTransitiveDependencies = showTransitiveDependencies ?: true,
-                strictMode = strictMode ?: false,
-                nestingEnabled = nestingEnabled ?: false,
-            )
-        }
+        internal fun build(): GraphConfig = GraphConfig(
+            readmePath = readmePath,
+            heading = heading,
+            theme = theme ?: Theme.NEUTRAL,
+            orientation = orientation ?: Orientation.LEFT_TO_RIGHT,
+            linkText = linkText ?: LinkText.NONE,
+            setStyleByModuleType = setStyleByModuleType ?: false,
+            focusedModulesRegex = focusedModulesRegex,
+            excludedConfigurationsRegex = excludedConfigurationsRegex,
+            excludedModulesRegex = excludedModulesRegex,
+            rootModulesRegex = rootModulesRegex,
+            showFullPath = showFullPath ?: false,
+            includeIsolatedModules = includeIsolatedModules ?: false,
+            showTransitiveDependencies = showTransitiveDependencies ?: true,
+            strictMode = strictMode ?: false,
+            nestingEnabled = nestingEnabled ?: false,
+        )
     }
 }

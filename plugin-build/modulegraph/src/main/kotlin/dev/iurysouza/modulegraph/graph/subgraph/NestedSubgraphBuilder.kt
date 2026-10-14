@@ -104,10 +104,12 @@ internal object NestedSubgraphBuilder {
     }
 
     private fun buildFullPath(current: String, segment: String): String {
-        return if (current.isEmpty()) ":$segment" else "$current:$segment"
+        if (current.isEmpty()) return ":$segment"
+        return "$current:$segment"
     }
 
     private fun extractUniqueModules(models: List<DigraphModel>): Set<ModuleNode> {
-        return models.flatMap { listOf(it.source, it.target) }.toSet()
+        val nodes = models.flatMap { listOf(it.source, it.target) }
+        return nodes.toSet()
     }
 }

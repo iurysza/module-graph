@@ -27,12 +27,10 @@ internal object DigraphCodeBuilder {
         """.trimMargin(),
     )
 
-    private fun toMermaid(it: DigraphModel, linkText: LinkText): CharSequence {
-        return if (it.source.fullPath == it.target.fullPath) {
-            """  ${it.source.fullPath}["${it.source.name}"]"""
-        } else {
-            """  ${it.source.fullPath} ${linkText.toLinkString(it.target.config.value)} ${it.target.fullPath}"""
-        }
+    private fun toMermaid(it: DigraphModel, linkText: LinkText) = if (it.source.fullPath == it.target.fullPath) {
+        """  ${it.source.fullPath}["${it.source.name}"]"""
+    } else {
+        """  ${it.source.fullPath} ${linkText.toLinkString(it.target.config.value)} ${it.target.fullPath}"""
     }
 }
 
