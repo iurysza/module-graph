@@ -18,4 +18,5 @@ kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 [libraries]
 junit5Api = "org.junit.jupiter:junit-jupiter-api:5.14.4"
 junit5Engine = "org.junit.jupiter:junit-jupiter-engine:5.14.4"
+junitPlatformLauncher = "org.junit.platform:junit-platform-launcher:1.14.4"
 kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerializationJson" }
