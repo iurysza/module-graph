@@ -66,6 +66,12 @@ class ModuleGraphPluginFunctionalTest {
         }
 
         readmeFile.writeText("### Dependency Diagram")
+        // Gradle 9 refuses to configure an included project whose directory is missing.
+        listOf(
+            "libs/app-common",
+            "libs/crash-reporting/api",
+            "libs/crash-reporting/firebase",
+        ).forEach { File(testProjectDir, it).mkdirs() }
 
         // Run the plugin task
         GradleRunner.create()
@@ -399,6 +405,8 @@ class ModuleGraphPluginFunctionalTest {
                 include(":ignoredExample")
             """.trimIndent(),
         )
+        // Included only as an excluded dependency. Gradle 9 still requires its directory.
+        File(testProjectDir, "ignoredExample").mkdirs()
 
         exampleBuildFile.writeText(
             """

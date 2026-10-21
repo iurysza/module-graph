@@ -6,9 +6,13 @@ This repository is the Gradle plugin `dev.iurysouza.modulegraph`. It generates M
 
 How-it-works docs belong in `ai-artifacts/` and must stay current when behavior or structure changes. Start at `ai-artifacts/_index.md`. That file points at `README.md` and `docs/`. Grow architecture notes under `ai-artifacts/` as you learn the graph pipeline.
 
-## JDK 8
+## JDK
 
-Use JDK 8. Pre Merge Checks, Publish Plugin to Portal, and Validate Gradle Wrapper all install Zulu 8. The plugin sets `jvmToolchain(8)` and `JavaVersion.VERSION_1_8`. Gradle configuration fails if no Java 8 toolchain is present. Point `JAVA_HOME` at JDK 8, or install JDK 8 where Gradle can detect it.
+Gradle 9.8.1 runs only on JDK 17 or newer. Pre Merge Checks and Publish Plugin to Portal install Zulu 17 for the Gradle daemon and Zulu 8 as a toolchain. The plugin still sets `jvmToolchain(8)` and `JavaVersion.VERSION_1_8`, so the published classes stay on Java 8. TestKit tests run on JDK 17 because that worker is what starts Gradle.
+
+Point `JAVA_HOME` at JDK 17 or newer, and install a JDK 8 that Gradle can detect. Configuration fails when the Java 8 toolchain is missing. Validate Gradle Wrapper still installs Zulu 8. That job checks the wrapper jar and does not start Gradle.
+
+This wrapper bump does not declare a higher minimum Gradle version for plugin users. The published classes stay on Java 8, and the plugin descriptors do not set a Gradle requirement.
 
 ## Commands
 

@@ -19,18 +19,25 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name || github.ref }}
 
-      - name: Configure JDK
+      - name: Configure JDK 8 toolchain
+        id: jdk8
         uses: actions/setup-java@v6
         with:
           distribution: zulu
           java-version: 8
 
+      - name: Configure JDK 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: zulu
+          java-version: 17
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run Gradle tasks
-        run: ./gradlew preMerge --continue
+        run: ./gradlew preMerge --continue "-Porg.gradle.java.installations.paths=${{ steps.jdk8.outputs.path }}"
 
       - name: Publish on Plugin Portal
         if: success()
-        run: ./gradlew --project-dir plugin-build setupPluginUploadFromEnvironment publishPlugins
+        run: ./gradlew --project-dir plugin-build setupPluginUploadFromEnvironment publishPlugins "-Porg.gradle.java.installations.paths=${{ steps.jdk8.outputs.path }}"
