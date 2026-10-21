@@ -18,6 +18,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
+import org.gradle.work.DisableCachingByDefault
 
 /**
  * The gradle task for this plugin,
@@ -26,6 +27,9 @@ import org.gradle.api.tasks.options.Option
  * All the properties defined in this task need to be Serializable -
  * this is a requirement for the Gradle Configuration Cache to work.
  */
+@DisableCachingByDefault(
+    because = "Reads a build-wide registry that is not a task input, so the build cache cannot key the readme output.",
+)
 abstract class CreateModuleGraphTask : DefaultTask() {
 
     @get:Input

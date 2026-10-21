@@ -6,6 +6,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.services.ServiceReference
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 
 /**
  * Registers a single project's [ProjectInfo] into the [ModuleGraphRegistry] at execution time.
@@ -13,6 +14,9 @@ import org.gradle.api.tasks.TaskAction
  * The snapshot is captured as a serializable input during configuration and registered when the
  * task runs.
  */
+@DisableCachingByDefault(
+    because = "Writes a project snapshot into a shared build service and produces no file output.",
+)
 internal abstract class ModuleGraphContributeTask : DefaultTask() {
     @get:Input
     abstract val projectInfo: Property<ProjectInfo>

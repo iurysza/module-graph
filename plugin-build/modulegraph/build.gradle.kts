@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
 plugins {
     kotlin("jvm")
     `java-gradle-plugin`
@@ -14,15 +16,21 @@ dependencies {
 
     testImplementation(libs.junit5Api)
     testRuntimeOnly(libs.junit5Engine)
-    // Gradle 8 injects its own launcher unless this is declared. Jupiter 5.14
+    // Gradle 9 does not inject a JUnit Platform launcher. Jupiter 5.14
     // needs the matching Platform 1.14 launcher or discovery fails.
     testRuntimeOnly(libs.junitPlatformLauncher)
     testImplementation(gradleTestKit())
 }
 
-// Configure the test task to use JUnit 5
+// TestKit starts the Gradle under test with the test worker JVM. Gradle 9
+// refuses to start on the Java 8 compile toolchain, so the worker uses 17.
+val testJavaLauncher = javaToolchains.launcherFor {
+    languageVersion.set(JavaLanguageVersion.of(17))
+}
+
 tasks.test {
     useJUnitPlatform()
+    javaLauncher.set(testJavaLauncher)
 }
 
 java {
