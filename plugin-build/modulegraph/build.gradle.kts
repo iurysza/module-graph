@@ -14,6 +14,9 @@ dependencies {
 
     testImplementation(libs.junit5Api)
     testRuntimeOnly(libs.junit5Engine)
+    // Gradle 8 injects its own launcher unless this is declared. Jupiter 5.14
+    // needs the matching Platform 1.14 launcher or discovery fails.
+    testRuntimeOnly(libs.junitPlatformLauncher)
     testImplementation(gradleTestKit())
 }
 
