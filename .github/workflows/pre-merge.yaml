@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v7
       - name: Cache Gradle Caches
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
       - name: Configure JDK 8 toolchain
         id: jdk8
         uses: actions/setup-java@v6
