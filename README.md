@@ -836,6 +836,45 @@ moduleGraphConfig {
 
 If you don't set `rootModulesRegex`, all modules will be considered root modules and cannot be excluded, even if they match `excludedModulesRegex`.
 
+## Troubleshooting
+
+### Graph syntax is valid but rendering fails
+
+A graph can pass Mermaid's syntax check and still fail during layout. For the graph in
+[issue #38](https://github.com/iurysza/module-graph/issues/38), Dagre throws
+`Cannot set properties of undefined (setting 'order')` after parsing succeeds.
+See the related [upstream Mermaid issue #1753](https://github.com/mermaid-js/mermaid/issues/1753).
+The plugin generates Mermaid text. Your Markdown viewer supplies the renderer and its version.
+
+To avoid this failure, use the existing full-path option and rerun `./gradlew createModuleGraph`:
+
+```kotlin
+moduleGraphConfig {
+	showFullPath.set(true)
+}
+```
+
+This removes subgraph grouping and displays full module paths. It preserves the nodes and dependencies,
+and renders the issue #38 graph with Dagre.
+
+To keep subgraphs, use ELK if your viewer supports it. For Mermaid 12 hosts that allow initialization
+directives, add `'layout': 'elk'` to the generated graph's existing `init` configuration. For example:
+
+```text
+%%{init: {'theme': 'neutral', 'layout': 'elk'}}%%
+```
+
+Keep your existing theme settings. This is Mermaid configuration, not a `moduleGraphConfig` option.
+Manual edits inside the generated graph section are overwritten the next time you run `createModuleGraph`.
+Prefer configuring the viewer to use ELK, where supported, or use `showFullPath` for a persistent workaround.
+
+Older Mermaid examples, including issue #38, use `flowchart.defaultRenderer` instead.
+Mermaid 12.3.0 ignores that setting and defaults to ELK, but still fails on this graph when explicitly
+configured to use Dagre. Check your viewer's Mermaid version and supported settings before choosing a directive.
+These workarounds do not fix the upstream layout bug.
+
+See the [reproduction note](ai-artifacts/oss-pass/module-graph-38.md) for versions and full-render results.
+
 ## Contributing 🤝
 
 Feel free to open an issue or submit a pull request for any bugs/improvements.
