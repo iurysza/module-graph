@@ -12,7 +12,7 @@ Its ordered edges were supplied to the unchanged
 [`Mermaid.generateGraph`](../../plugin-build/modulegraph/src/main/kotlin/dev/iurysouza/modulegraph/Mermaid.kt)
 through `GraphParseResult`, with `focusedModulesRegex = ".*(data).*"` and default grouping.
 The generated graph matched the issue block exactly except for its final newline.
-A second generation used `showFullPath = true`.
+A second generation used `showFullPath = true`. Both generations kept the default `nestingEnabled = false`.
 
 The renderer ran in HeadlessChrome 157.0.0.0 on macOS, through `agent-browser`.
 Installed versions were Mermaid 12.3.0, `dagre-d3-es` 7.0.14, and `elkjs` 0.12.1.

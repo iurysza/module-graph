@@ -850,10 +850,12 @@ To avoid this failure, use the existing full-path option and rerun `./gradlew cr
 
 ```kotlin
 moduleGraphConfig {
+	nestingEnabled.set(false)
 	showFullPath.set(true)
 }
 ```
 
+Explicitly disable nesting because it currently overrides `showFullPath`, as reproduced in [issue #64](https://github.com/iurysza/module-graph/issues/64).
 This removes subgraph grouping and displays full module paths. It preserves the nodes and dependencies,
 and renders the issue #38 graph with Dagre.
 
