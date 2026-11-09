@@ -4,7 +4,7 @@ kotlin = "2.4.21"
 kotlinSerializationJson = "1.12.0"
 ktlintGradle = "14.2.0"
 pluginPublish = "2.2.1"
-versionCheck = "0.66.0"
+versionCheck = "0.67.0"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt"}
