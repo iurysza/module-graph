@@ -1,6 +1,9 @@
 @file:Suppress("UnstableApiUsage")
 
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     kotlin("jvm")
@@ -14,25 +17,16 @@ dependencies {
     implementation(gradleApi())
     implementation(libs.kotlinxSerializationJson)
 
-    testImplementation(libs.junit5Api)
-    testRuntimeOnly(libs.junit5Engine)
-    // Gradle 9 does not inject a JUnit Platform launcher. Jupiter 5.14
-    // needs the matching Platform 1.14 launcher or discovery fails.
+    testImplementation(libs.junitJupiterApi)
+    testRuntimeOnly(libs.junitJupiterEngine)
+    // Gradle 9 does not inject a JUnit Platform launcher. JUnit 6.1
+    // needs the matching Platform 6.1 launcher or discovery fails.
     testRuntimeOnly(libs.junitPlatformLauncher)
     testImplementation(gradleTestKit())
 }
 
-// TestKit starts the Gradle under test with the test worker JVM. Gradle 9
-// refuses to start on the Java 8 compile toolchain, so the worker uses 17.
-val testJavaLauncher = javaToolchains.launcherFor {
-    languageVersion.set(JavaLanguageVersion.of(17))
-}
-
-tasks.test {
-    useJUnitPlatform()
-    javaLauncher.set(testJavaLauncher)
-}
-
+// Published classes stay on Java 8. Tests compile and run on 17 because
+// Gradle 9 will not start on Java 8, and JUnit 6 artifacts require 17.
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -40,6 +34,30 @@ java {
 
 kotlin {
     jvmToolchain(8)
+}
+
+val testJavaLauncher = javaToolchains.launcherFor {
+    languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+tasks.named<KotlinJvmCompile>("compileTestKotlin") {
+    compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+    kotlinJavaToolchain.toolchain.use(testJavaLauncher)
+}
+
+tasks.named<JavaCompile>("compileTestJava") {
+    sourceCompatibility = JavaVersion.VERSION_17.toString()
+    targetCompatibility = JavaVersion.VERSION_17.toString()
+    javaCompiler.set(
+        javaToolchains.compilerFor {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        },
+    )
+}
+
+tasks.test {
+    useJUnitPlatform()
+    javaLauncher.set(testJavaLauncher)
 }
 
 /** Plugin Portal version rules (must stay in sync with VersionPropertiesGuardTest). */
