@@ -8,9 +8,9 @@ How-it-works docs belong in `ai-artifacts/` and must stay current when behavior 
 
 ## JDK
 
-Gradle 9.8.1 runs only on JDK 17 or newer. Pre Merge Checks and Publish Plugin to Portal install Zulu 17 for the Gradle daemon and Zulu 8 as a toolchain. The plugin still sets `jvmToolchain(8)` and `JavaVersion.VERSION_1_8`, so the published classes stay on Java 8. TestKit tests run on JDK 17 because that worker is what starts Gradle.
+Gradle 9.8.2 runs only on JDK 17 or newer. Pre Merge Checks and Publish Plugin to Portal install Zulu 17 for the Gradle daemon and Zulu 8 as a toolchain. Main compilation still sets `jvmToolchain(8)` and `JavaVersion.VERSION_1_8`, so the published classes stay on Java 8. `compileTestKotlin` and the test worker use a Java 17 toolchain: Gradle 9 will not start on Java 8, and the JUnit 6 test libraries require Java 17.
 
-Point `JAVA_HOME` at JDK 17 or newer, and install a JDK 8 that Gradle can detect. Configuration fails when the Java 8 toolchain is missing. Validate Gradle Wrapper still installs Zulu 8. That job checks the wrapper jar and does not start Gradle.
+Point `JAVA_HOME` at JDK 17 or newer, and install a JDK 8 and a JDK 17 that Gradle can detect. Configuration fails when either toolchain is missing. Validate Gradle Wrapper still installs Zulu 8. That job checks the wrapper jar and does not start Gradle.
 
 This wrapper bump does not declare a higher minimum Gradle version for plugin users. The published classes stay on Java 8, and the plugin descriptors do not set a Gradle requirement.
 

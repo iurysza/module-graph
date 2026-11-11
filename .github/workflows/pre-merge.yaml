@@ -35,5 +35,6 @@ jobs:
           distribution: 'zulu'
           java-version: 17
       - name: Run Gradle tasks
-        # Gradle 9 runs on 17. The plugin still compiles with the Java 8 toolchain.
+        # Gradle 9 runs on 17. Main sources still compile with the Java 8 toolchain.
+        # Test compilation uses this job's JDK 17.
         run: ./gradlew preMerge --continue "-Porg.gradle.java.installations.paths=${{ steps.jdk8.outputs.path }}"
