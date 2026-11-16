@@ -2,7 +2,7 @@
 detekt = "1.23.8"
 junit = "6.1.3"
 kotlin = "2.4.21"
-kotlinSerializationJson = "1.12.0"
+kotlinSerializationJson = "1.13.0"
 ktlintGradle = "14.2.0"
 pluginPublish = "2.2.1"
 versionCheck = "0.67.0"
